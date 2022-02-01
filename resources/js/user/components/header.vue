@@ -88,10 +88,11 @@
 </template>
 
 <script>
+
     export default {
         data(){
             return{
-                coursesList:[]
+                coursesList:[],
             }
         },
         methods:{
@@ -118,6 +119,17 @@
         },
         beforeMount() {
             this.getCourses();
+            let style = document.createElement('link');
+            style.type = "text/css";
+            style.rel = "stylesheet";
+            style.href = '/assets/css/style.css';
+            style.id = "userStyle";
+
+            document.head.appendChild(style);
+        },
+        unmounted() {
+            document.getElementById("userStyle").remove();
         }
     }
 </script>
+

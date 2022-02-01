@@ -10,6 +10,9 @@
                             <div class="login-header">
                                 <h3>Login <span>Mentoring</span></h3>
                                 <p class="text-muted">Access to our dashboard</p>
+                                <h4 class="m-auto text-center text-danger" v-if="errors.message">
+                                    Email or password is wrong
+                                </h4>
                             </div>
                             <form @submit.prevent="loginForm">
                                 <div class="form-group">
@@ -68,7 +71,7 @@
 
                 }).catch((err)=>{
                     // console.log(err)
-                    this.errors = err.response.data.errors;
+                    this.errors = err.response.data;
                 })
             }
         }

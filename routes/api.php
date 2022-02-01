@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\authController;
 use \App\Http\Controllers\userController;
 use \App\Http\Controllers\courseController;
+use \App\Http\Controllers\TimingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/register',[authController::class,'register']);
 Route::post('/login',[authController::class,'login']);
 
+Route::get("/courses",[courseController::class,"index"]);
+Route::get("/courses/{id}",[courseController::class,"show"]);
+
 // protected routes
 Route::group(['middleware'=>['auth:sanctum']], function () {
     Route::delete('/logout',[AuthController::class,'logout']);
@@ -30,8 +34,9 @@ Route::group(['middleware'=>['auth:sanctum']], function () {
     Route::post('/addUser',[userController::class,'store']);
     Route::post('/removeUser',[userController::class,'removeUser']);
 
+    Route::post("/courses",[courseController::class,"store"]);
 
-    Route::apiResource("courses", courseController::class);
+    Route::apiResource("timings", TimingController::class);
 
 });
 

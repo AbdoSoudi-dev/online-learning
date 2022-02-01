@@ -22,6 +22,9 @@
                         <a><router-link to="/admin/invoices">Invoice Reports</router-link></a>
                     </li>
                     <li>
+                        <a><router-link to="/admin/timings"><span>Timings</span></router-link></a>
+                    </li>
+                    <li>
                         <a><router-link to="/admin/profile"><span>My Profile</span></router-link></a>
                     </li>
                 </ul>

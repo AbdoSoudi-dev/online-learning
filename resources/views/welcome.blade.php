@@ -18,7 +18,13 @@
             body {
                 font-family: 'Nunito', sans-serif;
             }
+            .cursor-pointer{
+                cursor: pointer;
+            }
         </style>
+
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js">
+        </script>
 
         <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/img/favicon.png')}}">
 
@@ -30,7 +36,7 @@
         <link rel="stylesheet" href="{{ asset('assets/css/owl.carousel.min.css')}}">
         <link rel="stylesheet" href="{{ asset('assets/css/owl.theme.default.min.css')}}">
 
-        <link rel="stylesheet" href="{{ asset('assets/css/style.css')}}">
+{{--        <link rel="stylesheet" href="{{ asset('assets/css/style.css')}}">--}}
 
         {{-- admin assets --}}
         <link rel="stylesheet" href="{{ asset('adminAssets/css/feathericon.min.css') }}">

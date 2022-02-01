@@ -23,6 +23,8 @@ import adminProfile from "../admin/pages/profile"
 import addUser from "../admin/pages/addUser";
 import addCourse from "../admin/pages/addCourse";
 import courseDetails from "../user/pages/courseDetails";
+import timings from "../admin/pages/timings";
+import enrollCourse from "../user/pages/enrollCourse";
 
 
 const routes = [
@@ -31,6 +33,9 @@ const routes = [
             { path : "/home", component: home,alias:"/" },
             { path : "/coursesList", component: courses },
             { path : "/course/:id", component: courseDetails },
+            { path : "/enrollCourse/:id", component: enrollCourse },
+            { path: "/login", name:"user.login" , component: login  },
+            { path: "/register", name:"user.register" , component: register  },
             { path : "/profile", component: profile,
                 children:[
                     { path: "/bookings",component:bookingProfile },
@@ -42,8 +47,6 @@ const routes = [
             },
         ]
     },
-    { path: "/login", name:"user.login" , component: login  },
-    { path: "/register", name:"user.register" , component: register  },
     { path: '/admin', component: indexAdmin,
         meta: { requiresAdmin: true },
         children: [
@@ -55,6 +58,7 @@ const routes = [
             { path: "addUser", component: addUser, meta: { requiresSuperadmin: true },  },
             { path: "profile", component: adminProfile  },
             { path: "addCourse", component: addCourse  },
+            { path: "timings", component: timings  },
 
         ]
     },

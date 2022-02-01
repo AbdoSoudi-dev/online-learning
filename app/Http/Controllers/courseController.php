@@ -54,7 +54,7 @@ class courseController extends Controller
      */
     public function show($id)
     {
-        $course = Course::find($id)->first();
+        $course = Course::find($id);
         return response($course,201);
     }
 

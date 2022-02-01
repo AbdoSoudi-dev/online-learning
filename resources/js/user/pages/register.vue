@@ -25,6 +25,43 @@
                                     <input id="email" type="email" class="form-control" v-model="formData.email" required>
                                     <label class="col-12 text-danger" v-if="errors.email">{{ errors.email[0] }}</label>
                                 </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">Mobile Number</label>
+                                        <vue-tel-input styleClasses="form-control"
+                                            :value="formData.mobile_number" invalidMsg="invalid Number"
+                                                       @input="countryChanged"
+                                                       enabledCountryCode="true"></vue-tel-input>
+<!--                                    <label class="col-12 text-danger" v-if="errors.mobile_number">{{ errors.mobile_number[0] }}</label>-->
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label">Country</label>
+
+                                            <form>
+                                                <input type="search" class="form-control"
+                                                       placeholder="Search Country" v-model="formData.country"
+                                                       list="data_countries" />
+
+                                                <datalist id="data_countries">
+                                                    <option v-for="(country,key) in contries" :value="key" />
+                                                </datalist>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label">City</label>
+                                            <select id="city" type="text" class="form-control" name="city" v-model="formData.city" required>
+                                                <option value="">~~ City ~~</option>
+                                                <option v-for="city in cities" :value="city">
+                                                    {{ city }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
@@ -63,35 +100,82 @@
 </template>
 
 
+
 <script>
+
+    import countriesCities from "../../countriesCities";
     export default {
         data(){
             return{
                 formData:{
                     name:"",
                     email:"",
+                    mobile_number:null,
                     password:"",
+                    country:"",
+                    city:"",
                     password_confirmation:"",
                 },
-                errors:{}
+                errors:{},
+                country:"",
+                contries:{},
+                cities:[]
             }
         },
         methods:{
             registerForm(){
-                axios.post('/api/register',this.formData).then((res) =>{
-                    // console.log(res)
-                    if (res.data.user.role_id == 1){
-                        this.$router.push("/");
-                    }else{
-                        this.$router.push("/admin");
-                    }
-                    this.$store.commit("get_token",res.data.token);
-                    this.$store.commit("get_current_user",res.data.user);
-                }).catch((err)=>{
-                    // console.log(err)
-                    this.errors = err.response.data.errors;
-                })
+                // axios.post('/api/register',this.formData).then((res) =>{
+                //     // console.log(res)
+                //     if (res.data.user.role_id == 1){
+                //         this.$router.push("/");
+                //     }else{
+                //         this.$router.push("/admin");
+                //     }
+                //     this.$store.commit("get_token",res.data.token);
+                //     this.$store.commit("get_current_user",res.data.user);
+                // }).catch((err)=>{
+                //     // console.log(err)
+                //     this.errors = err.response.data.errors;
+                // })
+                console.log(this.formData);
+            },
+            countryChanged(phone, phoneObject, input){
+                console.log(phoneObject);
+                if (phoneObject?.formatted) {
+                    this.formData.mobile_number = phoneObject.number
+                }
+                if(phoneObject.country.name){
+                    this.formData.country = phoneObject.country.name.split("(") ?
+                        phoneObject.country.name.split("(")[0].trim() : phoneObject.country.name.trim();
+                    this.country =this.formData.country;
+                }
+
             }
+        },
+        watch:{
+            formData: {
+              handler:function (newValue) {
+                  this.country = newValue.country;
+              },
+              deep:true
+            },
+            country(){
+                this.cities =( countriesCities[this.formData.country] ?
+                    countriesCities[this.formData.country].filter(function(item, pos, self) {
+                    return self.indexOf(item) == pos;
+                     })
+                    : countriesCities[this.formData.country]);
+            },
+            cities(){
+                this.formData.city = "";
+            }
+        },
+        mounted(){
+            this.contries = countriesCities;
+            var tz = jstz.determine();
+            var timezone = tz.name();
+            console.log(timezone);
         }
     }
 </script>
+

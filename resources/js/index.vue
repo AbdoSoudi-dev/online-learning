@@ -7,6 +7,11 @@
     export default {
         mounted() {
             window.axios.defaults.headers.common['Authorization'] = 'Bearer '+this.$store.state.token;
-        }
+        },
+        watch:{
+            $route (to, from){
+                // console.log(to);
+            }
+        },
     }
 </script>

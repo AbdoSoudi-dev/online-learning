@@ -1,4 +1,13 @@
 <template>
+
+    <div class="breadcrumb-bar">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+
+            </div>
+        </div>
+    </div>
+
     <div class="content">
             <div class="container-fluid">
                 <div class="row">
