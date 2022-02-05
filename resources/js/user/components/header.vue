@@ -119,16 +119,18 @@
         },
         beforeMount() {
             this.getCourses();
+            document.getElementById("adminStyle").remove();
+
+        },
+        beforeUnmount() {
             let style = document.createElement('link');
             style.type = "text/css";
             style.rel = "stylesheet";
-            style.href = '/assets/css/style.css';
-            style.id = "userStyle";
+            style.href = '/adminAssets/css/style.css';
+            style.id = "adminStyle";
 
             document.head.appendChild(style);
-        },
-        unmounted() {
-            document.getElementById("userStyle").remove();
+
         }
     }
 </script>

@@ -29,23 +29,41 @@
     </section>
 
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-md-8 col-12 m-auto ">
             <div class="card">
+
+                <div class="col-12 m-auto text-center mt-2">
+                    <h4 class="text-bold text-black">
+                        Choose your suitable time from our times
+                    </h4>
+                    <h6>
+                        Note: These times are detected based on you timezone {{ $store.state.currentUser.timezone_offset }}
+                              You can change it from <router-link class="text-bold text-primary" to="/profile">HERE</router-link>
+                    </h6>
+                </div>
+
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class=" table table-hover table-bordered">
                             <thead>
-                            <tr class="text-primary">
-                                <td class="text-center" colspan="3">Days</td>
-                                <td class="text-center"> Time </td>
-                            </tr>
+                                <tr class="text-light bg-primary text-bold">
+                                    <td class="text-center" colspan="3">Days</td>
+                                    <td class="text-center"> Time </td>
+                                    <td class="text-center"> Detect </td>
+                                </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="timing in timingsZone">
-                                <td v-for="daily in timing.days">{{ daily }} </td>
-
-                                <td>{{ timing.time }}</td>
-                            </tr>
+                                <tr v-for="timing in timingsZone">
+                                    <td v-for="daily in timing.days">{{ daily }} </td>
+                                    <td class="text-center">{{ timing.time }}</td>
+                                    <td class="text-center text-success">
+                                        <span v-if="checkTiming.includes(timing.id)">
+                                            Already detected
+                                        </span>
+                                        <i v-else
+                                           @click="saveBooking(timing.id)" class="fas fa-sign-in-alt text-success fa-2x cursor-pointer"></i>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -64,6 +82,7 @@
             return{
                 courseDetails:{},
                 timings:[],
+                checkTiming:[]
             }
         },
         methods:{
@@ -79,8 +98,18 @@
             },
             all_timings(){
                 axios.get("/api/timings").then((res)=>{
-                    console.log(res);
+                    // console.log(res);
                     this.timings = res.data;
+                }).catch((error)=>{
+                    console.log(error);
+                })
+            },
+            check_token_time(){
+                axios.post("/api/check_times",{
+                    course_id : this.$route.params.id
+                }).then((res)=>{
+                    // console.log(res);
+                    this.checkTiming = res.data;
                 }).catch((error)=>{
                     console.log(error);
                 })
@@ -96,10 +125,24 @@
                 var strTime = hours + ':' + minutes + ' ' + ampm;
                 return strTime;
             },
+            saveBooking(timing_id){
+                axios.post("/api/bookings",{
+                    timing_id:timing_id,
+                    course_id:this.$route.params.id
+                }).then((res)=>{
+                        // console.log(res);
+                        this.$router.push("/schedule-timings");
+                    })
+                    .catch((err)=>{
+                        // console.log(err);
+                        alert("Something went wrong");
+                    })
+            }
         },
         beforeMount() {
             this.getCourseDetails();
             this.all_timings();
+            this.check_token_time();
         },
         computed:{
             timingsZone(){

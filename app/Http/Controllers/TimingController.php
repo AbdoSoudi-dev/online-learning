@@ -2,17 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
 use App\Models\Timing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class TimingController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         $timings = Timing::all();
 
+        $timings = $timings->map(function ($timing) use ($request){
+            $timing['time'] = Carbon::createFromFormat('Y-m-d H:i:s',$timing['time']
+                ,$request->user()->timezone);
+            return $timing;
+        });
+
         return response($timings,201);
+    }
+
+    public function checkTimes(Request $request)
+    {
+//        $checkTimes = Booking::with("timing")
+//            ->where("user_id",$request->user()->id)
+//            ->where("course_id",$request->course_id)
+//            ->get();
+        $checkTimes = Booking::whereUser_idAndCourse_id($request->user()->id,$request->course_id)
+                                ->where(function ($query){
+                                    return $query
+                                            ->where("session_date",">",Carbon::now());
+                                })
+                                ->pluck("timing_id");
+
+        return response($checkTimes,201);
     }
 
 
@@ -20,7 +44,7 @@ class TimingController extends Controller
     {
         Timing::create([
             "days" => json_encode($request->days),
-            "time" => $request->time,
+            "time" => date("Y-m-d H:i:s",strtotime($request->time)),
             "user_id" => $request->user()->id
         ]);
         return response("DONE",201);

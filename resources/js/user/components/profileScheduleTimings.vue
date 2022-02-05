@@ -4,153 +4,39 @@
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Schedule Timings</h4>
-                        <div class="profile-box">
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label>Timing Slot Duration</label>
-                                        <select class="select form-control">
-                                            <option>Select</option>
-                                            <option>15 mins</option>
-                                            <option selected="selected">30 mins</option>
-                                            <option>45 mins</option>
-                                            <option>1 Hour</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="card schedule-widget mb-0">
-
-                                        <div class="schedule-header">
-
-                                            <div class="schedule-nav">
-                                                <ul class="nav nav-tabs nav-justified">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" data-bs-toggle="tab" href="#slot_sunday">Sunday</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link active" data-bs-toggle="tab" href="#slot_monday">Monday</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" data-bs-toggle="tab" href="#slot_tuesday">Tuesday</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" data-bs-toggle="tab" href="#slot_wednesday">Wednesday</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" data-bs-toggle="tab" href="#slot_thursday">Thursday</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" data-bs-toggle="tab" href="#slot_friday">Friday</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" data-bs-toggle="tab" href="#slot_saturday">Saturday</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-
-                                        </div>
-
-
-                                        <div class="tab-content schedule-cont">
-
-                                            <div id="slot_sunday" class="tab-pane fade">
-                                                <h4 class="card-title d-flex justify-content-between">
-                                                    <span>Time Slots</span>
-                                                    <a class="edit-link" data-bs-toggle="modal" href="#add_time_slot"><i class="fa fa-plus-circle"></i> Add Slot</a>
-                                                </h4>
-                                                <p class="text-muted mb-0">Not Available</p>
-                                            </div>
-
-
-                                            <div id="slot_monday" class="tab-pane fade show active">
-                                                <h4 class="card-title d-flex justify-content-between">
-                                                    <span>Time Slots</span>
-                                                    <a class="edit-link" data-bs-toggle="modal" href="#edit_time_slot"><i class="fa fa-edit me-1"></i>Edit</a>
-                                                </h4>
-
-                                                <div class="user-times">
-                                                    <div class="user-slot-list">
-                                                        8:00 pm - 11:30 pm
-                                                        <a href="javascript:void(0)" class="delete_schedule">
-                                                            <i class="fa fa-times"></i>
-                                                        </a>
-                                                    </div>
-                                                    <div class="user-slot-list">
-                                                        11:30 pm - 1:30 pm
-                                                        <a href="javascript:void(0)" class="delete_schedule">
-                                                            <i class="fa fa-times"></i>
-                                                        </a>
-                                                    </div>
-                                                    <div class="user-slot-list">
-                                                        3:00 pm - 5:00 pm
-                                                        <a href="javascript:void(0)" class="delete_schedule">
-                                                            <i class="fa fa-times"></i>
-                                                        </a>
-                                                    </div>
-                                                    <div class="user-slot-list">
-                                                        6:00 pm - 11:00 pm
-                                                        <a href="javascript:void(0)" class="delete_schedule">
-                                                            <i class="fa fa-times"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-
-                                            <div id="slot_tuesday" class="tab-pane fade">
-                                                <h4 class="card-title d-flex justify-content-between">
-                                                    <span>Time Slots</span>
-                                                    <a class="edit-link" data-bs-toggle="modal" href="#add_time_slot"><i class="fa fa-plus-circle"></i> Add Slot</a>
-                                                </h4>
-                                                <p class="text-muted mb-0">Not Available</p>
-                                            </div>
-
-
-                                            <div id="slot_wednesday" class="tab-pane fade">
-                                                <h4 class="card-title d-flex justify-content-between">
-                                                    <span>Time Slots</span>
-                                                    <a class="edit-link" data-bs-toggle="modal" href="#add_time_slot"><i class="fa fa-plus-circle"></i> Add Slot</a>
-                                                </h4>
-                                                <p class="text-muted mb-0">Not Available</p>
-                                            </div>
-
-
-                                            <div id="slot_thursday" class="tab-pane fade">
-                                                <h4 class="card-title d-flex justify-content-between">
-                                                    <span>Time Slots</span>
-                                                    <a class="edit-link" data-bs-toggle="modal" href="#add_time_slot"><i class="fa fa-plus-circle"></i> Add Slot</a>
-                                                </h4>
-                                                <p class="text-muted mb-0">Not Available</p>
-                                            </div>
-
-
-                                            <div id="slot_friday" class="tab-pane fade">
-                                                <h4 class="card-title d-flex justify-content-between">
-                                                    <span>Time Slots</span>
-                                                    <a class="edit-link" data-bs-toggle="modal" href="#add_time_slot"><i class="fa fa-plus-circle"></i> Add Slot</a>
-                                                </h4>
-                                                <p class="text-muted mb-0">Not Available</p>
-                                            </div>
-
-
-                                            <div id="slot_saturday" class="tab-pane fade">
-                                                <h4 class="card-title d-flex justify-content-between">
-                                                    <span>Time Slots</span>
-                                                    <a class="edit-link" data-bs-toggle="modal" href="#add_time_slot"><i class="fa fa-plus-circle"></i> Add Slot</a>
-                                                </h4>
-                                                <p class="text-muted mb-0">Not Available</p>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
+                        <h4 class="card-title">Your lectures </h4>
+                        <div class="table-responsive">
+                            <table class="table table-bordered border-primary">
+                                <thead>
+                                    <tr class="text-center text-bold text-light bg-primary">
+                                        <td>Course</td>
+                                        <td>Time</td>
+                                        <td>Date</td>
+                                        <td>Day</td>
+                                        <td>Status</td>
+                                    </tr>
+                                </thead>
+                                <tbody v-for="(book,key) in myBookingTimes">
+                                    <tr class="text-center " v-for="(courseTime,key) in book">
+                                        <td style="vertical-align: middle" v-if="key ==0" rowspan="12">
+                                            {{ courseTime.course.title }}
+                                        </td>
+                                        <td style="vertical-align: middle" v-if="key ==0" rowspan="12">
+                                            {{ formatAMPM(courseTime.timing.time) }}
+                                        </td>
+                                        <td>{{ courseTime.session_date }}</td>
+                                        <td>{{ courseTime.day }}</td>
+                                        <td>
+                                            <span :class="'text-light p-2 '+
+                                            (courseTime.current || courseTime.coming ? 'bg-info' : (courseTime.status === 'expired' ? 'bg-danger' : 'bg-secondary') ) "
+                                                  style="border-radius: 5px">
+                                                 {{ courseTime.current ? "Join Now"
+                                                : ( courseTime.coming ? "coming" : courseTime.status  ) }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -161,6 +47,36 @@
 
 <script>
     export default {
-
+        data(){
+            return{
+                myBookingTimes:[]
+            }
+        },
+        methods:{
+            getBookingTimes(){
+                axios.get("/api/bookings")
+                    .then((res)=>{
+                        console.log(res);
+                        this.myBookingTimes = res.data;
+                    })
+                    .catch((error)=>{
+                        // console.log(error);
+                    })
+            },
+            formatAMPM(date) {
+                date = new Date(date);
+                var hours = date.getHours();
+                var minutes = date.getMinutes();
+                var ampm = hours >= 12 ? 'pm' : 'am';
+                hours = hours % 12;
+                hours = hours ? hours : 12; // the hour '0' should be '12'
+                minutes = minutes < 10 ? '0'+minutes : minutes;
+                var strTime = hours + ':' + minutes + ' ' + ampm;
+                return strTime;
+            },
+        },
+        beforeMount() {
+            this.getBookingTimes();
+        }
     }
 </script>

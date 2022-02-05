@@ -19,10 +19,15 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->integer('mobile_number')->nullable();
+            $table->string('mobile_number')->nullable();
+            $table->string('timezone')->nullable();
+            $table->string('timezone_offset')->nullable();
+            $table->string('country')->nullable();
             $table->boolean('removed')->default(false);
             $table->boolean("free_trail")->default(false);
+
             $table->foreignId('role_id')->constrained();
+
             $table->rememberToken();
             $table->timestamps();
         });

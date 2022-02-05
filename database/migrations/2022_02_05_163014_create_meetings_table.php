@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEvaluationsTable extends Migration
+class CreateMeetingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,16 @@ class CreateEvaluationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('evaluations', function (Blueprint $table) {
+        Schema::create('meetings', function (Blueprint $table) {
             $table->id();
-            $table->integer("percent");
             $table->foreignId("user_id")->constrained();
-            $table->foreignId("booking_id")->constrained();
+            $table->string("meeting_id");
+            $table->string("topic");
+            $table->dateTime("start_at");
+            $table->integer("duration");
+            $table->string("password");
+            $table->text("start_url");
+            $table->text("join_url");
             $table->timestamps();
         });
     }
@@ -29,6 +34,6 @@ class CreateEvaluationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('evaluations');
+        Schema::dropIfExists('meetings');
     }
 }

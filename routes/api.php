@@ -6,7 +6,7 @@ use \App\Http\Controllers\authController;
 use \App\Http\Controllers\userController;
 use \App\Http\Controllers\courseController;
 use \App\Http\Controllers\TimingController;
-
+use \App\Http\Controllers\bookingController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -37,6 +37,12 @@ Route::group(['middleware'=>['auth:sanctum']], function () {
     Route::post("/courses",[courseController::class,"store"]);
 
     Route::apiResource("timings", TimingController::class);
+    Route::post("check_times", [TimingController::class,"checkTimes"]);
+
+    Route::post("bookings",[ bookingController::class,"store" ]);
+
+    Route::get("bookings",[ bookingController::class,"myBooking" ]);
+    Route::get("bookings_list",[ bookingController::class,"bookingsList" ]);
 
 });
 

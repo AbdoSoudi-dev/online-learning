@@ -25,6 +25,9 @@
                         <a><router-link to="/admin/timings"><span>Timings</span></router-link></a>
                     </li>
                     <li>
+                        <a><router-link to="/admin/new_meeting"><span>New Meeting</span></router-link></a>
+                    </li>
+                    <li>
                         <a><router-link to="/admin/profile"><span>My Profile</span></router-link></a>
                     </li>
                 </ul>
@@ -35,6 +38,17 @@
 
 <script>
     export default {
+        beforeMount() {
+            document.getElementById("userStyle").remove();
+        },
+        beforeUnmount() {
+            let style = document.createElement('link');
+            style.type = "text/css";
+            style.rel = "stylesheet";
+            style.href = '/assets/css/style.css';
+            style.id = "userStyle";
 
+            document.head.appendChild(style);
+        }
     }
 </script>

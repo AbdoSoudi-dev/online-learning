@@ -25,6 +25,7 @@ import addCourse from "../admin/pages/addCourse";
 import courseDetails from "../user/pages/courseDetails";
 import timings from "../admin/pages/timings";
 import enrollCourse from "../user/pages/enrollCourse";
+import createMeetings from "../admin/pages/createMeetings";
 
 
 const routes = [
@@ -59,6 +60,7 @@ const routes = [
             { path: "profile", component: adminProfile  },
             { path: "addCourse", component: addCourse  },
             { path: "timings", component: timings  },
+            { path: "new_meeting", component: createMeetings  },
 
         ]
     },

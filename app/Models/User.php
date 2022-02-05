@@ -22,6 +22,10 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
+        'timezone_offset',
+        'timezone',
+        'mobile_number',
+        'country'
     ];
 
     /**

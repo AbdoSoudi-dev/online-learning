@@ -25,43 +25,39 @@
                                     <input id="email" type="email" class="form-control" v-model="formData.email" required>
                                     <label class="col-12 text-danger" v-if="errors.email">{{ errors.email[0] }}</label>
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-control-label">Mobile Number</label>
-                                        <vue-tel-input styleClasses="form-control"
-                                            :value="formData.mobile_number" invalidMsg="invalid Number"
-                                                       @input="countryChanged"
-                                                       enabledCountryCode="true"></vue-tel-input>
-<!--                                    <label class="col-12 text-danger" v-if="errors.mobile_number">{{ errors.mobile_number[0] }}</label>-->
-                                </div>
+<!--                                <div class="form-group">-->
+<!--                                    <label class="form-control-label">Mobile Number</label>-->
+<!--                                        <vue-tel-input styleClasses="form-control"-->
+<!--                                            :value="formData.mobile_number" invalidMsg="invalid Number"-->
+<!--                                                       @input="countryChanged"-->
+<!--                                                       enabledCountryCode="true"></vue-tel-input>-->
+<!--&lt;!&ndash;                                    <label class="col-12 text-danger" v-if="errors.mobile_number">{{ errors.mobile_number[0] }}</label>&ndash;&gt;-->
+<!--                                </div>-->
+
                                 <div class="row">
-                                    <div class="col-lg-6">
+                                    <div class="col-12">
                                         <div class="form-group">
-                                            <label class="form-control-label">Country</label>
+                                            <div class="dropdown d-flex ">
+                                                <span class="btn btn-outline-primary dropdown-toggle d-flex w-20 pt-2 border" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <div :class="'mt-1 ml-2 vti__flag '+ ( (currentCountry.iso2 ?? allCountries[0].iso2).toLowerCase() )"></div>
+                                                </span>
 
-                                            <form>
-                                                <input type="search" class="form-control"
-                                                       placeholder="Search Country" v-model="formData.country"
-                                                       list="data_countries" />
+                                                <input type="tel" placeholder="write your number" v-model="mobile_number" class="form-control w-80" required>
 
-                                                <datalist id="data_countries">
-                                                    <option v-for="(country,key) in contries" :value="key" />
-                                                </datalist>
-                                            </form>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label class="form-control-label">City</label>
-                                            <select id="city" type="text" class="form-control" name="city" v-model="formData.city" required>
-                                                <option value="">~~ City ~~</option>
-                                                <option v-for="city in cities" :value="city">
-                                                    {{ city }}
-                                                </option>
-                                            </select>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1"
+                                                    style="max-height:200px; overflow: scroll">
+                                                    <li v-for="country in allCountries" @click="currentCountry = country; this.mobile_number = country.dialCode">
+                                                        <a class="dropdown-item d-flex" href="#">
+                                                            <div :class="'vti__flag '+ ( country.iso2.toLowerCase() )"></div>
+                                                            {{ country.name }} {{ "+"+country.dialCode }}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
@@ -103,7 +99,8 @@
 
 <script>
 
-    import countriesCities from "../../countriesCities";
+    import allCountries from "../../allCountries";
+    import timeZones from "../../timeZones";
     export default {
         data(){
             return{
@@ -111,70 +108,98 @@
                     name:"",
                     email:"",
                     mobile_number:null,
-                    password:"",
                     country:"",
                     city:"",
+                    timeZone:"",
+                    timeZoneOffset:"",
+                    password:"",
                     password_confirmation:"",
                 },
                 errors:{},
-                country:"",
-                contries:{},
-                cities:[]
+                allCountries:allCountries,
+                currentCountry:{},
+                mobile_number:"",
+                // country:"",
+                // contries:{},
+                // cities:[]
             }
         },
         methods:{
             registerForm(){
-                // axios.post('/api/register',this.formData).then((res) =>{
-                //     // console.log(res)
-                //     if (res.data.user.role_id == 1){
-                //         this.$router.push("/");
-                //     }else{
-                //         this.$router.push("/admin");
-                //     }
-                //     this.$store.commit("get_token",res.data.token);
-                //     this.$store.commit("get_current_user",res.data.user);
-                // }).catch((err)=>{
-                //     // console.log(err)
-                //     this.errors = err.response.data.errors;
-                // })
-                console.log(this.formData);
+
+                if(this.formData.mobile_number.toString().replace("+","").substring(0,2) == this.currentCountry.dialCode) {
+                    this.formData.mobile_number = this.mobile_number;
+                    axios.post('/api/register',this.formData).then((res) =>{
+                        // console.log(res)
+                        if (res.data.user.role_id == 1){
+                            this.$router.push("/");
+                        }else{
+                            this.$router.push("/admin");
+                        }
+                        this.$store.commit("get_token",res.data.token);
+                        this.$store.commit("get_current_user",res.data.user);
+                    }).catch((err)=>{
+                        // console.log(err)
+                        this.errors = err.response.data.errors;
+                        console.log(this.errors);
+                    })
+                }else{
+                    alert("Mobile format is incorrect.. It should be your country dial code then your number");
+                }
+
+
             },
             countryChanged(phone, phoneObject, input){
                 console.log(phoneObject);
+                console.log(phone);
                 if (phoneObject?.formatted) {
-                    this.formData.mobile_number = phoneObject.number
+                    this.formData.mobile_number = phoneObject.countryCallingCode + phoneObject.nationalNumber
                 }
                 if(phoneObject.country.name){
                     this.formData.country = phoneObject.country.name.split("(") ?
                         phoneObject.country.name.split("(")[0].trim() : phoneObject.country.name.trim();
-                    this.country =this.formData.country;
                 }
 
+            },
+            setTimeZone(){
+                var tz = jstz.determine();
+                this.formData.timeZone = tz.name();
+                for (let zone of timeZones){
+                    if (zone.utc.includes(this.formData.timeZone)){
+                        this.formData.timeZoneOffset = zone.text.split(" ")[0];
+                    }
+                }
             }
+
         },
         watch:{
-            formData: {
-              handler:function (newValue) {
-                  this.country = newValue.country;
-              },
-              deep:true
+            mobile_number(){
+                let code = this.mobile_number.toString().replace("+","");
+                if (!this.mobile_number){
+                    this.currentCountry = {};
+                }
+
+                // if(!this.currentCountry.iso2){
+                    for (let country of this.allCountries){
+                        if (
+                            country.dialCode == code.substring(0,1) ||
+                            country.dialCode == code.substring(0,2) ||
+                            country.dialCode == code.substring(0,3) ||
+                            country.dialCode == code.substring(0,4)
+                        ){
+                            this.currentCountry = country;
+                            // this.mobile_number = country.dialCode
+                        }
+                    }
+                // }
+
             },
-            country(){
-                this.cities =( countriesCities[this.formData.country] ?
-                    countriesCities[this.formData.country].filter(function(item, pos, self) {
-                    return self.indexOf(item) == pos;
-                     })
-                    : countriesCities[this.formData.country]);
-            },
-            cities(){
-                this.formData.city = "";
-            }
         },
         mounted(){
-            this.contries = countriesCities;
-            var tz = jstz.determine();
-            var timezone = tz.name();
-            console.log(timezone);
+            this.setTimeZone();
+            // this.contries = countriesCities;
+            console.log(allCountries);
+
         }
     }
 </script>

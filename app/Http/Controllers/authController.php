@@ -11,12 +11,20 @@ class authController extends Controller
     public function register(Request $request){
         $fields = $request->validate([
             'name' => 'required|string',
+            'country' => 'required|string',
+            'mobile_number' => 'required|string',
+            'timeZone' => 'required|string',
+            'timeZoneOffset' => 'required|string',
             'email' => 'required|string|unique:users,email',
             'password' => 'required|string|confirmed'
         ]);
         $user = User::create([
             'name' => $fields['name'],
             'email' => $fields['email'],
+            'timezone_offset' => $fields['timeZoneOffset'],
+            'timezone' => $fields['timeZone'],
+            'mobile_number' => $fields['mobile_number'],
+            'country' => $fields['country'],
             'password' => bcrypt($fields['password']),
             'role_id' => ($request->role_id ? $request->role_id : 1)
         ]);

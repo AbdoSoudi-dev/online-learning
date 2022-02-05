@@ -3,25 +3,20 @@
 
             <div class="profile-sidebar">
                 <div class="user-widget">
-                    <div class="pro-avatar">JD</div>
-                    <div class="rating">
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star filled"></i>
-                        <i class="fas fa-star"></i>
+                    <div class="pro-avatar text-uppercase">
+                        {{
+                            $store.state.currentUser.name.split("")[0] +
+                            ($store.state.currentUser.name.split(" ")[1] ?
+                                    $store.state.currentUser.name.split(" ")[1].split("")[0] : $store.state.currentUser.name.split("")[1] )
+                        }}
                     </div>
                     <div class="user-info-cont">
-                        <h4 class="usr-name">Jonathan Doe</h4>
-                        <p class="mentor-type">English Literature (M.A)</p>
+                        <h4 class="usr-name text-capitalize">{{ $store.state.currentUser.name }}</h4>
+<!--                        <p class="mentor-type">English Literature (M.A)</p>-->
                     </div>
                 </div>
-                <div class="progress-bar-custom">
-                    <h6>Complete your profiles ></h6>
-                    <div class="pro-progress">
-                        <div class="tooltip-toggle" tabindex="0"></div>
-                        <div class="tooltip">80%</div>
-                    </div>
+                <div class="progress-bar-custom text-danger">
+                    <h6>Verify Your Account </h6>
                 </div>
                 <div class="custom-sidebar-nav">
                     <ul>

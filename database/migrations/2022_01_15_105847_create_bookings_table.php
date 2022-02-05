@@ -15,8 +15,12 @@ class CreateBookingsTable extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
+            $table->boolean("present")->default(0);
             $table->foreignId("user_id")->constrained();
             $table->foreignId("course_id")->constrained();
+            $table->foreignId("timing_id")->constrained();
+            $table->dateTime("session_date");
+            $table->string("booking_group_id");
             $table->timestamps();
         });
     }

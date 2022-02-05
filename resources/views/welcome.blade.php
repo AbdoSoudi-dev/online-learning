@@ -36,11 +36,11 @@
         <link rel="stylesheet" href="{{ asset('assets/css/owl.carousel.min.css')}}">
         <link rel="stylesheet" href="{{ asset('assets/css/owl.theme.default.min.css')}}">
 
-{{--        <link rel="stylesheet" href="{{ asset('assets/css/style.css')}}">--}}
+        <link rel="stylesheet" id="userStyle" href="{{ asset('assets/css/style.css')}}">
 
         {{-- admin assets --}}
-        <link rel="stylesheet" href="{{ asset('adminAssets/css/feathericon.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('adminAssets/css/style.css') }}">
+        <link rel="stylesheet"  href="{{ asset('adminAssets/css/feathericon.min.css') }}">
+        <link rel="stylesheet" id="adminStyle" href="{{ asset('adminAssets/css/style.css') }}">
 {{--        <link rel="stylesheet" href="{{ asset('adminAssets/plugins/datatables/datatables.min.css')}}">--}}
     </head>
     <body class="antialiased">

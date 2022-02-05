@@ -9,6 +9,7 @@ import vuex from "./store/vuex";
 import VueTelInput from 'vue3-tel-input'
 import 'vue3-tel-input/dist/vue3-tel-input.css'
 
+
 createApp(index)
     .use(router)
     .use(vuex)
