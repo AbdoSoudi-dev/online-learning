@@ -23,6 +23,8 @@
                         this.$store.commit("get_current_user",res.data);
                     }).catch((err)=>{
                     // console.log(err)
+                    this.$store.commit("get_current_user",{});
+                    this.$store.commit("get_token","");
                 })
             }
         },

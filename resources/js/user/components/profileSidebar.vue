@@ -3,14 +3,17 @@
 
             <div class="profile-sidebar">
                 <div class="user-widget">
-                    <div class="pro-avatar text-uppercase">
+                    <div class="pro-avatar text-uppercase" v-if="!$store.state.currentUser.profile_image">
                         {{
                             $store.state.currentUser.name.split("")[0] +
                             ($store.state.currentUser.name.split(" ")[1] ?
                                     $store.state.currentUser.name.split(" ")[1].split("")[0] : $store.state.currentUser.name.split("")[1] )
                         }}
                     </div>
-                    <div class="user-info-cont">
+                    <div v-else>
+                        <img :src="'profile_images/' + $store.state.currentUser.profile_image" width="120" height="120" :alt="$store.state.currentUser.name" class="avatar-img rounded-circle">
+                    </div>
+                    <div class="user-info-cont mt-2">
                         <h4 class="usr-name text-capitalize">{{ $store.state.currentUser.name }}</h4>
 <!--                        <p class="mentor-type">English Literature (M.A)</p>-->
                     </div>

@@ -7,6 +7,7 @@ use \App\Http\Controllers\userController;
 use \App\Http\Controllers\courseController;
 use \App\Http\Controllers\TimingController;
 use \App\Http\Controllers\bookingController;
+use \App\Http\Controllers\MeetingController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -32,6 +33,7 @@ Route::group(['middleware'=>['auth:sanctum']], function () {
     Route::delete('/logout',[AuthController::class,'logout']);
     Route::get('/users',[userController::class,'index']);
     Route::post('/addUser',[userController::class,'store']);
+    Route::post('/editProfile',[userController::class,'editProfile']);
     Route::post('/removeUser',[userController::class,'removeUser']);
 
     Route::post("/courses",[courseController::class,"store"]);
@@ -41,8 +43,14 @@ Route::group(['middleware'=>['auth:sanctum']], function () {
 
     Route::post("bookings",[ bookingController::class,"store" ]);
 
-    Route::get("bookings",[ bookingController::class,"myBooking" ]);
-    Route::get("bookings_list",[ bookingController::class,"bookingsList" ]);
+    Route::get("coming_bookings",[ bookingController::class,"coming_bookings" ]);
+
+    Route::post("create_meeting",[ MeetingController::class,"createMeeting" ]);
+
+    Route::get("bookings/{id}",[ bookingController::class,"myBooking" ]);
+    Route::get("bookings_list/{id}",[ bookingController::class,"bookingsList" ]);
+
+    Route::post("bookingsPresenting", [ bookingController::class, "bookingsPresenting" ]);
 
 });
 

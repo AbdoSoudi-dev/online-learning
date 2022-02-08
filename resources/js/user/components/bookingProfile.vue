@@ -5,7 +5,16 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <h4 class="mb-4">Bookings List</h4>
+                <div class="d-flex justify-content-between">
+                    <h4 class="card-title">Bookings List </h4>
+                    <div class="form-group" v-if="[2,3].includes($store.state.currentUser.role_id)">
+                        <h4>Choose User</h4>
+                        <select class="form-control m-auto" @change="getBookingTimes" v-model="user_id">
+                            <option v-for="user in users" :value="user.id">{{ user.name }}</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="card card-table">
                     <div class="card-body">
                         <div class="table-responsive">
@@ -33,19 +42,19 @@
                                                     </span>
                                                 </div>
                                                 <div class="col-4">
-                                                    {{ formatAMPM(list.time) }}
+                                                    {{ formatAMPM(list.timing.time) }}
                                                 </div>
                                             </div>
 
                                         </td>
-                                        <td>(12/{{ list.token_lect }})</td>
-                                        <td>{{ (list.time_diff ?? "expired") }}</td>
+                                        <td>(12/{{ list.session_num-1 }})</td>
+                                        <td>{{ (list.diff_time ?? "expired") }}</td>
                                         <td >
                                             <div class="pro-progress ">
-                                                <div class="tooltip-toggle" tabindex="0" :style="'width:' + Math.round(list.percent) + '% !important' ">
+                                                <div class="tooltip-toggle" tabindex="0" :style="'width:' + Math.round((list.session_num-1)*100/12) + '% !important' ">
 
                                                 </div>
-                                                <div class="tooltip" :style="'left:' + (+Math.round(list.percent) -7) + '% !important' ">{{ Math.round(list.percent) + "%" }}</div>
+                                                <div class="tooltip" :style="'left:' + (+Math.round((list.session_num-1)*100/12) -7) + '% !important' ">{{ Math.round((list.session_num-1)*100/12) + "%" }}</div>
                                             </div>
                                         </td>
                                     </tr>
@@ -63,14 +72,26 @@
     export default {
         data(){
             return{
-                bookingsList:[]
+                bookingsList:[],
+                user_id:this.$store.state.currentUser.id,
+                users:[]
             }
         },
         methods:{
-            getBookingsList(){
-                axios.get("/api/bookings_list")
+            getUsers(){
+                axios.get('/api/users')
                     .then((res)=>{
-                        // console.log(res);
+                        // console.log(res)
+                        this.users = res.data;
+                    })
+                    .catch((err)=>{
+
+                    })
+            },
+            getBookingsList(){
+                axios.get("/api/bookings_list/"+this.user_id)
+                    .then((res)=>{
+                        console.log(res);
                         this.bookingsList = res.data;
                     })
                     .catch((error)=>{
@@ -91,6 +112,7 @@
 
         },
         beforeMount() {
+            this.getUsers();
             this.getBookingsList();
         }
     }

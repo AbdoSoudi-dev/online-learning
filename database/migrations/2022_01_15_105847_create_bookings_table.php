@@ -21,6 +21,7 @@ class CreateBookingsTable extends Migration
             $table->foreignId("timing_id")->constrained();
             $table->dateTime("session_date");
             $table->string("booking_group_id");
+            $table->integer("session_num");
             $table->timestamps();
         });
     }

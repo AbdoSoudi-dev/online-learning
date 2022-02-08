@@ -25,8 +25,9 @@ class CreateUsersTable extends Migration
             $table->string('country')->nullable();
             $table->boolean('removed')->default(false);
             $table->boolean("free_trail")->default(false);
-
             $table->foreignId('role_id')->constrained();
+
+            $table->string('profile_image')->nullable();
 
             $table->rememberToken();
             $table->timestamps();

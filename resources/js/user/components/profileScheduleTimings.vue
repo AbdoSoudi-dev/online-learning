@@ -4,7 +4,16 @@
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Your lectures </h4>
+                        <div class="d-flex justify-content-between">
+                            <h4 class="card-title">Your lectures </h4>
+                            <div class="form-group">
+                                <h4>Choose User</h4>
+                                <select class="form-control m-auto" @change="getBookingTimes" v-model="user_id" v-if="[2,3].includes($store.state.currentUser.role_id)">
+                                    <option v-for="user in users" :value="user.id">{{ user.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="table-responsive">
                             <table class="table table-bordered border-primary">
                                 <thead>
@@ -27,11 +36,14 @@
                                         <td>{{ courseTime.session_date }}</td>
                                         <td>{{ courseTime.day }}</td>
                                         <td>
-                                            <span :class="'text-light p-2 '+
-                                            (courseTime.current || courseTime.coming ? 'bg-info' : (courseTime.status === 'expired' ? 'bg-danger' : 'bg-secondary') ) "
+                                            <span @click="setPresented(courseTime.id,courseTime.present)" v-if="courseTime.current" class="text-light p-2 bg-info cursor-pointer">
+                                                Join Now
+                                            </span>
+                                            <span v-else :class="'text-light p-2 '+
+                                                (courseTime.current || courseTime.coming ? 'bg-info r' : (courseTime.status === 'expired' ? 'bg-danger' : 'bg-secondary') ) "
                                                   style="border-radius: 5px">
-                                                 {{ courseTime.current ? "Join Now"
-                                                : ( courseTime.coming ? "coming" : courseTime.status  ) }}
+                                                    {{ courseTime.current ? "Join Now"
+                                                    : ( courseTime.coming ? "coming" : courseTime.status  ) }}
                                             </span>
                                         </td>
                                     </tr>
@@ -49,14 +61,29 @@
     export default {
         data(){
             return{
-                myBookingTimes:[]
+                myBookingTimes:[],
+                user_id:this.$store.state.currentUser.id,
+                users:[],
+                interval:""
             }
         },
         methods:{
+            getUsers(){
+                if (this.$store.state.currentUser.role_id != 1) {
+                    axios.get('/api/users')
+                        .then((res) => {
+                            // console.log(res)
+                            this.users = res.data;
+                        })
+                        .catch((err) => {
+
+                        })
+                }
+            },
             getBookingTimes(){
-                axios.get("/api/bookings")
+                axios.get("/api/bookings/"+this.user_id)
                     .then((res)=>{
-                        console.log(res);
+                        // console.log(res);
                         this.myBookingTimes = res.data;
                     })
                     .catch((error)=>{
@@ -74,9 +101,38 @@
                 var strTime = hours + ':' + minutes + ' ' + ampm;
                 return strTime;
             },
+            setPresented(booking_id,present){
+                if (present == 0 || this.$store.state.currentUser.free_trail == 0){
+                    axios.post("/api/bookingsPresenting",{
+                        booking_id: booking_id
+                    })
+                    .then((res)=>{
+                        console.log(res);
+                        this.$store.commit("get_current_user",res.data);
+                        // window.open("adsad")
+                    })
+                    .catch((error)=>{
+                        // console.log(error);
+                    })
+                }
+                else{
+                    // window.open("adsad")
+                }
+
+            }
         },
         beforeMount() {
             this.getBookingTimes();
+            this.getUsers();
+
+          this.interval = setInterval(()=>{
+                if (!document.hidden){
+                    this.getBookingTimes()
+                }
+            },20000);
+        },
+        unmounted() {
+            clearInterval(this.interval);
         }
     }
 </script>

@@ -119,16 +119,15 @@
                 allCountries:allCountries,
                 currentCountry:{},
                 mobile_number:"",
-                // country:"",
-                // contries:{},
-                // cities:[]
             }
         },
         methods:{
             registerForm(){
 
                 if(this.formData.mobile_number.toString().replace("+","").substring(0,2) == this.currentCountry.dialCode) {
-                    this.formData.mobile_number = this.mobile_number;
+                    this.formData.mobile_number = this.mobile_number.toString().replace("+","");
+                    this.formData.country = this.currentCountry.name.split(" ")[0];
+
                     axios.post('/api/register',this.formData).then((res) =>{
                         // console.log(res)
                         if (res.data.user.role_id == 1){
@@ -170,7 +169,6 @@
                     }
                 }
             }
-
         },
         watch:{
             mobile_number(){
@@ -197,8 +195,6 @@
         },
         mounted(){
             this.setTimeZone();
-            // this.contries = countriesCities;
-            console.log(allCountries);
 
         }
     }

@@ -25,5 +25,9 @@ class Booking extends Model
     public function course(){
         return $this->belongsTo(Course::class);
     }
+    public function meetings()
+    {
+        return $this->belongsToMany(Meeting::class,"booking_meeting");
+    }
 
 }

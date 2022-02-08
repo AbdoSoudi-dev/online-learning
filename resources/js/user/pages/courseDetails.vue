@@ -7,7 +7,7 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <div class="row mt-5">
+                            <div class="row ">
                                 <span class="course-title col-12">{{ courseDetails.title }}</span>
                                 <div class="blog-details d-flex row justify-content-center">
 
@@ -20,7 +20,7 @@
                                                 </h3>
 <!--                                            </div>-->
 <!--                                            <div class="col-6">-->
-                                                <button class="btn btn-success" @click="enrollCourse" v-if="$store.state.currentUser.free_trial == 1">
+                                                <button class="btn btn-success" @click="enrollCourse" v-if="$store.state.currentUser.free_trail == 1">
                                                     Enroll Now
                                                 </button>
                                                 <button class="btn btn-success" @click="enrollCourse" v-else>

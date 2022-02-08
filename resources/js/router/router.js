@@ -26,18 +26,23 @@ import courseDetails from "../user/pages/courseDetails";
 import timings from "../admin/pages/timings";
 import enrollCourse from "../user/pages/enrollCourse";
 import createMeetings from "../admin/pages/createMeetings";
+import meetings from "../admin/pages/meetings";
+import zoomRoom from "../user/pages/zoomRoom";
+import payment from "../user/pages/payment";
 
 
 const routes = [
+    { path : "/joinRoom", component: zoomRoom },
     { path: "/", name:"home", component: index,
         children:[
             { path : "/home", component: home,alias:"/" },
             { path : "/coursesList", component: courses },
             { path : "/course/:id", component: courseDetails },
             { path : "/enrollCourse/:id", component: enrollCourse },
-            { path: "/login", name:"user.login" , component: login  },
-            { path: "/register", name:"user.register" , component: register  },
-            { path : "/profile", component: profile,
+            { path : "/payment/:booking_id", component: payment },
+            { path: "/login", name:"user.login" , component: login,meta: { requiresNoAuth: true },  },
+            { path: "/register", name:"user.register" , component: register,meta: { requiresNoAuth: true },  },
+            { path : "/profile", component: profile, meta: { requiresAuth: true },
                 children:[
                     { path: "/bookings",component:bookingProfile },
                     { path: "/schedule-timings",component:profileScheduleTimings },
@@ -61,6 +66,7 @@ const routes = [
             { path: "addCourse", component: addCourse  },
             { path: "timings", component: timings  },
             { path: "new_meeting", component: createMeetings  },
+            { path: "meetings", component: meetings  },
 
         ]
     },
@@ -80,10 +86,15 @@ router.beforeEach((to, from, next) => {
     let requiresSuperadminCond = to.matched.some(record => record.meta.requiresSuperadmin) && store.state.token !== ""
         && to.meta.requiresSuperadmin && (!store.state.currentUser.role_id || store.state.currentUser.role_id != 3 );
 
+    let requiresAuth = to.matched.some(record => record.meta.requiresAuth) && !store.state.token && to.meta.requiresAuth
+        && !store.state.currentUser.role_id;
+
+    let requiresNoAuth = to.matched.some(record => record.meta.requiresNoAuth) && store.state.token && to.meta.requiresNoAuth
+        && store.state.currentUser.role_id;
 
 
 
-    if ( requiresAdminCond || requiresSuperadminCond) {
+    if ( requiresAdminCond || requiresSuperadminCond || requiresNoAuth || requiresAuth) {
         next("/")
     }
     else{

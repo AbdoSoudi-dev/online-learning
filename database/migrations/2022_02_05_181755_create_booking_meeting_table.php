@@ -13,7 +13,7 @@ class CreateBookingsMeetingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('bookings_meetings', function (Blueprint $table) {
+        Schema::create('booking_meeting', function (Blueprint $table) {
 
             $table->foreignId("booking_id")->constrained();
             $table->foreignId("meeting_id")->constrained();

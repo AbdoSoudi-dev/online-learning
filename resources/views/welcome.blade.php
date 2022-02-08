@@ -4,6 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        {{--        --}}
+        <meta http-equiv="origin-trial" content="TOKEN_GOES_HERE">
         <title>Laravel</title>
 
         <!-- Fonts -->

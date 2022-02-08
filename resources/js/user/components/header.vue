@@ -60,19 +60,19 @@
                             <router-link class="nav-link  header-login" to="/register">register</router-link>
                         </li>
                         <li class="nav-item dropdown has-arrow logged-item" v-else>
-                            <a class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                            <a class="dropdown-toggle nav-link cursor-pointer head-photo" data-bs-toggle="dropdown">
                                 <span class="user-img">
-                                <img class="rounded-circle" src="/assets/img/user/user.jpg" width="31" alt="Darren Elder">
+                                    <img class="rounded-circle" :src="'/profile_images/' + $store.state.currentUser.profile_image" width="31" :alt="$store.state.currentUser.name">
                                 </span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <div class="user-header">
                                     <div class="avatar avatar-sm">
-                                        <img src="/assets/img/user/user.jpg" alt="User Image" class="avatar-img rounded-circle">
+                                        <img :src="'/profile_images/' + $store.state.currentUser.profile_image" :alt="$store.state.currentUser.name" class="avatar-img rounded-circle">
                                     </div>
-                                    <div class="user-text">
-                                        <h6>Jonathan Doe</h6>
-                                        <p class="text-muted mb-0">Mentor</p>
+                                    <div class="user-text text-capitalize">
+                                        <h6>{{ $store.state.currentUser.name }}</h6>
+                                        <p class="text-muted mb-0">{{ $store.state.currentUser.role_id == 1 ? "Trainee" : "Trainer" }}</p>
                                     </div>
                                 </div>
                                 <a class="dropdown-item">
@@ -135,3 +135,8 @@
     }
 </script>
 
+<style scoped>
+    .head-photo:hover{
+        background-color: #0d6efd;
+    }
+</style>

@@ -25,6 +25,9 @@
                         <a><router-link to="/admin/timings"><span>Timings</span></router-link></a>
                     </li>
                     <li>
+                        <a><router-link to="/admin/meetings"><span>Meetings</span></router-link></a>
+                    </li>
+                    <li>
                         <a><router-link to="/admin/new_meeting"><span>New Meeting</span></router-link></a>
                     </li>
                     <li>
