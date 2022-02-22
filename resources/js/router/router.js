@@ -29,6 +29,13 @@ import createMeetings from "../admin/pages/createMeetings";
 import meetings from "../admin/pages/meetings";
 import zoomRoom from "../user/pages/zoomRoom";
 import payment from "../user/pages/payment";
+import profileChangePassword from "../user/components/profileChangePassword";
+import emailVerification from "../user/pages/emailVerification";
+import profileEmailVerified from "../user/components/profileEmailVerified";
+import aboutUs from "../user/pages/aboutUs";
+import resetPassword from "../user/pages/resetPassword";
+import newPassword from "../user/pages/newPassword";
+import editUser from "../admin/pages/editUser";
 
 
 const routes = [
@@ -36,18 +43,24 @@ const routes = [
     { path: "/", name:"home", component: index,
         children:[
             { path : "/home", component: home,alias:"/" },
+            { path : "/aboutUs", component: aboutUs },
             { path : "/coursesList", component: courses },
             { path : "/course/:id", component: courseDetails },
-            { path : "/enrollCourse/:id", component: enrollCourse },
+            { path : "/enrollCourse/:id", component: enrollCourse,meta: { requiresAuth: true } },
             { path : "/payment/:booking_id", component: payment },
             { path: "/login", name:"user.login" , component: login,meta: { requiresNoAuth: true },  },
             { path: "/register", name:"user.register" , component: register,meta: { requiresNoAuth: true },  },
+            { path: "/resetPassword" , component: resetPassword,meta: { requiresNoAuth: true },  },
+            { path: "/newPassword" , component: newPassword,meta: { requiresNoAuth: true },  },
             { path : "/profile", component: profile, meta: { requiresAuth: true },
                 children:[
                     { path: "/bookings",component:bookingProfile },
                     { path: "/schedule-timings",component:profileScheduleTimings },
                     { path: "/invoices",component:profileInvoices },
                     { path: "/reviews",component:profileReviews },
+                    { path: "/changePassword",component:profileChangePassword },
+                    { path: "/emailVerification",component:emailVerification },
+                    { path: "/emailVerified",component:profileEmailVerified },
                     { path: "",component:profileEdit },
                 ]
             },
@@ -62,6 +75,7 @@ const routes = [
             { path: "invoices",component: adminInvoices  },
             { path: "users", component: adminUsers, meta: { requiresSuperadmin: true },  },
             { path: "addUser", component: addUser, meta: { requiresSuperadmin: true },  },
+            { path: "editUser/:id", component: editUser, meta: { requiresSuperadmin: true },  },
             { path: "profile", component: adminProfile  },
             { path: "addCourse", component: addCourse  },
             { path: "timings", component: timings  },
@@ -70,6 +84,7 @@ const routes = [
 
         ]
     },
+    { path: '/:pathMatch(.*)*', component: index },
 ];
 
 const router = createRouter({
@@ -80,10 +95,10 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
 
-    let requiresAdminCond = to.matched.some(record => record.meta.requiresAdmin) && store.state.token !== "" && to.meta.requiresAdmin
+    let requiresAdminCond = to.matched.some(record => record.meta.requiresAdmin) && to.meta.requiresAdmin
         && (!store.state.currentUser.role_id || store.state.currentUser.role_id == 1 );
 
-    let requiresSuperadminCond = to.matched.some(record => record.meta.requiresSuperadmin) && store.state.token !== ""
+    let requiresSuperadminCond = to.matched.some(record => record.meta.requiresSuperadmin)
         && to.meta.requiresSuperadmin && (!store.state.currentUser.role_id || store.state.currentUser.role_id != 3 );
 
     let requiresAuth = to.matched.some(record => record.meta.requiresAuth) && !store.state.token && to.meta.requiresAuth
@@ -93,8 +108,9 @@ router.beforeEach((to, from, next) => {
         && store.state.currentUser.role_id;
 
 
-
-    if ( requiresAdminCond || requiresSuperadminCond || requiresNoAuth || requiresAuth) {
+    if ( requiresAdminCond || requiresSuperadminCond) {
+        location.href = "/";
+    }else if (requiresNoAuth || requiresAuth){
         next("/")
     }
     else{

@@ -1,10 +1,10 @@
 <template>
-    <section class="section path-section mt-3">
+    <section class="section path-section bg-gray-dark">
         <div class="section-header text-center">
             <div class="container">
-                <span>Choose the</span>
-                <h2>Different All Learning Paths</h2>
-                <p class="sub-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</p>
+<!--                <span>Choose the</span>-->
+                <h2>Courses</h2>
+<!--                <p class="sub-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</p>-->
             </div>
         </div>
         <div class="learning-path-col">
@@ -12,14 +12,18 @@
                 <div class="row">
 
                     <div class="col-12 col-md-4 col-lg-3" v-for="course in coursesList">
-                        <div class="large-col">
+                        <div class="large-col text-center">
                             <router-link :to="'/course/'+course.id">
-                                <div class="image-col-merge">
-                                    <img :src="'/courses/'+course.image" alt="">
+                                <div class="image-col-merge img_course" >
+                                    <img :src="'/courses/'+course.image" alt="" >
                                     <div class="text-col">
-                                        <h5>{{course.title}}</h5>
+                                        <h5 class="title">{{course.title}}</h5>
+                                        <p class="sub-title short_desc mt-3">
+                                            {{ course.short_desc }}
+                                        </p>
                                     </div>
                                 </div>
+                                <div class="btn btn-success mt-2 w-100">More Details</div>
                             </router-link>
                         </div>
                     </div>
@@ -55,3 +59,27 @@
         }
 
 </script>
+<style scoped>
+
+    .img_course{
+        position: relative;
+    }
+
+    .short_desc {
+        background: rgba(29, 106, 154, 0.72);
+        color: #fff;
+        display: none;
+        opacity: 0;
+
+        /* transition effect. not necessary */
+        transition: opacity .7s, display .7s;
+    }
+
+    .img_course:hover .short_desc {
+        display: block;
+        opacity: 1;
+    }
+    .bg-gray-dark{
+        background-color: #e4f2ff;
+    }
+</style>

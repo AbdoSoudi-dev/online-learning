@@ -42,14 +42,13 @@ class bookingController extends Controller
                 "status" => ($myBooking['session_date'] < $date_now ? "expired" : "incoming"),
                 "current" => ($date_now >= $lecture_start && $date_now <= $lecture_end ? true : false),
                 "coming" =>($myBooking['session_date'] > $date_now && !$check_coming &&
-                                ($date_now >= $lecture_start && $date_now <= $lecture_end) ? true : false),
+                                !($date_now >= $lecture_start && $date_now <= $lecture_end) ? true : false),
                 "timing" => $myBooking['timing'],
                 "course" => $myBooking['course'],
             ];
             if ($myBooking['session_date'] > $date_now){
                 $check_coming = true;
             }
-
         }
 
         return response($myBookingsGroup,201);
@@ -72,50 +71,50 @@ class bookingController extends Controller
         return response($myBookings,201);
     }
 
-    public function getBooking($myBookings,$timezone)
-    {
-        $allBookings = [];
-
-        foreach ($myBookings as $myBooking) {
-            $start_date = Carbon::createFromFormat('Y-m-d H:i:s',$myBooking->start_date
-                ,$timezone);
-
-            $end_date = Carbon::createFromFormat('Y-m-d H:i:s',$myBooking->start_date
-                ,$timezone)->addDays(35);
-
-            $period = CarbonPeriod::create($start_date, $end_date);
-
-            $days = [];
-            $timingDays= $myBooking->timing->days;
-            $myBooking->time = Carbon::createFromFormat('Y-m-d H:i:s',
-                $myBooking->timing->time
-                ,$timezone);
-
-            foreach ($period as $item) {
-                $day = $item->format("l");
-                $coming = $item->format("Y-m-d ") . $myBooking->time->format("H:i");
-                if (in_array($day,$timingDays) && count($days) != 12){
-                    $days[] = [
-                        "date" => $item->format("Y-m-d"),
-                        "day" => $day,
-                        "date_time" =>$coming,
-                        "status" => ($coming < date("Y-m-d H:i") ? "expired" : "incoming"),
-                        "current" => ($coming == date("Y-m-d H:i") ? true : false),
-                        "coming" => ($coming > date("Y-m-d H:i") && !in_array(true,array_column($days,"coming")) ? true : false),
-                    ];
-                }
-            }
-            $myBooking->courseTimes = $days;
-            if (!$myBooking->expired_date){
-                $expiredBooking = Booking::find($myBooking->id);
-                $expiredBooking->expired_date = $days[count($days)-1]['date'] . " " . Carbon::parse($myBooking->time)->addHours(2)->format("H:i");
-                $expiredBooking->save();
-            }
-            $allBookings[] = $myBooking;
-        }
-
-        return $allBookings;
-    }
+//    public function getBooking($myBookings,$timezone)
+//    {
+//        $allBookings = [];
+//
+//        foreach ($myBookings as $myBooking) {
+//            $start_date = Carbon::createFromFormat('Y-m-d H:i:s',$myBooking->start_date
+//                ,$timezone);
+//
+//            $end_date = Carbon::createFromFormat('Y-m-d H:i:s',$myBooking->start_date
+//                ,$timezone)->addDays(35);
+//
+//            $period = CarbonPeriod::create($start_date, $end_date);
+//
+//            $days = [];
+//            $timingDays= $myBooking->timing->days;
+//            $myBooking->time = Carbon::createFromFormat('Y-m-d H:i:s',
+//                $myBooking->timing->time
+//                ,$timezone);
+//
+//            foreach ($period as $item) {
+//                $day = $item->format("l");
+//                $coming = $item->format("Y-m-d ") . $myBooking->time->format("H:i");
+//                if (in_array($day,$timingDays) && count($days) != 12){
+//                    $days[] = [
+//                        "date" => $item->format("Y-m-d"),
+//                        "day" => $day,
+//                        "date_time" =>$coming,
+//                        "status" => ($coming < date("Y-m-d H:i") ? "expired" : "incoming"),
+//                        "current" => ($coming == date("Y-m-d H:i") ? true : false),
+//                        "coming" => ($coming > date("Y-m-d H:i") && !in_array(true,array_column($days,"coming")) ? true : false),
+//                    ];
+//                }
+//            }
+//            $myBooking->courseTimes = $days;
+//            if (!$myBooking->expired_date){
+//                $expiredBooking = Booking::find($myBooking->id);
+//                $expiredBooking->expired_date = $days[count($days)-1]['date'] . " " . Carbon::parse($myBooking->time)->addHours(2)->format("H:i");
+//                $expiredBooking->save();
+//            }
+//            $allBookings[] = $myBooking;
+//        }
+//
+//        return $allBookings;
+//    }
 
     public function store(Request $request)
     {
@@ -212,5 +211,19 @@ class bookingController extends Controller
         Booking::find($request->booking_id)->update([ "present" => "1" ]);
 
         return response(User::find($request->user()->id),201);
+    }
+
+    public function bookingsPayCheck($id,Request $request)
+    {
+        $bookingCheck = Booking::with(["timing","course"])
+                         ->whereIdAndUser_id($id,$request->user()->id)
+                         ->whereDoesntHave("payment")
+                         ->first();
+        if ($bookingCheck){
+            return response($bookingCheck,201);
+        }
+
+        return response("",500);
+
     }
 }

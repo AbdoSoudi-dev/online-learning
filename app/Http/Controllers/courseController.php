@@ -15,7 +15,7 @@ class courseController extends Controller
      */
     public function index()
     {
-        $courses = Course::all();
+        $courses = Course::whereRemoved(0)->get();
         return response($courses,201);
     }
 

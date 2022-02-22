@@ -10,21 +10,29 @@ class userController extends Controller
 {
     public function index()
     {
-        return User::with("role")->where("removed",0)->get();
+        return User::with("role")->where("removed",0)->latest()->get();
     }
 
     public function store(Request $request)
     {
         $fields = $request->validate([
             'name' => 'required|string',
+            'country' => 'required|string',
+            'mobile_number' => 'required|string',
+            'timeZone' => 'required|string',
+            'timeZoneOffset' => 'required|string',
             'email' => 'required|string|unique:users,email',
             'password' => 'required|string|confirmed'
         ]);
         $user = User::create([
             'name' => $fields['name'],
             'email' => $fields['email'],
+            'timezone_offset' => $fields['timeZoneOffset'],
+            'timezone' => $fields['timeZone'],
+            'mobile_number' => $fields['mobile_number'],
+            'country' => $fields['country'],
             'password' => bcrypt($fields['password']),
-            'role_id' => $request->role_id
+            'role_id' => ($request->role_id ? $request->role_id : 1)
         ]);
 
 
@@ -57,6 +65,11 @@ class userController extends Controller
             User::find($request->user()->id)->update(["profile_image" =>$imageName]);
         }
 
+        if ($request->email !== $request->user()->id){
+            User::find($request->user()->id)->update(["email_verified_at" =>NULL]);
+        }
+
+
        User::find($request->user()->id)->update([
             "name" => $request->name,
             "email" => $request->email,
@@ -68,4 +81,26 @@ class userController extends Controller
        return response(User::find($request->user()->id),201);
     }
 
+    public function getUser($id, Request $request)
+    {
+        if ($request->user()->role_id == 3){
+            return response(User::find($id),200);
+        }
+        return response("Unauthorized",500);
+    }
+
+    public function update(Request $request)
+    {
+        User::find($request->id)->update([
+            "name" => $request->name,
+            "email" => $request->email,
+            "country" => $request->country,
+            "mobile_number" => $request->mobile_number,
+            "timezone" => $request->timezone,
+            "timezone_offset" => $request->timezone_offset,
+            "role_id" => $request->role_id,
+        ]);
+
+        return response("DONE",200);
+    }
 }

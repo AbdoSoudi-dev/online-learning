@@ -8,8 +8,8 @@
                     <div class="account-box">
                         <div class="login-right">
                             <div class="login-header">
-                                <h3><span>Mentoring</span> Register</h3>
-                                <p class="text-muted">Access to our dashboard</p>
+                                <h3><span>Quraan education</span> Register</h3>
+                                <p class="text-muted">Access to our services</p>
                             </div>
 
                             <form @submit.prevent="registerForm">
@@ -79,7 +79,7 @@
                                         <label class="form-check-label" for="agree_checkbox_user">I agree to Mentoring</label> <a tabindex="-1" href="javascript:void(0);">Privacy Policy</a> &amp; <a tabindex="-1" href="javascript:void(0);"> Terms.</a>
                                     </div>
                                 </div>
-                                <button class="btn btn-primary login-btn" type="submit">Create Account</button>
+                                <button class="btn btn-primary login-btn" type="submit" id="submit">Create Account</button>
                                 <div class="account-footer text-center mt-3">
                                     Already have an account? <a class="forgot-link mb-0" ><router-link to="/login">Login</router-link></a>
                                 </div>
@@ -123,20 +123,21 @@
         },
         methods:{
             registerForm(){
-
-                if(this.formData.mobile_number.toString().replace("+","").substring(0,2) == this.currentCountry.dialCode) {
-                    this.formData.mobile_number = this.mobile_number.toString().replace("+","");
-                    this.formData.country = this.currentCountry.name.split(" ")[0];
-
+                this.formData.mobile_number = this.mobile_number.toString().replace("+","");
+                this.formData.country = this.currentCountry.name.split(" ")[0];
+                if(this.formData.mobile_number.substring(0,2) == this.currentCountry.dialCode) {
+                    document.getElementById("submit").disabled = true;
+                    document.getElementById("submit").innerHTML = "Waiting...";
                     axios.post('/api/register',this.formData).then((res) =>{
                         // console.log(res)
-                        if (res.data.user.role_id == 1){
-                            this.$router.push("/");
-                        }else{
-                            this.$router.push("/admin");
-                        }
                         this.$store.commit("get_token",res.data.token);
                         this.$store.commit("get_current_user",res.data.user);
+                        if (res.data.user.role_id == 1){
+                            this.$router.push("/coursesList");
+                        }else{
+                            this.$router.push("/");
+                        }
+
                     }).catch((err)=>{
                         // console.log(err)
                         this.errors = err.response.data.errors;

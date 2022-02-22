@@ -19,6 +19,9 @@
     export default {
         components:{
             profileSidebar
+        },
+        mounted() {
+            window.axios.defaults.headers.common['Authorization'] = 'Bearer '+this.$store.state.token;
         }
     }
 </script>

@@ -6,7 +6,7 @@
 
         {{--        --}}
         <meta http-equiv="origin-trial" content="TOKEN_GOES_HERE">
-        <title>Laravel</title>
+        <title>Quran Education</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -35,15 +35,17 @@
         <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome/css/fontawesome.min.css')}}">
         <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome/css/all.min.css')}}">
 
-        <link rel="stylesheet" href="{{ asset('assets/css/owl.carousel.min.css')}}">
-        <link rel="stylesheet" href="{{ asset('assets/css/owl.theme.default.min.css')}}">
+{{--        <link rel="stylesheet" href="{{ asset('assets/css/owl.carousel.min.css')}}">--}}
+{{--        <link rel="stylesheet" href="{{ asset('assets/css/owl.theme.default.min.css')}}">--}}
 
-        <link rel="stylesheet" id="userStyle" href="{{ asset('assets/css/style.css')}}">
 
-        {{-- admin assets --}}
-        <link rel="stylesheet"  href="{{ asset('adminAssets/css/feathericon.min.css') }}">
-        <link rel="stylesheet" id="adminStyle" href="{{ asset('adminAssets/css/style.css') }}">
-{{--        <link rel="stylesheet" href="{{ asset('adminAssets/plugins/datatables/datatables.min.css')}}">--}}
+        @if(request()->is('admin/*') || request()->is('admin'))
+            <link rel="stylesheet"  href="{{ asset('adminAssets/css/feathericon.min.css') }}">
+            <link rel="stylesheet" id="adminStyle" href="{{ asset('adminAssets/css/style.css') }}">
+        @else
+            <link rel="stylesheet" id="userStyle" href="{{ asset('assets/css/style.css')}}">
+        @endif
+
     </head>
     <body class="antialiased">
        <div id="app">
@@ -52,15 +54,26 @@
 
        <script src="{{ asset("js/app.js") }}"></script>
 
-       <script src="{{ asset('assets/js/jquery-3.6.0.min.js')}}"></script>
-       <script src="{{ asset('assets/js/bootstrap.bundle.min.js')}}"></script>
-       <script src="{{ asset('assets/js/owl.carousel.min.js')}}"></script>
-       <script src="{{ asset('assets/js/script.js')}}"></script>
 
-       {{-- admin assets --}}
-       <script src="{{ asset('adminAssets/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>
-       <script src="{{ asset('adminAssets/js/script.js')}}"></script>
-{{--       <script src="{{ asset('adminAssets/plugins/datatables/jquery.dataTables.min.js')}}"></script>--}}
-{{--       <script src="{{ asset('adminAssets/plugins/datatables/datatables.min.js')}}"></script>--}}
+       <script src="{{ asset('assets/js/bootstrap.bundle.min.js')}}"></script>
+{{--       <script src="{{ asset('assets/js/owl.carousel.min.js')}}"></script>--}}
+
+       <script src="{{ asset('assets/js/jquery-3.6.0.min.js')}}"></script>
+
+       @if(request()->is('admin/*') || request()->is('admin'))
+           <script src="{{ asset('adminAssets/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>
+           <script id="adminScript" src="{{ asset('adminAssets/js/script.js')}}"></script>
+       @else
+           <script id="userScript" src="{{ asset('assets/js/script.js')}}"></script>
+
+           <script type='text/javascript'>
+               var onWebChat={ar:[], set: function(a,b){if (typeof onWebChat_==='undefined'){this.ar.
+                   push([a,b]);}else{onWebChat_.set(a,b);}},get:function(a){return(onWebChat_.get(a));},
+                   w:(function(){ var ga=document.createElement('script'); ga.type = 'text/javascript';
+                       ga.async=1;ga.src=('https:'==document.location.protocol?'https:':'http:') +
+                           '//www.onwebchat.com/clientchat/b33d07a884b4db671989e22fafdbbb46';var s=
+                           document.getElementsByTagName('script')[0];s.parentNode.insertBefore(ga,s);})()}
+           </script>
+       @endif
     </body>
 </html>

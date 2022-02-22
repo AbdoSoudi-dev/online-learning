@@ -18,8 +18,10 @@
 <!--                        <p class="mentor-type">English Literature (M.A)</p>-->
                     </div>
                 </div>
-                <div class="progress-bar-custom text-danger">
-                    <h6>Verify Your Account </h6>
+                <div class="progress-bar-custom text-danger" v-if="!$store.state.currentUser.email_verified_at">
+                    <router-link to="/emailVerification">
+                        <h5 class="text-danger">Verify Your Account <br> <small>*for security reasons</small> </h5>
+                    </router-link>
                 </div>
                 <div class="custom-sidebar-nav">
                     <ul>
@@ -35,21 +37,26 @@
                         </li>
                         <li>
                             <router-link to="/invoices">
-                                <i class="fas fa-file-invoice"></i>My Invoices <span><i class="fas fa-chevron-right"></i></span>
+                                <i class="fas fa-file-invoice"></i>My Payments <span><i class="fas fa-chevron-right"></i></span>
                             </router-link>
                         </li>
-                        <li>
-                            <router-link to="/reviews">
-                                <i class="fas fa-eye"></i>My Reviews <span><i class="fas fa-chevron-right"></i></span>
-                            </router-link>
-                        </li>
+<!--                        <li>-->
+<!--                            <router-link to="/reviews">-->
+<!--                                <i class="fas fa-eye"></i>My Reviews <span><i class="fas fa-chevron-right"></i></span>-->
+<!--                            </router-link>-->
+<!--                        </li>-->
                         <li>
                             <router-link to="/profile">
                                 <i class="fas fa-user-cog"></i>Edit Profile <span><i class="fas fa-chevron-right"></i></span>
                             </router-link>
                         </li>
                         <li>
-                            <a>
+                            <router-link to="/changePassword">
+                                <i class="fas fa-user-edit"></i>Change Password <span><i class="fas fa-chevron-right"></i></span>
+                            </router-link>
+                        </li>
+                        <li>
+                            <a href="#!" @click="logout()">
                                 <i class="fas fa-sign-out-alt"></i>Logout <span><i class="fas fa-chevron-right"></i></span>
                             </a>
                         </li>
@@ -62,6 +69,18 @@
 
 <script>
     export default {
-
+        methods:{
+            logout(){
+                axios.delete('/api/logout')
+                    .then((res) =>{
+                        // console.log(res)
+                        this.$store.commit("get_current_user",{});
+                        this.$store.commit("get_current_user","");
+                        this.$router.push("/");
+                    }).catch((err)=>{
+                    // console.log(err)
+                })
+            },
+        }
     }
 </script>

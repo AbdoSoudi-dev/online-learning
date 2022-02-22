@@ -17,6 +17,8 @@ class CreateCoursesTable extends Migration
             $table->id();
             $table->string("title");
             $table->longText("description");
+            $table->boolean("removed")->default(0);
+            $table->string("short_desc");
             $table->string("image");
             $table->string("price");
             $table->foreignId("user_id")->constrained();

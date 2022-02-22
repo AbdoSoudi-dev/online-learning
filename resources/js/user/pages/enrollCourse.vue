@@ -1,5 +1,5 @@
 <template>
-    <section class="section path-section mt-3">
+    <section class="section path-section" v-if="courseDetails.removed == 0">
         <div class="section-header">
             <div class="container">
                 <span class="text-bold">lorem aaaa</span>
@@ -28,7 +28,7 @@
         </div>
     </section>
 
-    <div class="row">
+    <div class="row" v-if="courseDetails.removed == 0">
         <div class="col-md-8 col-12 m-auto ">
             <div class="card">
 
@@ -72,6 +72,9 @@
             </div>
         </div>
     </div>
+    <h1 v-else-if="courseDetails.removed == 1" class="text-danger text-center mt-3 mx-auto h-75vh">
+        Unavailable Course
+    </h1>
 </template>
 
 <script>
@@ -160,5 +163,7 @@
 </script>
 
 <style scoped>
-
+    .h-75vh{
+        height: 75vh;
+    }
 </style>

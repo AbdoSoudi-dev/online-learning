@@ -3,12 +3,15 @@
 
             <div class="header-left">
                 <a class="logo">
-                    <router-link to="/home">
-                        <img :src="'../adminAssets/img/logo.png'" alt="Logo">
-                    </router-link>
+                    <a href="/">
+                        <img :src="'/adminAssets/img/logo.png'" alt="Logo">
+                    </a>
                 </a>
-                <a href="index.html" class="logo logo-small">
-                    <img :src="'../adminAssets/img/logo-small.png'" alt="Logo" width="30" height="30">
+                <a class="logo logo-small">
+                    <a href="/">
+                        <img :src="'/adminAssets/img/logo-small.png'" alt="Logo" width="30" height="30">
+                    </a>
+
                 </a>
             </div>
 
@@ -24,12 +27,12 @@
             <ul class="nav user-menu">
                 <li class="nav-item dropdown has-arrow">
                     <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                        <span class="user-img"><img class="rounded-circle" :src="'../adminAssets/img/profiles/avatar-12.jpg'" width="31" alt="Ryan Taylor"></span>
+                        <span class="user-img"><img class="rounded-circle" :src="'/adminAssets/img/profiles/avatar-12.jpg'" width="31" alt="Ryan Taylor"></span>
                     </a>
                     <div class="dropdown-menu">
                         <div class="user-header">
                             <div class="avatar avatar-sm">
-                                <img :src="'../adminAssets/img/profiles/avatar-12.jpg'" alt="User Image" class="avatar-img rounded-circle">
+                                <img :src="'/adminAssets/img/profiles/avatar-12.jpg'" alt="User Image" class="avatar-img rounded-circle">
                             </div>
                             <div class="user-text">
                                 <h6>Allen Davis</h6>
@@ -56,7 +59,7 @@
                         // console.log(res)
                         this.$store.commit("get_current_user",{});
                         this.$store.commit("get_current_user","");
-                        this.$router.push("/");
+                        location.href = "/";
                     }).catch((err)=>{
                     // console.log(err)
                 })

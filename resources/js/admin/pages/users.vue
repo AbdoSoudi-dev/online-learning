@@ -37,10 +37,12 @@
                                             <td>{{ key+1 }}</td>
                                             <td>{{ user.name }}</td>
                                             <td>{{ user.email }}</td>
-                                            <td>{{ user.created_at.split(" ")[0] }}</td>
+                                            <td>{{ user.updated_at.split("T")[0] }}</td>
                                             <td>{{ user.role.title }}</td>
                                             <td style="cursor: pointer;">
-                                                <i class="fas fa-edit text-primary"></i>
+                                                <router-link :to="'editUser/'+user.id">
+                                                    <i class="fas fa-edit text-primary"></i>
+                                                </router-link>
                                             </td>
                                             <td style="cursor: pointer;">
                                                 <i class="fas fa-trash-alt text-danger" @click="deleteUser(user.id)"></i>

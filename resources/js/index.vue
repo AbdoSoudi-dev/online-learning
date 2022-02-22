@@ -17,15 +17,18 @@
         },
         methods:{
             checkLoginAuth(){
-                axios.get('/api/user')
-                    .then((res) =>{
-                        // console.log(res)
-                        this.$store.commit("get_current_user",res.data);
-                    }).catch((err)=>{
-                    // console.log(err)
-                    this.$store.commit("get_current_user",{});
-                    this.$store.commit("get_token","");
-                })
+                if(this.$store.state.token !== ""){
+                    axios.get('/api/user')
+                        .then((res) =>{
+                            // console.log(res)
+                            this.$store.commit("get_current_user",res.data);
+                        }).catch((err)=>{
+                        // console.log(err)
+                        this.$store.commit("get_current_user",{});
+                        this.$store.commit("get_token","");
+                    })
+                }
+
             }
         },
         mounted() {

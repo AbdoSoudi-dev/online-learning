@@ -29,5 +29,8 @@ class Booking extends Model
     {
         return $this->belongsToMany(Meeting::class,"booking_meeting");
     }
+    public function payment(){
+        return $this->belongsTo(Payment::class,"booking_group_id","booking_group_id");
+    }
 
 }

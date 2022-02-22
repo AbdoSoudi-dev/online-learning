@@ -9,7 +9,7 @@
                     <h4 class="card-title">Bookings List </h4>
                     <div class="form-group" v-if="[2,3].includes($store.state.currentUser.role_id)">
                         <h4>Choose User</h4>
-                        <select class="form-control m-auto" @change="getBookingTimes" v-model="user_id">
+                        <select class="form-control m-auto" @change="getBookingsList" v-model="user_id">
                             <option v-for="user in users" :value="user.id">{{ user.name }}</option>
                         </select>
                     </div>
@@ -25,6 +25,7 @@
                                         <td>Course</td>
                                         <td>Time</td>
                                         <td>Count</td>
+                                        <td v-if="payments.count"> Unpaid </td>
                                         <td>Next lecture</td>
                                         <td width="35%">Process</td>
                                     </tr>
@@ -48,6 +49,15 @@
 
                                         </td>
                                         <td>(12/{{ list.session_num-1 }})</td>
+                                        <td v-if="payments.count">
+                                            <div class="btn btn-danger" v-if="payments[list.booking_group_id]">
+                                                <router-link :to="'/payment/'+payments[list.booking_group_id].id">
+                                                    <span class="text-light">
+                                                        Pay
+                                                    </span>
+                                                </router-link>
+                                            </div>
+                                        </td>
                                         <td>{{ (list.diff_time ?? "expired") }}</td>
                                         <td >
                                             <div class="pro-progress ">
@@ -74,7 +84,8 @@
             return{
                 bookingsList:[],
                 user_id:this.$store.state.currentUser.id,
-                users:[]
+                users:[],
+                payments:[]
             }
         },
         methods:{
@@ -93,6 +104,7 @@
                     .then((res)=>{
                         console.log(res);
                         this.bookingsList = res.data;
+                        this.checkPayments();
                     })
                     .catch((error)=>{
                         // console.log(error);
@@ -109,6 +121,16 @@
                 var strTime = hours + ':' + minutes + ' ' + ampm;
                 return strTime;
             },
+            checkPayments(){
+                axios.get("/api/checkPayments/"+this.user_id)
+                    .then( (res)=>{
+                        console.log(res);
+                        this.payments = res.data;
+                    })
+                    .catch( (error)=>{
+                        console.log(error)
+                    })
+            }
 
         },
         beforeMount() {

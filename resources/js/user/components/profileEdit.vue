@@ -10,7 +10,8 @@
                             <div class="form-group">
                                 <div class="change-avatar">
                                     <div class="profile-img">
-                                        <img :src="'profile_images/' + $store.state.currentUser.profile_image" id="showImage" :alt="$store.state.currentUser.name">
+                                        <img v-if="$store.state.currentUser.profile_image" :src="'profile_images/' + $store.state.currentUser.profile_image" id="showImage" :alt="$store.state.currentUser.name">
+                                        <img v-else id="showImage" src="/profile_images/avatar.png" alt="avatar">
                                     </div>
                                     <div class="upload-img">
                                         <div class="change-photo-btn">
@@ -175,7 +176,7 @@
                     axios.post("/api/editProfile", myForm)
                         .then((res) => {
                             // console.log(res);
-                            alert("تم تحديث بياناتك بنجاح");
+                            alert("Profile has been updated successfully");
                             this.$store.commit("get_current_user",res.data);
                             this.$router.push("/");
                         })

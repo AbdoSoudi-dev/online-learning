@@ -8,8 +8,8 @@
                     <div class="account-box">
                         <div class="login-right">
                             <div class="login-header">
-                                <h3>Login <span>Mentoring</span></h3>
-                                <p class="text-muted">Access to our dashboard</p>
+                                <h3>Login <span>Quraan education</span></h3>
+                                <p class="text-muted">Access to our services</p>
                                 <h4 class="m-auto text-center text-danger" v-if="errors.message">
                                     Email or password is wrong
                                 </h4>
@@ -29,7 +29,11 @@
                                     </div>
                                 </div>
                                 <div class="text-end">
-                                    <a class="forgot-link">Forgot Password ?</a>
+                                    <a class="forgot-link">
+                                        <router-link to="/resetPassword">
+                                            Forgot Password ?
+                                        </router-link>
+                                    </a>
                                 </div>
                                 <button class="btn btn-primary login-btn" type="submit">Login</button>
                                 <div class="text-center dont-have">Don’t have an account? <router-link to="/register">Register</router-link> </div>
@@ -66,7 +70,7 @@
                         if (res.data.user.role_id == 1){
                             this.$router.push("/");
                         }else{
-                            this.$router.push("/admin");
+                            this.$router.push("/");
                         }
 
                 }).catch((err)=>{

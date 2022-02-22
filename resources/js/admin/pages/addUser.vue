@@ -26,6 +26,31 @@
                         <input type="password" class="form-control" v-model="formData.password_confirmation" required>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <div class="dropdown d-flex ">
+                                                <span class="btn btn-outline-primary dropdown-toggle d-flex w-20 pt-2 border" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <div :class="'mt-1 ml-2 vti__flag '+ ( (currentCountry.iso2 ?? allCountries[0].iso2).toLowerCase() )"></div>
+                                                </span>
+
+                                <input type="tel" placeholder="write your number" v-model="mobile_number" class="form-control w-80" required>
+
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1"
+                                    style="max-height:200px; overflow: scroll">
+                                    <li v-for="country in allCountries" @click="currentCountry = country; this.mobile_number = country.dialCode">
+                                        <a class="dropdown-item d-flex" href="#">
+                                            <div :class="'vti__flag '+ ( country.iso2.toLowerCase() )"></div>
+                                            {{ country.name }} {{ "+"+country.dialCode }}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-6 mb-3 my-auto">
                         <label>User Role</label>
@@ -45,6 +70,9 @@
 </template>
 
 <script>
+    import allCountries from "../../allCountries";
+    import timeZones from "../../timeZones";
+
     export default {
         name: "addUser",
         data(){
@@ -52,24 +80,74 @@
                 formData:{
                     name:"",
                     email:"",
+                    mobile_number:null,
+                    country:"",
+                    city:"",
+                    role_id:"",
+                    timeZone:"",
+                    timeZoneOffset:"",
                     password:"",
                     password_confirmation:"",
-                    role_id:""
                 },
-                errors:{}
+                errors:{},
+                allCountries:allCountries,
+                currentCountry:{},
+                mobile_number:"",
             }
         },
         methods:{
             addUserForm(){
-                axios.post('/api/addUser',this.formData).then((res) =>{
-                    // console.log(res)
-                    alert("User has been added successfully");
-                    this.$router.push("users")
-                }).catch((err)=>{
-                    // console.log(err)
-                    this.errors = err.response.data.errors;
-                })
+                this.formData.mobile_number = this.mobile_number.toString().replace("+","");
+                this.formData.country = this.currentCountry.name.split(" ")[0];
+                if(this.formData.mobile_number.substring(0,2) == this.currentCountry.dialCode) {
+                    axios.post('/api/addUser',this.formData).then((res) =>{
+                        // console.log(res)
+                        alert("User has been added successfully");
+                        this.$router.push("users")
+                    }).catch((err)=>{
+                        // console.log(err)
+                        this.errors = err.response.data.errors;
+                    })
+                }else{
+                    alert("Mobile format is incorrect.. It should be your country dial code then your number");
+                }
+            },
+            setTimeZone(){
+                var tz = jstz.determine();
+                this.formData.timeZone = tz.name();
+                for (let zone of timeZones){
+                    if (zone.utc.includes(this.formData.timeZone)){
+                        this.formData.timeZoneOffset = zone.text.split(" ")[0];
+                    }
+                }
             }
+        },
+        watch:{
+            mobile_number(){
+                let code = this.mobile_number.toString().replace("+","");
+                if (!this.mobile_number){
+                    this.currentCountry = {};
+                }
+
+                // if(!this.currentCountry.iso2){
+                for (let country of this.allCountries){
+                    if (
+                        country.dialCode == code.substring(0,1) ||
+                        country.dialCode == code.substring(0,2) ||
+                        country.dialCode == code.substring(0,3) ||
+                        country.dialCode == code.substring(0,4)
+                    ){
+                        this.currentCountry = country;
+                        // this.mobile_number = country.dialCode
+                    }
+                }
+                // }
+
+            },
+        },
+        mounted(){
+            this.setTimeZone();
+
         }
     }
 </script>

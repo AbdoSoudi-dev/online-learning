@@ -1,6 +1,6 @@
 <template>
 
-    <section class="section">
+    <section v-if="courseDetails.removed == 0" class="section">
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
@@ -13,7 +13,17 @@
 
                                     <div class="col-md-4 col-12">
                                         <img class="img-fluid" :src="'/courses/'+courseDetails.image" :alt="courseDetails.title">
-                                        <div class="col-12 mt-3 d-flex justify-content-center">
+
+
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h5 class="text-primary mb-0 mt-2">60 mins</h5>
+                                                <h5 class="text-primary m-0">1 Free trial class</h5>
+                                                <h5 class="text-primary">Classes around the clock</h5>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 mt-3 d-flex justify-content-start">
 <!--                                            <div class="col-6 ">-->
                                                 <h3 class="text-success text-bold m-2" v-if="courseDetails.price">
                                                     {{ courseDetails.price + ' $' }}
@@ -42,7 +52,9 @@
             </div>
         </div>
     </section>
-
+    <h1 v-else-if="courseDetails.removed == 1" class="text-danger text-center mt-3 mx-auto h-75vh">
+        Unavailable Course
+    </h1>
 </template>
 
 <script>
@@ -88,5 +100,7 @@
 </script>
 
 <style scoped>
-
+    .h-75vh{
+        height: 75vh;
+    }
 </style>

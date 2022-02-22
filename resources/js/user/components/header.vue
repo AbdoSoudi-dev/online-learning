@@ -29,7 +29,9 @@
                         </div>
                         <ul class="main-nav">
                             <li class="">
-                                <router-link to="/">Home</router-link>
+                                <router-link to="/">
+                                    Home
+                                </router-link>
                             </li>
                             <li class="has-submenu">
                                 <router-link to="/coursesList">Courses <i class="fas fa-chevron-down"></i></router-link>
@@ -40,14 +42,38 @@
                                 </ul>
                             </li>
                             <li class="">
-                                <router-link to="/">About Us</router-link>
+                                <router-link to="/aboutUs">About Us</router-link>
                             </li>
                             <li v-if="$store.state.currentUser.role_id && $store.state.currentUser.role_id != 1">
-                                <router-link to="/admin">Admin</router-link>
+                                <a href="/admin">Admin</a>
                             </li>
-                            <li class="login-link">
-                                <router-link to="/login">Login / Signup</router-link>
+<!--                            <li class="login-link" v-if="!$store.state.token">-->
+<!--                                <router-link to="/login">Login / Signup</router-link>-->
+<!--                            </li>-->
+
+
+                            <li class="nav-item d-block d-md-none" v-if="!$store.state.currentUser.role_id">
+                                <!--                            <a class="nav-link" href="login.vue.html">Login</a>-->
+                                <router-link class="nav-link" to="/login">Login</router-link>
                             </li>
+                            <li class="nav-item d-block d-md-none" v-if="!$store.state.currentUser.role_id">
+                                <!--                            <a class="nav-link header-login.vue" href="register.html">Register</a>-->
+                                <router-link class="nav-link  header-login" to="/register">register</router-link>
+                            </li>
+                            <li class="nav-item d-block d-md-none" v-if="$store.state.currentUser.role_id">
+                                <router-link to="/profile">
+                                    Profile Settings
+<!--                                    <div class="avatar avatar-sm ml-2">-->
+<!--                                        <img :src="'/profile_images/' + $store.state.currentUser.profile_image" v-if="$store.state.currentUser.profile_image" :alt="$store.state.currentUser.name" class="avatar-img rounded-circle">-->
+<!--                                        <img v-else class="avatar-img rounded-circle" src="/profile_images/avatar.png" alt="avatar">-->
+<!--                                    </div>-->
+                                </router-link>
+                            </li>
+                            <li class="nav-item d-block d-md-none" v-if="$store.state.currentUser.role_id">
+                                <a class="dropdown-item" style="cursor: pointer" @click="logout()">Logout</a>
+                            </li>
+
+
                         </ul>
                     </div>
                     <ul class="nav header-navbar-rht">
@@ -62,13 +88,15 @@
                         <li class="nav-item dropdown has-arrow logged-item" v-else>
                             <a class="dropdown-toggle nav-link cursor-pointer head-photo" data-bs-toggle="dropdown">
                                 <span class="user-img">
-                                    <img class="rounded-circle" :src="'/profile_images/' + $store.state.currentUser.profile_image" width="31" :alt="$store.state.currentUser.name">
+                                    <img class="rounded-circle" :src="'/profile_images/' + $store.state.currentUser.profile_image" v-if="$store.state.currentUser.profile_image" width="31" :alt="$store.state.currentUser.name">
+                                    <img v-else src="/profile_images/avatar.png" width="31" class="rounded-circle" alt="avatar">
                                 </span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <div class="user-header">
                                     <div class="avatar avatar-sm">
-                                        <img :src="'/profile_images/' + $store.state.currentUser.profile_image" :alt="$store.state.currentUser.name" class="avatar-img rounded-circle">
+                                        <img :src="'/profile_images/' + $store.state.currentUser.profile_image" v-if="$store.state.currentUser.profile_image" :alt="$store.state.currentUser.name" class="avatar-img rounded-circle">
+                                        <img v-else class="avatar-img rounded-circle" src="/profile_images/avatar.png" alt="avatar">
                                     </div>
                                     <div class="user-text text-capitalize">
                                         <h6>{{ $store.state.currentUser.name }}</h6>
@@ -97,6 +125,7 @@
         },
         methods:{
             logout(){
+                window.axios.defaults.headers.common['Authorization'] = 'Bearer '+this.$store.state.token;
                 axios.delete('/api/logout')
                     .then((res) =>{
                         // console.log(res)
@@ -115,23 +144,12 @@
                     .catch((err)=>{
                         // console.log(err);
                     });
-            }
+            },
         },
-        beforeMount() {
+        mounted() {
+
             this.getCourses();
-            document.getElementById("adminStyle").remove();
-
         },
-        beforeUnmount() {
-            let style = document.createElement('link');
-            style.type = "text/css";
-            style.rel = "stylesheet";
-            style.href = '/adminAssets/css/style.css';
-            style.id = "adminStyle";
-
-            document.head.appendChild(style);
-
-        }
     }
 </script>
 

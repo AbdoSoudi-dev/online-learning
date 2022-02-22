@@ -41,17 +41,6 @@
 
 <script>
     export default {
-        beforeMount() {
-            document.getElementById("userStyle").remove();
-        },
-        beforeUnmount() {
-            let style = document.createElement('link');
-            style.type = "text/css";
-            style.rel = "stylesheet";
-            style.href = '/assets/css/style.css';
-            style.id = "userStyle";
 
-            document.head.appendChild(style);
-        }
     }
 </script>
