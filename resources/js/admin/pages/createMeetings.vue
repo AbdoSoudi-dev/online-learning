@@ -83,7 +83,7 @@
                                 <input type="datetime-local" id="start_at" class="form-control" :value="checkedBookings[0].meeting_date" readonly required>
                             </div>
                             <div class="col-12 mt-2 mx-auto text-center">
-                                <input type="submit" class="form-control btn btn-outline-success" value="Create Meeting">
+                                <input type="submit" class="form-control btn btn-outline-success" :disabled="wait" :value="wait ? 'waiting' : 'Create Meeting'">
                             </div>
                         </div>
                     </form>
@@ -100,7 +100,8 @@
         data(){
             return{
                 comingBookings:[],
-                checkedBookings:[]
+                checkedBookings:[],
+                wait:false
             }
         },
         methods:{
@@ -133,14 +134,17 @@
 
             },
             createMeeting(){
+                this.wait = true;
                 axios.post("/api/create_meeting",{
                     bookings:this.checkedBookings.map(x => x.id),
                     topic:document.getElementById("topic").value,
                     duration:document.getElementById("duration").value,
                     start_at:this.checkedBookings[0].session_date,
                 }).then((res)=>{
-                    console.log(res);
-                    this.$router.push("admin/meetings");
+                    // console.log(res);
+                    this.wait = false;
+                    this.$router.push("/admin/meetings");
+
                 })
             }
         },

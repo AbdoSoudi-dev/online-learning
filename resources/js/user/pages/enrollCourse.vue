@@ -2,8 +2,9 @@
     <section class="section path-section" v-if="courseDetails.removed == 0">
         <div class="section-header">
             <div class="container">
-                <span class="text-bold">lorem aaaa</span>
-                <h2 class="text-center">Start Free Trial!</h2>
+<!--                <span class="text-bold">lorem aaaa</span>-->
+                <h2 class="text-center" v-if="$store.state.currentUser.free_trail == 1"></h2>
+                <h2 class="text-center" v-else>Start Free Trial!</h2>
             </div>
         </div>
         <div class="learning-path-col">
@@ -47,21 +48,37 @@
                         <table class=" table table-hover table-bordered">
                             <thead>
                                 <tr class="text-light bg-primary text-bold">
-                                    <td class="text-center" colspan="3">Days</td>
+                                    <td class="text-center">Days</td>
                                     <td class="text-center"> Time </td>
+                                    <td class="text-center"> Price </td>
                                     <td class="text-center"> Detect </td>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="timing in timingsZone">
-                                    <td v-for="daily in timing.days">{{ daily }} </td>
-                                    <td class="text-center">{{ timing.time }}</td>
+
+                                    <td >
+                                        <div class="d-flex row justify-content-center">
+                                            <div class="col-4" v-for="daily in timing.days">
+                                                {{ daily }}
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td class="text-center">
+<!--                                        {{ timing.time }}-->
+                                        <input type="time" class="form-control time_timing">
+                                    </td>
+                                    <td class="text-center text-success">{{ timing.price + "$" }}</td>
                                     <td class="text-center text-success">
-                                        <span v-if="checkTiming.includes(timing.id)">
-                                            Already detected
+<!--                                        <span v-if="checkTiming.includes(timing.id)">-->
+<!--                                            Already detected-->
+<!--                                        </span>-->
+                                        <span v-if="wait">
+                                            Waiting
                                         </span>
                                         <i v-else
-                                           @click="saveBooking(timing.id)" class="fas fa-sign-in-alt text-success fa-2x cursor-pointer"></i>
+                                           @click="saveBooking(timing.id,$event)" class="fas fa-sign-in-alt text-success fa-2x cursor-pointer"></i>
                                     </td>
                                 </tr>
                             </tbody>
@@ -85,7 +102,8 @@
             return{
                 courseDetails:{},
                 timings:[],
-                checkTiming:[]
+                checkTiming:[],
+                wait:false
             }
         },
         methods:{
@@ -128,24 +146,41 @@
                 var strTime = hours + ':' + minutes + ' ' + ampm;
                 return strTime;
             },
-            saveBooking(timing_id){
-                axios.post("/api/bookings",{
-                    timing_id:timing_id,
-                    course_id:this.$route.params.id
-                }).then((res)=>{
+            saveBooking(timing_id,event){
+                let inputTime = event.currentTarget.parentNode.parentNode.children[1].children[0];
+                let time = inputTime.value;
+
+                if (time) {
+                    this.wait = true;
+                    axios.post("/api/bookings", {
+                        timing_id: timing_id,
+                        time: time,
+                        course_id: this.$route.params.id
+                    }).then((res) => {
                         // console.log(res);
                         this.$router.push("/schedule-timings");
                     })
-                    .catch((err)=>{
-                        // console.log(err);
-                        alert("Something went wrong");
-                    })
-            }
+                        .catch((err) => {
+                            // console.log(err);
+                            alert("Something went wrong");
+                            this.wait = false;
+                        })
+                }else{
+                    inputTime.style = "transform: scale(1.5);transition: all 1s ease-in-out;";
+                    alert("detect you suitable time, please!");
+
+                    setTimeout(()=>{
+                        inputTime.style = "transform: scale(1);transition: all 1s ease-in-out;";
+                    },500);
+
+                }
+            },
+
         },
         beforeMount() {
             this.getCourseDetails();
             this.all_timings();
-            this.check_token_time();
+            // this.check_token_time();
         },
         computed:{
             timingsZone(){
@@ -158,6 +193,9 @@
                 return timing;
             }
         },
+        mounted() {
+
+        }
     }
 
 </script>

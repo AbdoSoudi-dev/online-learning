@@ -17,6 +17,8 @@ class CreateTimingsTable extends Migration
             $table->id();
             $table->string("days");
             $table->dateTime("time");
+            $table->string("price");
+            $table->boolean("removed")->default(0);
             $table->foreignId("user_id")->constrained();
             $table->timestamps();
         });

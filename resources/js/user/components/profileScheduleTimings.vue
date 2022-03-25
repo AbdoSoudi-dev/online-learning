@@ -6,13 +6,26 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <h4 class="card-title">Your lectures </h4>
-                            <div class="form-group" v-if="[2,3].includes($store.state.currentUser.role_id)">
+                            <div class="form-group" v-if="$store.state.currentUser.role_id == 2 || $store.state.currentUser.role_id == 3">
                                 <h4>Choose User</h4>
                                 <select class="form-control m-auto" @change="getBookingTimes();checkPayments()" v-model="user_id" >
                                     <option v-for="user in users" :value="user.id">{{ user.name }}</option>
                                 </select>
                             </div>
                         </div>
+
+                        <div class="row mb-2">
+                            <div class="col-12 m-auto text-center" >
+                                <h4 class="">
+                                    Now, we are waiting for you in the coming class, Be there on time.
+                                </h4>
+                                <h6>
+                                    Note: These times are detected based on you timezone {{ $store.state.currentUser.timezone_offset }}
+                                    You can change it from <router-link class="text-bold text-primary" to="/profile">HERE</router-link>.
+                                </h6>
+                            </div>
+                        </div>
+
                         <div class="row" v-if="payments.count && $store.state.currentUser.free_trail == 1">
                             <div class="col-12 m-auto text-center" >
                                 <h5 class="text-danger">Already used free trail. You must pay then lectures open</h5>
@@ -31,17 +44,18 @@
                                         <td>Status</td>
                                     </tr>
                                 </thead>
-                                <tbody v-for="(book,booking_group_id) in myBookingTimes">
+                                <tbody>
+                                    <template v-for="(book,booking_group_id) in myBookingTimes">
                                     <tr class="text-center " v-for="(courseTime,key) in book">
-                                        <td style="vertical-align: middle" v-if="key ==0" rowspan="12">
+                                        <td style="vertical-align: middle" v-if="key ==0" :rowspan="book.length">
                                             {{ courseTime.course.title }}
                                         </td>
-                                        <td style="vertical-align: middle" v-if="key ==0" rowspan="12">
-                                            {{ formatAMPM(courseTime.timing.time) }}
+                                        <td style="vertical-align: middle" v-if="key ==0" :rowspan="book.length">
+                                            {{ formatAMPM(courseTime.session_time) }}
                                         </td>
                                         <td>{{ courseTime.session_date }}</td>
                                         <td>{{ courseTime.day }}</td>
-                                        <td v-if="payments.count && key ==0" style="vertical-align: middle" rowspan="12">
+                                        <td v-if="payments.count && key ==0" style="vertical-align: middle" :rowspan="book.length">
                                             <div class="btn btn-danger" v-if="payments[booking_group_id]">
                                                 <router-link :to="'/payment/'+payments[booking_group_id].id">
                                                     <span class="text-light">
@@ -51,7 +65,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <span @click="setPresented(courseTime.id,courseTime.present)" class="text-light p-2 bg-info cursor-pointer"
+                                            <span @click="setPresented(courseTime.id,courseTime.present,courseTime.meeting.meeting_id)" class="text-light p-2 bg-info cursor-pointer"
                                                   v-if="courseTime.current && ( $store.state.currentUser.free_trail ==0 || ($store.state.currentUser.free_trail ==1 && payments[booking_group_id]) )">
                                                 Join Now
                                             </span>
@@ -61,11 +75,14 @@
                                             <span v-else :class="'text-light p-2 '+
                                                 (courseTime.current || courseTime.coming ? 'bg-info r' : (courseTime.status === 'expired' ? 'bg-danger' : 'bg-secondary') ) "
                                                   style="border-radius: 5px">
+<!--                                                <a :href="'/joinRoom/'+courseTime.meeting.meeting_id">-->
                                                     {{ courseTime.current ? "Join Now"
                                                     : ( courseTime.coming ? "coming" : courseTime.status  ) }}
+                                                <!--                                                </a>-->
                                             </span>
                                         </td>
                                     </tr>
+                                </template>
                                 </tbody>
                             </table>
                         </div>
@@ -103,7 +120,7 @@
             getBookingTimes(){
                 axios.get("/api/bookings/"+this.user_id)
                     .then((res)=>{
-                        // console.log(res);
+                        console.log(res);
                         this.myBookingTimes = res.data;
                     })
                     .catch((error)=>{
@@ -121,7 +138,7 @@
                 var strTime = hours + ':' + minutes + ' ' + ampm;
                 return strTime;
             },
-            setPresented(booking_id,present){
+            setPresented(booking_id,present,meeting_id){
                 if (present == 0 || this.$store.state.currentUser.free_trail == 0){
                     axios.post("/api/bookingsPresenting",{
                         booking_id: booking_id
@@ -129,7 +146,7 @@
                     .then((res)=>{
                         // console.log(res);
                         this.$store.commit("get_current_user",res.data);
-                        // window.open("adsad")
+                        window.open("/joinRoom/"+meeting_id)
                     })
                     .catch((error)=>{
                         // console.log(error);

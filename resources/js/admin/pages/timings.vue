@@ -24,15 +24,35 @@
                                 <table class=" table table-hover table-bordered">
                                     <thead>
                                     <tr class="text-primary">
-                                        <td class="text-center" colspan="3">Days</td>
-                                        <td class="text-center"> Time </td>
+                                        <td class="text-center" >Days</td>
+<!--                                        <td class="text-center"> Time </td>-->
+                                        <td class="text-center"> Price </td>
+                                        <td class="text-center"> Actions </td>
                                     </tr>
                                     </thead>
                                     <tbody>
                                         <tr v-for="timing in timingsZone">
-                                            <td v-for="daily in timing.days">{{ daily }} </td>
+                                            <td >
+                                                <div class="d-flex row justify-content-center">
+                                                    <div class="col-4" v-for="daily in timing.days">
+                                                        {{ daily }}
+                                                    </div>
+                                                </div>
+                                            </td>
 
-                                            <td>{{ timing.time }}</td>
+<!--                                            <td>{{ timing.time }}</td>-->
+                                            <td class="text-success">{{ timing.price + "$" }}</td>
+                                            <td>
+                                                <div class="d-flex justify-content-center">
+                                                    <div class="col-6">
+                                                        <i class="fas fa-edit fa-2x text-primary cursor-pointer" data-bs-toggle="modal" href="#timeModal"
+                                                           @click="actionType = 'Edit';editTimingId = timing.id; days=timing.days; time = timing.timeEdit; price = timing.price;"></i>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <i class="fas fa-trash-alt fa-2x text-danger cursor-pointer" @click="deleteTiming(timing.id)"></i>
+                                                    </div>
+                                                </div>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -61,8 +81,8 @@
                             <div class="col-12 ">
                                 <div class="form-group m-auto">
                                     <label class="col-12 text-bold">Days</label>
-                                    <select name="days" class="form-control mb-2" v-model="day" :disabled="days.length == 3">
-                                        <option value="">{{ days.length == 3 ? '3 days Chosen' : "~~Choose Day~~" }}</option>
+                                    <select name="days" class="form-control mb-2" v-model="day">
+                                        <option value="">{{ "~~Choose Day~~" }}</option>
                                         <option value="Sunday">Sunday</option>
                                         <option value="Monday">Monday</option>
                                         <option value="Tuesday">Tuesday</option>
@@ -78,17 +98,64 @@
                                     </div>
                                 </div>
                             </div>
+<!--                            <div class="col-12">-->
+<!--                                <div class="form-group m-auto">-->
+<!--                                    <label class="col-12"> Time </label>-->
+<!--                                    <input type="time" class="form-control text-center" v-model="time">-->
+<!--                                </div>-->
+<!--                            </div>-->
                             <div class="col-12">
                                 <div class="form-group m-auto">
-                                    <label class="col-12"> Time </label>
-                                    <input type="time" class="form-control text-center" v-model="time">
+                                    <label class="col-12"> Price </label>
+                                    <input type="number" class="form-control text-center" v-model="price">
                                 </div>
                             </div>
 
 
                         </div>
 
-                        <button type="submit" v-if="days.length == 3 && time"
+                        <button type="submit" v-if="days.length && price"
+                                class="btn btn-primary btn-block w-100 mt-3">{{ actionType }}</button>
+                    </form>
+                    <form v-else-if="actionType === 'Edit'" @submit.prevent="editTime">
+                        <div class="row form-row">
+                            <div class="col-12 ">
+                                <div class="form-group m-auto">
+                                    <label class="col-12 text-bold">Days</label>
+                                    <select name="days" class="form-control mb-2" v-model="day">
+                                        <option value="">~~Choose Day~~</option>
+                                        <option value="Sunday">Sunday</option>
+                                        <option value="Monday">Monday</option>
+                                        <option value="Tuesday">Tuesday</option>
+                                        <option value="Wednesday">Wednesday</option>
+                                        <option value="Thursday">Thursday</option>
+                                        <option value="Friday">Friday</option>
+                                        <option value="Saturday">Saturday</option>
+                                    </select>
+                                    <div class="row d-flex justify-content-between mb-2 mx-auto col-md-8 col-12"
+                                         v-for="(day,key) in days" :key="key">
+                                          <div class="col-6 text-center">{{ day }}</div>
+                                        <i @click="deleteDay(day)" class="col-6 text-center fas fa-trash-alt text-danger cursor-pointer"></i>
+                                    </div>
+                                </div>
+                            </div>
+<!--                            <div class="col-12">-->
+<!--                                <div class="form-group m-auto">-->
+<!--                                    <label class="col-12"> Time </label>-->
+<!--                                    <input type="time" class="form-control text-center" v-model="time">-->
+<!--                                </div>-->
+<!--                            </div>-->
+                            <div class="col-12">
+                                <div class="form-group m-auto">
+                                    <label class="col-12"> Price </label>
+                                    <input type="number" class="form-control text-center" v-model="price">
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <button type="submit" v-if="days.length && price"
                                 class="btn btn-primary btn-block w-100 mt-3">{{ actionType }}</button>
                     </form>
 
@@ -105,9 +172,11 @@
             return{
                 actionType:"",
                 day:"",
+                price:"",
                 time:"",
                 days:[],
-                timings:[]
+                timings:[],
+                editTimingId:""
             }
         },
         methods:{
@@ -116,7 +185,7 @@
             },
             all_timings(){
                 axios.get("/api/timings").then((res)=>{
-                    console.log(res);
+                    // console.log(res);
                     this.timings = res.data;
                 }).catch((error)=>{
                     console.log(error);
@@ -126,13 +195,14 @@
 
                 axios.post("/api/timings",{
                     days:this.days,
-                    time:this.time
+                    price:this.price
                 }).then((res)=>{
-                    console.log(res);
+                    // console.log(res);
 
                     document.getElementById('close').click();
 
                     this.days = [];
+                    this.price = "";
                     this.time = "";
 
                     this.all_timings();
@@ -150,12 +220,37 @@
                 minutes = minutes < 10 ? '0'+minutes : minutes;
                 var strTime = hours + ':' + minutes + ' ' + ampm;
                 return strTime;
+            },
+            deleteTiming(id){
+                if (confirm("Are you sure?")){
+                    axios.delete("/api/timings/"+id).then(res=>{
+                        console.log(res);
+                    })
+                }
+            },
+            editTime(){
+                axios.put("/api/timings/"+this.editTimingId,{
+                    days:this.days,
+                    price:this.price
+                }).then((res)=>{
+                    // console.log(res);
+
+                    document.getElementById('close').click();
+
+                    this.days = [];
+                    this.price = "";
+                    this.time = "";
+
+                    this.all_timings();
+                }).catch((error)=>{
+                    console.log(error);
+                })
             }
         },
         watch:{
             day(){
                 if(this.day){
-                    if (this.days.length < 3){
+                    if (this.days.length < 5){
                         if(this.days.includes(this.day)){
                             this.day = "";
                             alert("Already Chosen");
@@ -165,11 +260,11 @@
                         }
                     }else{
                         this.day = "";
-                        alert("3 days only");
+                        alert("5 days only");
                     }
                 }
 
-            }
+            },
         },
         beforeMount() {
             this.all_timings();

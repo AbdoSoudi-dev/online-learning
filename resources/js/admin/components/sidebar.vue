@@ -30,9 +30,9 @@
                     <li>
                         <a><router-link to="/admin/new_meeting"><span>New Meeting</span></router-link></a>
                     </li>
-                    <li>
-                        <a><router-link to="/admin/profile"><span>My Profile</span></router-link></a>
-                    </li>
+<!--                    <li>-->
+<!--                        <a><router-link to="/admin/profile"><span>My Profile</span></router-link></a>-->
+<!--                    </li>-->
                 </ul>
             </div>
         </div>

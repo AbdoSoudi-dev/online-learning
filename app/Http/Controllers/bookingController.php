@@ -15,8 +15,8 @@ class bookingController extends Controller
 {
     public function myBooking($id,Request $request)
     {
-        $id = $request->user()->roler_id == 1 ? $request->user()->id : $id;
-        $myBookings = Booking::with(["timing","course"])
+        $id = $request->user()->role_id == 1 ? $request->user()->id : $id;
+        $myBookings = Booking::with(["timing","course","meetings"])
                             ->where("user_id",$id)
                             ->get();
 
@@ -38,6 +38,7 @@ class bookingController extends Controller
                 "course_id" => $myBooking['course_id'],
                 "booking_group_id" => $myBooking['booking_group_id'],
                 "session_date" => date("Y-m-d",strtotime($myBooking['session_date'])),
+                "session_time" => $myBooking['session_date'],
                 "day" => date("l",strtotime($myBooking['session_date'])),
                 "status" => ($myBooking['session_date'] < $date_now ? "expired" : "incoming"),
                 "current" => ($date_now >= $lecture_start && $date_now <= $lecture_end ? true : false),
@@ -45,6 +46,7 @@ class bookingController extends Controller
                                 !($date_now >= $lecture_start && $date_now <= $lecture_end) ? true : false),
                 "timing" => $myBooking['timing'],
                 "course" => $myBooking['course'],
+                "meeting" => $myBooking['meetings'][0] ?? [] ,
             ];
             if ($myBooking['session_date'] > $date_now){
                 $check_coming = true;
@@ -65,6 +67,8 @@ class bookingController extends Controller
         $myBookings = $myBookings->map(function ($book)use ($request){
             $book['diff_time'] = Carbon::createFromFormat("Y-m-d H:i:s",$book['session_date'],
                 $request->user()->id)->diffForHumans();
+
+            $book['count'] = Booking::whereBooking_group_id($book['booking_group_id'])->count();
             return $book;
         });
 
@@ -119,26 +123,28 @@ class bookingController extends Controller
     public function store(Request $request)
     {
 
-        $timing = Timing::find($request->timing_id)->first();
+        $lectures_times = Timing::find($request->timing_id);
             $start_date = Carbon::createFromFormat('Y-m-d H:i:s',Carbon::now()
-                ,"Africa/Cairo");
+                ,"Africa/Cairo")->addDays(2);
 
             $end_date = Carbon::createFromFormat('Y-m-d H:i:s',Carbon::now()
-                ,"Africa/Cairo")->addDays(35);
+                ,"Africa/Cairo")->addDays(40);
 
 
 
             $period = CarbonPeriod::create($start_date, $end_date);
 
             $days = [];
-            $timingDays= $timing->days;
-            $time = Carbon::createFromFormat('Y-m-d H:i:s',$timing->time
+            $timingDays= $lectures_times->days;
+            $time = Carbon::createFromFormat('Y-m-d H:i:s',date("Y-m-d H:i:s",strtotime($request->time))
                 ,"Africa/Cairo");
+
+
 
             foreach ($period as $item) {
                 $day = $item->format("l");
                 $coming = $item->format("Y-m-d ") . $time->format("H:i");
-                if (in_array($day,$timingDays) && count($days) != 12){
+                if (in_array($day,$timingDays) && count($days) != count($lectures_times->days) * 4){
                     $days[] = [
                         "date" => $item->format("Y-m-d"),
                         "day" => $day,
@@ -225,5 +231,11 @@ class bookingController extends Controller
 
         return response("",500);
 
+    }
+
+    public function deleteBooking($booking_group_id)
+    {
+        Booking::whereBooking_group_id($booking_group_id)->delete();
+        return response("DONE",201);
     }
 }

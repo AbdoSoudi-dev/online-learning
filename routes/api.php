@@ -68,6 +68,8 @@ Route::group(['middleware'=>['auth:sanctum']], function () {
     Route::post('/removeUser',[userController::class,'removeUser']);
 
     Route::post("/courses",[courseController::class,"store"]);
+    Route::post("/courseUpdate",[courseController::class,"update"]);
+    Route::put("/courseDestroy/{id}",[courseController::class,"destroy"]);
 
     Route::apiResource("timings", TimingController::class);
     Route::post("check_times", [TimingController::class,"checkTimes"]);
@@ -77,6 +79,7 @@ Route::group(['middleware'=>['auth:sanctum']], function () {
     Route::get("coming_bookings",[ bookingController::class,"coming_bookings" ]);
 
     Route::post("create_meeting",[ MeetingController::class,"createMeeting" ]);
+    Route::get("meetingsAll",[ MeetingController::class,"getMeetings" ]);
 
     Route::get("bookings/{id}",[ bookingController::class,"myBooking" ]);
     Route::get("bookingsPayCheck/{id}",[ bookingController::class,"bookingsPayCheck" ]);
@@ -84,9 +87,12 @@ Route::group(['middleware'=>['auth:sanctum']], function () {
 
     Route::post("bookingsPresenting", [ bookingController::class, "bookingsPresenting" ]);
 
+    Route::delete("deleteBooking/{booking_group_id}", [ bookingController::class, "deleteBooking" ]);
+
     Route::post("setPayment", [ paymentController::class, "store" ]);
 
     Route::get("myPayments", [ paymentController::class, "myPayments" ]);
+    Route::get("paymentsAdmin", [ paymentController::class, "allPayments" ]);
     Route::get("checkPayments/{id}", [ paymentController::class, "checkPayments" ]);
 
 });

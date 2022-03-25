@@ -27,20 +27,25 @@
             <ul class="nav user-menu">
                 <li class="nav-item dropdown has-arrow">
                     <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                        <span class="user-img"><img class="rounded-circle" :src="'/adminAssets/img/profiles/avatar-12.jpg'" width="31" alt="Ryan Taylor"></span>
+                        <span class="user-img">
+                            <img class="rounded-circle" :src="'/profile_images/' + $store.state.currentUser.profile_image" v-if="$store.state.currentUser.profile_image" :alt="$store.state.currentUser.name">
+                            <img class="rounded-circle" src="/profile_images/avatar.png" width="31" v-else :alt="$store.state.currentUser.name">
+                        </span>
                     </a>
                     <div class="dropdown-menu">
                         <div class="user-header">
                             <div class="avatar avatar-sm">
-                                <img :src="'/adminAssets/img/profiles/avatar-12.jpg'" alt="User Image" class="avatar-img rounded-circle">
+                                <img :src="'/profile_images/' + $store.state.currentUser.profile_image" v-if="$store.state.currentUser.profile_image" alt="User Image" class="avatar-img rounded-circle">
+                                <img src="/profile_images/avatar.png" v-else alt="User Image" class="avatar-img rounded-circle">
                             </div>
                             <div class="user-text">
-                                <h6>Allen Davis</h6>
+                                <h6>{{ $store.state.currentUser.name }}</h6>
                                 <p class="text-muted mb-0">Administrator</p>
                             </div>
                         </div>
-                        <a class="dropdown-item" >My Profile</a>
-                        <a class="dropdown-item" >Settings</a>
+                        <a class="dropdown-item" href="/profile" >
+                            Profile Settings
+                        </a>
                         <a class="dropdown-item" style="cursor: pointer" @click="logout()">Logout</a>
                     </div>
                 </li>

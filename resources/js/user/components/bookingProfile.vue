@@ -7,7 +7,7 @@
             <div class="col-md-12">
                 <div class="d-flex justify-content-between">
                     <h4 class="card-title">Bookings List </h4>
-                    <div class="form-group" v-if="[2,3].includes($store.state.currentUser.role_id)">
+                    <div class="form-group" v-if="$store.state.currentUser.role_id == 2 || $store.state.currentUser.role_id == 3">
                         <h4>Choose User</h4>
                         <select class="form-control m-auto" @change="getBookingsList" v-model="user_id">
                             <option v-for="user in users" :value="user.id">{{ user.name }}</option>
@@ -28,6 +28,7 @@
                                         <td v-if="payments.count"> Unpaid </td>
                                         <td>Next lecture</td>
                                         <td width="35%">Process</td>
+                                        <td v-if="$store.state.currentUser.role_id === 3">delete</td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -43,12 +44,12 @@
                                                     </span>
                                                 </div>
                                                 <div class="col-4">
-                                                    {{ formatAMPM(list.timing.time) }}
+                                                    {{ formatAMPM(list.session_date) }}
                                                 </div>
                                             </div>
 
                                         </td>
-                                        <td>(12/{{ list.session_num-1 }})</td>
+                                        <td>( {{ list.count }} /{{ list.session_num-1 }})</td>
                                         <td v-if="payments.count">
                                             <div class="btn btn-danger" v-if="payments[list.booking_group_id]">
                                                 <router-link :to="'/payment/'+payments[list.booking_group_id].id">
@@ -61,12 +62,18 @@
                                         <td>{{ (list.diff_time ?? "expired") }}</td>
                                         <td >
                                             <div class="pro-progress ">
-                                                <div class="tooltip-toggle" tabindex="0" :style="'width:' + Math.round((list.session_num-1)*100/12) + '% !important' ">
+                                                <div class="tooltip-toggle" tabindex="0" :style="'width:' + Math.round((list.session_num-1)*100/list.count) + '% !important' ">
 
                                                 </div>
-                                                <div class="tooltip" :style="'left:' + (+Math.round((list.session_num-1)*100/12) -7) + '% !important' ">{{ Math.round((list.session_num-1)*100/12) + "%" }}</div>
+                                                <div class="tooltip" :style="'left:' + (+Math.round((list.session_num-1)*100/list.count) -7) + '% !important' ">{{ Math.round((list.session_num-1)*100/list.count) + "%" }}</div>
                                             </div>
                                         </td>
+
+                                        <td v-if="$store.state.currentUser.role_id === 3">
+                                            <i class="fas fa-trash-alt fa-2x text-danger cursor-pointer" @click="deleteBooking(list.booking_group_id)"
+                                               v-if="payments[list.booking_group_id]"></i>
+                                        </td>
+
                                     </tr>
                                 </tbody>
                             </table>
@@ -102,7 +109,7 @@
             getBookingsList(){
                 axios.get("/api/bookings_list/"+this.user_id)
                     .then((res)=>{
-                        console.log(res);
+                        // console.log(res);
                         this.bookingsList = res.data;
                         this.checkPayments();
                     })
@@ -129,6 +136,13 @@
                     })
                     .catch( (error)=>{
                         console.log(error)
+                    })
+            },
+            deleteBooking(booking_group_id){
+                axios.delete("/api/deleteBooking/"+booking_group_id)
+                    .then(res=>{
+                        console.log(res.data);
+                        this.getBookingsList();
                     })
             }
 

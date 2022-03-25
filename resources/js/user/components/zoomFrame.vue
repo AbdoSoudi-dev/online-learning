@@ -24,12 +24,15 @@
 
     export default {
         name: "zoomRoom",
+        props: {
+            id: Number
+        },
         data(){
             return{
                 meetConfig:{
                     apiKey: 'vz6pKGljQHebFfSZxiuyVA',
                     apiSecret: '4F0qhRP3EYS1gCObDWNdJeUlkWMKk7I9OuEd',
-                    meetingNumber: "89748372995",
+                    meetingNumber: this.id,
                     role: 1,
                     leaveUrl: 'http://127.0.0.1:8000/schedule-timings',
                     userName: this.$store.state.currentUser.name,

@@ -18,12 +18,12 @@
                                     <img :src="'/courses/'+course.image" alt="" >
                                     <div class="text-col">
                                         <h5 class="title">{{course.title}}</h5>
-                                        <p class="sub-title short_desc mt-3">
+                                        <p class="sub-title short_desc mt-4">
                                             {{ course.short_desc }}
                                         </p>
                                     </div>
                                 </div>
-                                <div class="btn btn-success mt-2 w-100">More Details</div>
+                                <div class="btn btn-success text-bold mt-2 w-100">More Details</div>
                             </router-link>
                         </div>
                     </div>
@@ -63,14 +63,20 @@
 
     .img_course{
         position: relative;
+        border-radius: 15px;
     }
 
     .short_desc {
-        background: rgba(29, 106, 154, 0.72);
+        /*background: rgba(29, 106, 154, 0.72);*/
         color: #fff;
         display: none;
         opacity: 0;
-
+        font-weight: bolder;
+        width: 63%;
+        margin: auto;
+        border: 1px solid #fff;
+        border-radius: 13px;
+        padding: 4px;
         /* transition effect. not necessary */
         transition: opacity .7s, display .7s;
     }
@@ -81,5 +87,14 @@
     }
     .bg-gray-dark{
         background-color: #e4f2ff;
+    }
+    .btn-success{
+        background: #16A086 !important;
+    }
+    .btn-success:hover{
+        background: #000 !important;
+    }
+    .title{
+        font-size: 28px !important;
     }
 </style>

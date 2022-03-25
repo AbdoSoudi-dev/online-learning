@@ -47,4 +47,11 @@ class paymentController extends Controller
 
         return response($checkPayments,201);
     }
+    public function allPayments()
+    {
+        $payments = Payment::with(["user","booking"=>function($query){
+            $query->with("course");
+        }])->latest()->get();
+        return response($payments,200);
+    }
 }

@@ -12,11 +12,12 @@ class TimingController extends Controller
 
     public function index(Request $request)
     {
-        $timings = Timing::all();
+        $timings = Timing::whereRemoved(0)->get();
 
         $timings = $timings->map(function ($timing) use ($request){
             $timing['time'] = Carbon::createFromFormat('Y-m-d H:i:s',$timing['time']
                 ,$request->user()->timezone);
+            $timing['timeEdit'] = $timing['time']->format("H:i");
             return $timing;
         });
 
@@ -44,7 +45,8 @@ class TimingController extends Controller
     {
         Timing::create([
             "days" => json_encode($request->days),
-            "time" => date("Y-m-d H:i:s",strtotime($request->time)),
+            "price" => $request->price,
+            "time" => date("Y-m-d H:i:s"),
             "user_id" => $request->user()->id
         ]);
         return response("DONE",201);
@@ -81,7 +83,13 @@ class TimingController extends Controller
      */
     public function update(Request $request, Timing $timing)
     {
-        //
+        $timing->update([
+            "days" => json_encode($request->days),
+            "price" => $request->price,
+            "time" => date("Y-m-d H:i:s"),
+            "user_id" => $request->user()->id
+        ]);
+        return response($timing,200);
     }
 
     /**
@@ -90,8 +98,9 @@ class TimingController extends Controller
      * @param  \App\Models\Timing  $timing
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Timing $timing)
+    public function destroy($id)
     {
-        //
+        Timing::find($id)->update(["removed" => "1"]);
+        return response("done",200);
     }
 }

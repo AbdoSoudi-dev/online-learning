@@ -4,9 +4,11 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        <meta name="description" content="The Qur'an and most of Islam studies are between your hand all in one course to get you well educated Muslim with strong basis about Allah and Islam, with considering the Qur'an as it's our priority from reading to reciting, till memorizing">
+        <meta name="keywords" content="Quraan edu,Quraan education, Quran edu, learning Tajweed">
         {{--        --}}
         <meta http-equiv="origin-trial" content="TOKEN_GOES_HERE">
-        <title>Quran Education</title>
+        <title>Quraanedu</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -39,7 +41,7 @@
 {{--        <link rel="stylesheet" href="{{ asset('assets/css/owl.theme.default.min.css')}}">--}}
 
 
-        @if(request()->is('admin/*') || request()->is('admin'))
+        @if(request()->is('admin/*') || request()->is('joinRoom/*') || request()->is('admin'))
             <link rel="stylesheet"  href="{{ asset('adminAssets/css/feathericon.min.css') }}">
             <link rel="stylesheet" id="adminStyle" href="{{ asset('adminAssets/css/style.css') }}">
         @else
@@ -49,7 +51,8 @@
     </head>
     <body class="antialiased">
        <div id="app">
-
+           <h1 class="opacity-0">Quraan edu</h1>
+           <p class="opacity-0">Online courses provide live classes for adults and kids teach Quraan and Islam "all in one" , one place and one class.</p>
        </div>
 
        <script src="{{ asset("js/app.js") }}"></script>
@@ -60,7 +63,7 @@
 
        <script src="{{ asset('assets/js/jquery-3.6.0.min.js')}}"></script>
 
-       @if(request()->is('admin/*') || request()->is('admin'))
+       @if(request()->is('admin/*') || request()->is('joinRoom/*') || request()->is('admin'))
            <script src="{{ asset('adminAssets/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>
            <script id="adminScript" src="{{ asset('adminAssets/js/script.js')}}"></script>
        @else
@@ -71,7 +74,7 @@
                    push([a,b]);}else{onWebChat_.set(a,b);}},get:function(a){return(onWebChat_.get(a));},
                    w:(function(){ var ga=document.createElement('script'); ga.type = 'text/javascript';
                        ga.async=1;ga.src=('https:'==document.location.protocol?'https:':'http:') +
-                           '//www.onwebchat.com/clientchat/b33d07a884b4db671989e22fafdbbb46';var s=
+                           '//www.onwebchat.com/clientchat/cdcdfd1a8c4a48346e9160b0b7e47894';var s=
                            document.getElementsByTagName('script')[0];s.parentNode.insertBefore(ga,s);})()}
            </script>
        @endif

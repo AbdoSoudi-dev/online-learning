@@ -9,9 +9,14 @@
                         <label for="" class="text-danger" v-if="errors.title"> {{ errors.title[0] }}</label>
                     </div>
                     <div class="col-6 mb-3">
-                        <label>Price</label>
-                        <input type="number" class="form-control" name="price" required>
-                        <label for="" class="text-danger" v-if="errors.price"> {{ errors.price[0] }}</label>
+<!--                        <label>Price</label>-->
+<!--                        <input type="number" class="form-control" name="price" required>-->
+<!--                        <label for="" class="text-danger" v-if="errors.price"> {{ errors.price[0] }}</label>-->
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label>Short Description</label>
+                        <textarea class="form-control" name="short_desc" required></textarea>
+                        <label class="text-danger" v-if="errors.short_desc"> {{ errors.short_desc[0] }}</label>
                     </div>
                 </div>
 
@@ -90,11 +95,6 @@
                          // console.log(err);
                      })
 
-            },
-        },
-        watch:{
-            description(){
-                console.log(this.description);
             },
         },
         mounted() {

@@ -29,4 +29,13 @@ class MeetingController extends Controller
 
         return response("Done",201);
     }
+
+    public function getMeetings()
+    {
+        $meetings = Meeting::with(["bookings"=>function($query){
+            $query->with("user");
+        }])->latest()->get();
+
+        return response($meetings,200);
+    }
 }

@@ -75,8 +75,8 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="form-check form-check-xs custom-checkbox">
-                                        <input type="checkbox" class="form-check-input" name="agreeCheckboxUser" id="agree_checkbox_user">
-                                        <label class="form-check-label" for="agree_checkbox_user">I agree to Mentoring</label> <a tabindex="-1" href="javascript:void(0);">Privacy Policy</a> &amp; <a tabindex="-1" href="javascript:void(0);"> Terms.</a>
+                                        <input type="checkbox" class="form-check-input" name="agreeCheckboxUser" checked id="agree_checkbox_user">
+                                        <label class="form-check-label" for="agree_checkbox_user">I agree to Quraan edu</label> <router-link to="/privacyPolicy">Privacy Policy</router-link> &amp; <router-link to="/terms"> Terms.</router-link>
                                     </div>
                                 </div>
                                 <button class="btn btn-primary login-btn" type="submit" id="submit">Create Account</button>

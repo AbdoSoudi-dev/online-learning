@@ -20,7 +20,7 @@ class CreateCoursesTable extends Migration
             $table->boolean("removed")->default(0);
             $table->string("short_desc");
             $table->string("image");
-            $table->string("price");
+            $table->string("price")->default(0);
             $table->foreignId("user_id")->constrained();
             $table->timestamps();
         });

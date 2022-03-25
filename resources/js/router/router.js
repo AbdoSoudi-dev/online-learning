@@ -36,15 +36,22 @@ import aboutUs from "../user/pages/aboutUs";
 import resetPassword from "../user/pages/resetPassword";
 import newPassword from "../user/pages/newPassword";
 import editUser from "../admin/pages/editUser";
+import editCourse from "../admin/pages/editCourse";
+import pricing from "../user/pages/pricing";
+import privacyPolicy from "../user/pages/privacyPolicy";
+import terms from "../user/pages/terms";
 
 
 const routes = [
-    { path : "/joinRoom", component: zoomRoom },
+    { path : "/joinRoom/:id", component: zoomRoom },
     { path: "/", name:"home", component: index,
         children:[
             { path : "/home", component: home,alias:"/" },
             { path : "/aboutUs", component: aboutUs },
+            { path : "/privacyPolicy", component: privacyPolicy },
+            { path : "/terms", component: terms },
             { path : "/coursesList", component: courses },
+            { path : "/pricing", component: pricing },
             { path : "/course/:id", component: courseDetails },
             { path : "/enrollCourse/:id", component: enrollCourse,meta: { requiresAuth: true } },
             { path : "/payment/:booking_id", component: payment },
@@ -76,8 +83,9 @@ const routes = [
             { path: "users", component: adminUsers, meta: { requiresSuperadmin: true },  },
             { path: "addUser", component: addUser, meta: { requiresSuperadmin: true },  },
             { path: "editUser/:id", component: editUser, meta: { requiresSuperadmin: true },  },
-            { path: "profile", component: adminProfile  },
+            // { path: "profile", component: adminProfile  },
             { path: "addCourse", component: addCourse  },
+            { path: "editCourse/:id", component: editCourse  },
             { path: "timings", component: timings  },
             { path: "new_meeting", component: createMeetings  },
             { path: "meetings", component: meetings  },

@@ -8,35 +8,49 @@
                         <div class="card-body">
 
                             <div class="row ">
-                                <span class="course-title col-12">{{ courseDetails.title }}</span>
                                 <div class="blog-details d-flex row justify-content-center">
 
                                     <div class="col-md-4 col-12">
-                                        <img class="img-fluid" :src="'/courses/'+courseDetails.image" :alt="courseDetails.title">
+                                        <h2 class="col-12 text-bold text-center mb-2 text-primary">{{ courseDetails.title }}</h2>
+                                        <img class="img-fluid raduis" :src="'/courses/'+courseDetails.image" :alt="courseDetails.title">
 
 
                                         <div class="row">
-                                            <div class="col-12">
-                                                <h5 class="text-primary mb-0 mt-2">60 mins</h5>
-                                                <h5 class="text-primary m-0">1 Free trial class</h5>
-                                                <h5 class="text-primary">Classes around the clock</h5>
+                                            <div class="col-10" style="margin: 15px 30px 0 30px;">
+                                                <div class="row border-style">
+                                                    <h5 class="col-12 text-primary mb-0 mt-2">
+                                                        <i class="fas fa-long-arrow-alt-right  text-primary"></i>
+                                                        60 mins
+                                                    </h5>
+                                                    <h5 class="col-12 text-primary m-0">
+                                                        <i class="fas fa-long-arrow-alt-right  text-primary"></i>
+                                                        1 Free trial class
+                                                    </h5>
+                                                    <h5 class=" col-12 text-primary">
+                                                        <i class="fas fa-long-arrow-alt-right  text-primary"></i>
+                                                        Classes around the clock
+                                                    </h5>
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <div class="col-12 mt-3 d-flex justify-content-start">
-<!--                                            <div class="col-6 ">-->
-                                                <h3 class="text-success text-bold m-2" v-if="courseDetails.price">
-                                                    {{ courseDetails.price + ' $' }}
-                                                </h3>
-<!--                                            </div>-->
-<!--                                            <div class="col-6">-->
-                                                <button class="btn btn-success" @click="enrollCourse" v-if="$store.state.currentUser.free_trail == 1">
+                                        <div class="col-12 text-center">
+                                            <div class="mt-2 mx-auto">
+                                                <!--                                            <div class="col-6 ">-->
+                                                <!--                                                <h3 class="text-success text-bold m-2" v-if="courseDetails.price">-->
+                                                <!--                                                    {{ courseDetails.price + ' $' }}-->
+                                                <!--                                                </h3>-->
+                                                <!--                                            </div>-->
+                                                <!--                                            <div class="col-6">-->
+                                                <button class="btn btn-success col-6 m-auto" @click="enrollCourse" v-if="$store.state.currentUser.free_trail == 1">
                                                     Enroll Now
                                                 </button>
-                                                <button class="btn btn-success" @click="enrollCourse" v-else>
+                                                <button class="btn btn-success col-6 m-auto" @click="enrollCourse" v-else>
                                                     Free Trial
                                                 </button>
-<!--                                            </div>-->
+                                                <!--                                            </div>-->
+                                            </div>
+
                                         </div>
                                     </div>
                                     <div class="blog-content col-md-8 col-12"  v-html="courseDetails.description">
@@ -87,7 +101,6 @@
         },
         watch:{
             $route (to, from){
-                console.log(to.params.id);
                 if (to.params.id != from.params.id){
                     this.getCourseDetails();
                 }
@@ -102,5 +115,20 @@
 <style scoped>
     .h-75vh{
         height: 75vh;
+    }
+
+    .btn-success{
+        background: #16A086 !important;
+    }
+    .btn-success:hover{
+        background: #000 !important;
+    }
+    .border-style{
+        border: 1.8px solid #16A086;
+        border-radius: 10px;
+        margin-left: 3px;
+    }
+    .raduis{
+        border-radius: 10px;
     }
 </style>

@@ -31,7 +31,7 @@ class courseController extends Controller
         $image = $request->file('image');
         $imageName = date("YmdHis").$image->getClientOriginalName(). '.webp';
 
-         Image::make($image)->encode('webp',70)->save(public_path('courses/'  .  $imageName));
+        Image::make($image)->encode('webp',70)->save(public_path('courses/'  .  $imageName));
 
 
 
@@ -39,7 +39,8 @@ class courseController extends Controller
             "title"=> $request->title,
             "image"=> $imageName,
             "description"=> $request->description,
-            "price"=> $request->price,
+            "short_desc"=> $request->short_desc,
+//            "price"=> $request->price,
             "user_id" => $request->user()->id
         ]);
 
@@ -65,9 +66,27 @@ class courseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $course = Course::find($request->id);
+        $imageName = $course->image;
+        if ($request->hasFile("image")){
+            $image = $request->file('image');
+            $imageName = date("YmdHis").$image->getClientOriginalName(). '.webp';
+
+            Image::make($image)->encode('webp',70)->save(public_path('courses/'  .  $imageName));
+            @unlink(public_path('courses/'  .  $course->image));
+        }
+
+        Course::find($request->id)->update([
+            "title"=> $request->title,
+            "image"=> $imageName,
+            "description"=> $request->description,
+            "short_desc"=> $request->short_desc,
+//            "price"=> $request->price,
+            "user_id" => $request->user()->id
+        ]);
+        return response($request->title,200);
     }
 
     /**
@@ -78,6 +97,11 @@ class courseController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $course = Course::find($id);
+
+        $course->removed = 1;
+        $course->save();
+
+        return response("done",200);
     }
 }

@@ -42,7 +42,7 @@
                                 </ul>
                             </li>
                             <li class="">
-                                <router-link to="/aboutUs">About Us</router-link>
+                                <router-link to="/pricing">Pricing</router-link>
                             </li>
                             <li v-if="$store.state.currentUser.role_id && $store.state.currentUser.role_id != 1">
                                 <a href="/admin">Admin</a>
@@ -71,6 +71,12 @@
                             </li>
                             <li class="nav-item d-block d-md-none" v-if="$store.state.currentUser.role_id">
                                 <a class="dropdown-item" style="cursor: pointer" @click="logout()">Logout</a>
+                            </li>
+                            <li class="" v-if="$store.state.currentUser.role_id">
+                                <router-link to="/schedule-timings">Meetings</router-link>
+                            </li>
+                            <li class="">
+                                <router-link to="/aboutUs">About Us</router-link>
                             </li>
 
 

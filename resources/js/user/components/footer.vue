@@ -11,23 +11,25 @@
                                 <img src="/assets/img/logo.png" alt="logo">
                             </div>
                             <div class="footer-about-content">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+                                <p>
+                                    Online courses provide live classes for adults and kids with a highly qualified and trusted teachers from Al Azhr in Egypt for Quraan and Islam "all in one", in one place and one Home.
+                                </p>
                                 <div class="social-icon">
                                     <ul>
                                         <li>
-                                            <a href="#" target="_blank"><i class="fab fa-facebook-f"></i> </a>
+                                            <a href="https://www.facebook.com/quraanedu.fb" target="_blank"><i class="fab fa-facebook-f"></i> </a>
                                         </li>
                                         <li>
-                                            <a href="#" target="_blank"><i class="fab fa-twitter"></i> </a>
+                                            <a href="https://twitter.com/quraan_edu" target="_blank"><i class="fab fa-twitter"></i> </a>
+                                        </li>
+<!--                                        <li>-->
+<!--                                            <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>-->
+<!--                                        </li>-->
+                                        <li>
+                                            <a href="https://wa.me/message/JBQ3GVHCNEQZH1" target="_blank"><i class="fab fa-whatsapp"></i></a>
                                         </li>
                                         <li>
-                                            <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                                        </li>
-                                        <li>
-                                            <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
-                                        </li>
-                                        <li>
-                                            <a href="#" target="_blank"><i class="fab fa-dribbble"></i> </a>
+                                            <a href="https://www.instagram.com/quraanedu.insta/" target="_blank"><i class="fab fa-instagram"></i></a>
                                         </li>
                                     </ul>
                                 </div>
@@ -38,13 +40,13 @@
                     <div class="col-lg-3 col-md-6">
 
                         <div class="footer-widget footer-menu">
-                            <h2 class="footer-title">For Mentee</h2>
+                            <h2 class="footer-title">Courses</h2>
                             <ul>
-                                <li><a href="search.html">Search Mentors</a></li>
-                                <li><a href="login.html">Login</a></li>
-                                <li><a href="register.html">Register</a></li>
-                                <li><a href="booking.html">Booking</a></li>
-                                <li><a href="dashboard-mentee.html">Mentee Dashboard</a></li>
+                                <li v-for="course in coursesList">
+                                    <router-link :to="'/course/'+course.id">
+                                        {{ course.title }}
+                                    </router-link>
+                                </li>
                             </ul>
                         </div>
 
@@ -52,13 +54,33 @@
                     <div class="col-lg-3 col-md-6">
 
                         <div class="footer-widget footer-menu">
-                            <h2 class="footer-title">For Mentors</h2>
+                            <h2 class="footer-title">Our Links</h2>
                             <ul>
-                                <li><a href="appointments.html">Appointments</a></li>
-                                <li><a href="chat.html">Chat</a></li>
-                                <li><a href="login.html">Login</a></li>
-                                <li><a href="register.html">Register</a></li>
-                                <li><a href="dashboard.html">Mentor Dashboard</a></li>
+                                <li>
+                                    <a class="cursor-pointer" @click="openChat">
+                                        Contact Us
+                                    </a>
+                                </li>
+                                <li>
+                                    <router-link to="/aboutUs">
+                                        About Us
+                                    </router-link>
+                                </li>
+                                <li>
+                                    <router-link to="/terms">
+                                        Terms And Conditions
+                                    </router-link>
+                                </li>
+                                <li>
+                                    <router-link to="/privacyPolicy">
+                                        Privacy Policy
+                                    </router-link>
+                                </li>
+                                <li>
+                                    <router-link to="/pricing">
+                                        Pricing
+                                    </router-link>
+                                </li>
                             </ul>
                         </div>
 
@@ -70,15 +92,15 @@
                             <div class="footer-contact-info">
                                 <div class="footer-address">
                                     <span><i class="fas fa-map-marker-alt"></i></span>
-                                    <p> 3556 Beech Street, San Francisco,<br> California, CA 94108 </p>
+                                    <p> Cairo, Egypt </p>
                                 </div>
                                 <p>
                                     <i class="fas fa-phone-alt"></i>
-                                    +1 315 369 5943
+                                    +201149770796
                                 </p>
                                 <p class="mb-0">
                                     <i class="fas fa-envelope"></i>
-                                    <a href="https://mentoring-html.dreamguystech.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f39e969d879c819a9d94b3968b929e839f96dd909c9e">[email&#160;protected]</a>
+                                    <a class="text-primary" href="mailto:quraanedu.contact@gmail.com">quraanedu.contact@gmail.com</a>
                                 </p>
                             </div>
                         </div>
@@ -96,7 +118,7 @@
                     <div class="row">
                         <div class="col-12 text-center">
                             <div class="copyright-text">
-                                <p class="mb-0">&copy; 2020 Mentoring. All rights reserved.</p>
+                                <p class="mb-0">&copy; {{ year }} Quraan edu. All rights reserved.</p>
                             </div>
                         </div>
                     </div>
@@ -110,7 +132,34 @@
 
 <script>
     export default {
-
+        data(){
+            return{
+                year:"",
+                coursesList:[]
+            }
+        },
+        methods:{
+            getCurrentYear(){
+                let date = new Date();
+                this.year  = date.getUTCFullYear();
+            },
+            getCourses(){
+                axios.get("/api/courses")
+                    .then((res)=>{
+                        this.coursesList = res.data;
+                    })
+                    .catch((err)=>{
+                        // console.log(err);
+                    });
+            },
+            openChat(){
+                document.getElementById("webchat_header").click();
+            }
+        },
+        beforeMount() {
+            this.getCurrentYear();
+            this.getCourses();
+        }
     }
 </script>
 

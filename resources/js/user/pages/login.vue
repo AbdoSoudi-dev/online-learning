@@ -22,11 +22,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="form-control-label">Password</label>
-                                    <div class="pass-group">
-                                        <input type="password" class="form-control pass-input" v-model="formData.password" required>
-                                        <span class="fas fa-eye toggle-password"></span>
-                                        <label class="col-12 text-danger" v-if="errors.password">{{ errors.password[0] }}</label>
-                                    </div>
+                                    <input type="password" class="form-control" name="password" id="password" v-model="formData.password" required>
+                                    <label class="col-12 text-danger" v-if="errors.password">{{ errors.password[0] }}</label>
                                 </div>
                                 <div class="text-end">
                                     <a class="forgot-link">

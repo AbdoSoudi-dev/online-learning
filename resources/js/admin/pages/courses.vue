@@ -35,17 +35,19 @@
                                                     :src="'/courses/'+course.image" :alt="course.title"></a>
                                         </div>
                                         <div class="course-content">
-                                            <span class="date">April 09 2020</span>
+                                            <span class="date">{{ course.updated_at.split("T")[0] }}</span>
                                             <span class="course-title">{{ course.title }}</span>
                                             <p v-html="course.description" id="description"></p>
                                             <div class="row">
                                                 <div class="col">
                                                     <a class="text-success">
-                                                        <i class="far fa-edit"></i> Edit
+                                                        <router-link :to="'editCourse/'+course.id">
+                                                            <i class="far fa-edit"></i> Edit
+                                                        </router-link>
                                                     </a>
                                                 </div>
                                                 <div class="col text-end">
-                                                    <a href="javascript:void(0);" class="text-danger">
+                                                    <a href="javascript:void(0);" @click="inactiveCourse(course.id)" class="text-danger">
                                                         <i class="far fa-trash-alt"></i> Inactive
                                                     </a>
                                                 </div>
@@ -80,6 +82,17 @@
                     .catch((err)=>{
                         // console.log(err);
                     });
+            },
+            inactiveCourse(id){
+                if (confirm("Are you sure?")){
+                    axios.put("/api/courseDestroy/"+id)
+                        .then((res)=>{
+                            this.myCourses();
+                        })
+                        .catch((err)=>{
+                            // console.log(err);
+                        });
+                }
             }
         },
         beforeMount() {

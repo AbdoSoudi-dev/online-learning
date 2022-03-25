@@ -75,13 +75,13 @@
                                         <li>Time <span>{{ dateHours }}</span></li>
                                     </ul>
                                     <ul class="booking-fee">
-                                        <li>Course amount <span>{{ bookingData.course?.price + "$" }}</span></li>
+                                        <li>Course amount <span>{{ (bookingData.timing ? bookingData.timing.price: 0) + "$" }}</span></li>
                                     </ul>
                                     <div class="booking-total">
                                         <ul class="booking-total-list">
                                             <li>
                                                 <span>Total</span>
-                                                <span class="total-cost">{{ bookingData.course?.price + "$" }}</span>
+                                                <span class="total-cost">{{ (bookingData.timing ? bookingData.timing.price: 0) + "$" }}</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -138,7 +138,7 @@
             setPayload(){
                 let booking_id = this.$route.params.booking_id;
                 let user_id = this.$store.state.currentUser.id;
-                let price = this.bookingData.course?.price;
+                let price = this.bookingData.timing?.price;
                 let booking_group_id = this.bookingData.booking_group_id;
 
                 paypal.Buttons({
@@ -222,7 +222,7 @@
                 return strTime;
             },
         },
-        mounted() {
+        beforeMount() {
             this.getBookingData();
             this.formatDate();
         },
