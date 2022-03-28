@@ -58,7 +58,8 @@
 
                             <div class="booking-user-info">
                                 <a class="booking-user-img">
-                                    <img :src="'/profile_images/' + $store.state.currentUser.profile_image" width="31" :alt="$store.state.currentUser.name">
+                                    <img class="rounded-circle" :src="'/profile_images/' + $store.state.currentUser.profile_image" v-if="$store.state.currentUser.profile_image" width="31" :alt="$store.state.currentUser.name">
+                                    <img v-else src="/profile_images/avatar.png" width="31" class="rounded-circle" alt="avatar">
                                 </a>
                                 <div class="booking-info mt-2">
                                     <h4><a class="text-capitalize"> {{ $store.state.currentUser.name }}</a></h4>
@@ -73,15 +74,16 @@
                                     <ul class="booking-date">
                                         <li>Date <span>{{ dateDay }}</span></li>
                                         <li>Time <span>{{ dateHours }}</span></li>
+                                        <li>Duration <span>{{ bookingData.duration }}</span></li>
                                     </ul>
                                     <ul class="booking-fee">
-                                        <li>Course amount <span>{{ (bookingData.timing ? bookingData.timing.price: 0) + "$" }}</span></li>
+                                        <li>Course amount <span>{{ (bookingData.timing ? (bookingData.duration == "60" ? bookingData.timing.price : (bookingData.timing.price/2) ): 0) + "$" }}</span></li>
                                     </ul>
                                     <div class="booking-total">
                                         <ul class="booking-total-list">
                                             <li>
                                                 <span>Total</span>
-                                                <span class="total-cost">{{ (bookingData.timing ? bookingData.timing.price: 0) + "$" }}</span>
+                                                <span class="total-cost">{{ (bookingData.timing ? (bookingData.duration == "60" ? bookingData.timing.price : (bookingData.timing.price/2) ): 0) + "$" }}</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -117,7 +119,7 @@
             loadPaypalScript(){
                 const script = document.createElement("script");
                 script.src =
-                    "https://www.paypal.com/sdk/js?client-id=AUDUxtbSB7Lt1wgPHnyVd2xLTziX0A0MSsZYkclJdpCWC6RYOaUmSomUbXlIudr7FsdXn5Le9-_koRHc&disable-funding=credit,card";
+                    "https://www.paypal.com/sdk/js?client-id=AUDUxtbSB7Lt1wgPHnyVd2xLTziX0A0MSsZYkclJdpCWC6RYOaUmSomUbXlIudr7FsdXn5Le9-_koRHc";
                 script.id = "paypal_script";
                 // AWVtRxX_6Ekx_x9dME6zWgJ6BDKa_tAFZtsJgQ1FmNwWvHBGo-FvutOYiTib1Xm_OncTr4i-OcbegdFz
             // &disable-funding=credit,card
@@ -128,7 +130,7 @@
             getBookingData(){
                 axios.get("/api/bookingsPayCheck/"+this.$route.params.booking_id)
                      .then((res)=>{
-                         console.log(res);
+                         // console.log(res);
                          this.bookingData = res.data;
                          this.loadPaypalScript();
                      }).catch((err)=>{
@@ -138,7 +140,7 @@
             setPayload(){
                 let booking_id = this.$route.params.booking_id;
                 let user_id = this.$store.state.currentUser.id;
-                let price = this.bookingData.timing?.price;
+                let price = (this.bookingData.duration == "60" ? this.bookingData.timing?.price : (this.bookingData.timing?.price / 2) );
                 let booking_group_id = this.bookingData.booking_group_id;
 
                 paypal.Buttons({
@@ -156,6 +158,7 @@
 
                     onApprove: function(data, actions) {
                         return actions.order.capture().then(function (details) {
+                            console.log(data)
 
                             let paypalData = {};
                             paypalData.email_address = details.payer.email_address;
@@ -168,6 +171,7 @@
                             paypalData.booking_id = booking_id;
                             paypalData.user_id = user_id;
 
+                            // console.log(paypalData);
                             //send data to save
                             axios.post("/api/setPayment",paypalData)
                                 .then((res)=>{
@@ -178,11 +182,11 @@
                                     // console.log(err);
                                 })
 
-                            // alert('Transaction completed by ' + details.payer.name.given_name);
+                            alert('Transaction completed, Thanks ' + details.payer.name.given_name);
                         });
                     },
                     onError: function (err) {
-
+                        alert("Something went wrong, Please try again")
                         console.log(err);
                     }
 

@@ -27,8 +27,11 @@
                                         <th>#</th>
                                         <td>Topic</td>
                                         <td>Start at</td>
+                                        <td>Duration</td>
                                         <td>Bookings</td>
                                         <td> start meeting</td>
+                                        <td> Start URL</td>
+                                        <td> Join URL</td>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -36,6 +39,7 @@
                                             <td>{{ key+1 }}</td>
                                             <td>{{ meeting.topic }}</td>
                                             <td>{{ meeting.start_at }}</td>
+                                            <td>{{ meeting.duration }}</td>
                                             <td>
                                                 <div class="row d-flex justify-content-center">
                                                     <h5 class="col-6" v-for="booking in meeting.bookings">
@@ -46,6 +50,8 @@
                                             <td>
                                                 <a :href="'/joinRoom/'+meeting.meeting_id" class="btn btn-info text-light">Start</a>
                                             </td>
+                                            <td>{{ meeting.start_url }}</td>
+                                            <td>{{ meeting.join_url }}</td>
                                         </tr>
                                     </tbody>
                                 </table>

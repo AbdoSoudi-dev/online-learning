@@ -76,7 +76,7 @@
                             </div>
                             <div class="col-12 mt-2">
                                 <label for="duration">Duration <small>*min</small></label>
-                                <input type="number" id="duration" class="form-control" value="60" required>
+                                <input type="number" id="duration" class="form-control" :value="checkedBookings[0].duration" required>
                             </div>
                             <div class="col-12 mt-2">
                                 <label for="start_at">Start at</label>
@@ -107,7 +107,7 @@
         methods:{
             getComingBookings(){
                 axios.get("/api/coming_bookings").then((res)=>{
-                    console.log(res);
+                    // console.log(res);
                     this.comingBookings = res.data;
                 })
             },
@@ -129,8 +129,6 @@
                 }else{
                     this.checkedBookings = this.checkedBookings.filter(x=> x.id != booking.id);
                 }
-
-                console.log(this.checkedBookings);
 
             },
             createMeeting(){

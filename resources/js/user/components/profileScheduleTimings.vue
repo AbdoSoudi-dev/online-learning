@@ -52,8 +52,14 @@
                                         </td>
                                         <td style="vertical-align: middle" v-if="key ==0" :rowspan="book.length">
                                             {{ formatAMPM(courseTime.session_time) }}
+                                            <br>
+                                            <span class="text-danger">
+                                                For {{ courseTime.duration }} mins
+                                            </span>
                                         </td>
-                                        <td>{{ courseTime.session_date }}</td>
+                                        <td>
+                                            {{ courseTime.session_date }}
+                                        </td>
                                         <td>{{ courseTime.day }}</td>
                                         <td v-if="payments.count && key ==0" style="vertical-align: middle" :rowspan="book.length">
                                             <div class="btn btn-danger" v-if="payments[booking_group_id]">
@@ -120,7 +126,7 @@
             getBookingTimes(){
                 axios.get("/api/bookings/"+this.user_id)
                     .then((res)=>{
-                        console.log(res);
+                        // console.log(res);
                         this.myBookingTimes = res.data;
                     })
                     .catch((error)=>{
@@ -164,7 +170,7 @@
                         this.payments = res.data;
                     })
                     .catch( (error)=>{
-                        console.log(error)
+                        // console.log(error)
                     })
             }
         },

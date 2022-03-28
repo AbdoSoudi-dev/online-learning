@@ -20,7 +20,7 @@
                                                 <div class="row border-style">
                                                     <h5 class="col-12 text-primary mb-0 mt-2">
                                                         <i class="fas fa-long-arrow-alt-right  text-primary"></i>
-                                                        60 mins
+                                                        (30/60) mins
                                                     </h5>
                                                     <h5 class="col-12 text-primary m-0">
                                                         <i class="fas fa-long-arrow-alt-right  text-primary"></i>

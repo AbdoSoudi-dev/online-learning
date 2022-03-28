@@ -12,7 +12,7 @@
                             </div>
                             <div class="footer-about-content">
                                 <p>
-                                    Online courses provide live classes for adults and kids with a highly qualified and trusted teachers from Al Azhr in Egypt for Quraan and Islam "all in one", in one place and one Home.
+                                    Online Institute provides live classes for All ages,for you and your kids with a highly qualified native tutors from Al-Azhar in Egypt for Quraan and Islam "all in one".
                                 </p>
                                 <div class="social-icon">
                                     <ul>
@@ -92,15 +92,15 @@
                             <div class="footer-contact-info">
                                 <div class="footer-address">
                                     <span><i class="fas fa-map-marker-alt"></i></span>
-                                    <p> Cairo, Egypt </p>
+                                    <p> Head Office: Cairo, Egypt </p>
                                 </div>
                                 <p>
                                     <i class="fas fa-phone-alt"></i>
-                                    +201149770796
+                                    WhatsApp: +201149770796
                                 </p>
                                 <p class="mb-0">
                                     <i class="fas fa-envelope"></i>
-                                    <a class="text-primary" href="mailto:quraanedu.contact@gmail.com">quraanedu.contact@gmail.com</a>
+                                    <a class="text-primary" href="mailto:info@quraanedu.com">Email: info@quraanedu.com</a>
                                 </p>
                             </div>
                         </div>

@@ -4,7 +4,9 @@
             <div class="banner-wrapper m-auto text-center">
                 <div class="banner-header">
                     <h1> <span class="text-uppercase text-light title-style">  Quraan edu</span></h1>
-                    <h2 class="text-bold text-light bg-darked">Online courses provide live classes for adults and kids with a highly qualified and trusted teachers from Al Azhr in Egypt for Quraan and Islam "all in one".</h2>
+                    <h2 class="text-light bg-darked">
+                        Online Institute provides live classes for All ages,for you and your kids with a highly qualified native tutors from <span class="text-bold">Al-Azhar</span> in Egypt for Quraan and Islam "all in one".
+                    </h2>
                 </div>
 
             </div>
@@ -14,86 +16,126 @@
     <section class="section how-it-works">
         <div class="container">
             <div class="section-header text-center">
-                <span>Who we are? </span>
-                <h2>Description</h2>
+<!--                <span>Who we are? </span>-->
+                <h2>Who we are?</h2>
                 <p class="sub-title">We are an online institute providing online classes "All in One"</p>
             </div>
 
             <div class="row m-auto " style="font-size: 18px !important;">
-                <div class="col-12">
-                    <p class="sub-title"> <i class="fas fa-long-arrow-alt-right  text-primary"></i> The Qur'an and most of Islam studies are between your hand all in one course to get you well educated Muslim with strong basis about Allah and Islam, with considering the Qur'an as it's our priority from reading to reciting, till memorizing ( Hifz ). </p>
-                    <p class="sub-title"> <i class="fas fa-long-arrow-alt-right  text-primary"></i> As we provide you an integrated courses, that will feed your satisfaction:</p>
+                <div class="row d-flex justify-content-center">
+
+                    <div class="col-md-4 col-12 mb-3 d-block d-md-none">
+                        <img src="/mosque-vector.png" class="img-fluid">
+                    </div>
+
+                    <div class="col-md-7 col-12">
+                        <p class="sub-title" v-for="item in descriptionItems">
+                            {{ item }}
+                        </p>
+                    </div>
+
+                    <div class="col-md-1 d-none-d-md-block"></div>
+
+                    <div class="col-md-4 col-12 mt-5 d-none d-md-block">
+                        <img src="/mosque-vector.png" class="img-fluid" >
+                    </div>
+
                 </div>
-                <div class="col-1"></div>
-                <div class="col-md-11 col-12">
-                    <p class="sub-title ml-4">
-                        <i class="fas fa-check text-primary mr-3"></i>  1 free trial.
-                        <br>
-                        <i class="fas fa-check text-primary mr-3"></i>  60 minutes class.
-                    </p>
-                    <div class="ol_margin">
-                        <ul>
-                            <li>60 minutes class. </li>
-                            <li>30 minutes for islam studies.</li>
-                        </ul>
-                    </div>
-                    <p class="sub-title ml-4">
-                        <i class="fas fa-check text-primary mr-3"></i>  24/7 learn online classes around the clock.
-                        <br>
-                        <i class="fas fa-check text-primary mr-3"></i>  Online classes live on our website.
-                        <br>
-                        <i class="fas fa-check text-primary mr-3"></i>  Group or 1 on 1 online sessions.
-                        <br>
-                        <i class="fas fa-check text-primary mr-3"></i>  The fixed components of all courses, you will learn:
-                    </p>
-
-                    <div class="ol_margin">
-                        30 minutes for:
-                        <ul>
-                            <li>The Holy Qur'an. </li>
-                        </ul>
-                    </div>
-
-                    <div class="ol_margin">
-                        30 minutes for:
-                        <ul>
-                            <li> The alphabet and phonetics of arabic language. </li>
-                            <li> Hadith and sunnah in a long enough discussion. </li>
-                            <li> Tafsir and explanation for every class. </li>
-                            <li> Sirah of Prophet Mohamed and islam history. </li>
-                            <li> Fiqh and aqidah. </li>
-                        </ul>
-                    </div>
-
-                    <p class="sub-title ml-4">
-                        <i class="fas fa-check text-primary mr-3"></i>  Reading the Qur’an.
-                        <br>
-                        <i class="fas fa-check text-primary mr-3"></i>  Reciting the Qur’an.
-                        <br>
-                        <i class="fas fa-check text-primary mr-3"></i>  Memorizing the Qur'an.
-                        <br>
-                        <i class="fas fa-check text-primary mr-3"></i>  Tajweed of the Qur'an.
-                        <br>
-                        <i class="fas fa-check text-primary mr-3"></i>  Ijazah as accredited certificate for completing a course.
-                        <br>
-                        <i class="fas fa-check text-primary mr-3"></i>  Best and trusted tutors from Al Azhar itself in Egypt.
-                    </p>
-                </div>
-
-                <div class="col-12 mt-2">
-                    <div class="col-md-8 col-11 m-auto">
-                        <blockquote class="sub-title text-bold ">
-                            Availability of joining a friend to the same course with only one Fee conditioned to be gathered in the same place on one screen with a similar Level. What are you wanting for?? Call your friend and join now.
-                        </blockquote>
-                    </div>
-                </div>
-
             </div>
+<!--            <div class="row m-auto " style="font-size: 18px !important;">-->
+<!--                <div class="col-12">-->
+<!--                    <p class="sub-title"> <i class="fas fa-long-arrow-alt-right  text-primary"></i> The Qur'an and most of Islam studies are between your hand all in one course to get you well educated Muslim with strong basis about Allah and Islam, with considering the Qur'an as it's our priority from reading to reciting, till memorizing ( Hifz ). </p>-->
+<!--                    <p class="sub-title"> <i class="fas fa-long-arrow-alt-right  text-primary"></i> As we provide you an integrated courses, that will feed your satisfaction:</p>-->
+<!--                </div>-->
+<!--                <div class="col-1"></div>-->
+<!--                <div class="col-md-11 col-12">-->
+<!--                    <p class="sub-title ml-4">-->
+<!--                        <i class="fas fa-check text-primary mr-3"></i>  1 free trial.-->
+<!--                        <br>-->
+<!--                        <i class="fas fa-check text-primary mr-3"></i>  60 minutes class.-->
+<!--                    </p>-->
+<!--                    <div class="ol_margin">-->
+<!--                        <ul>-->
+<!--                            <li>60 minutes class. </li>-->
+<!--                            <li>30 minutes for islam studies.</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                    <p class="sub-title ml-4">-->
+<!--                        <i class="fas fa-check text-primary mr-3"></i>  24/7 learn online classes around the clock.-->
+<!--                        <br>-->
+<!--                        <i class="fas fa-check text-primary mr-3"></i>  Online classes live on our website.-->
+<!--                        <br>-->
+<!--                        <i class="fas fa-check text-primary mr-3"></i>  Group or 1 on 1 online sessions.-->
+<!--                        <br>-->
+<!--                        <i class="fas fa-check text-primary mr-3"></i>  The fixed components of all courses, you will learn:-->
+<!--                    </p>-->
+
+<!--                    <div class="ol_margin">-->
+<!--                        30 minutes for:-->
+<!--                        <ul>-->
+<!--                            <li>The Holy Qur'an. </li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+
+<!--                    <div class="ol_margin">-->
+<!--                        30 minutes for:-->
+<!--                        <ul>-->
+<!--                            <li> The alphabet and phonetics of arabic language. </li>-->
+<!--                            <li> Hadith and sunnah in a long enough discussion. </li>-->
+<!--                            <li> Tafsir and explanation for every class. </li>-->
+<!--                            <li> Sirah of Prophet Mohamed and islam history. </li>-->
+<!--                            <li> Fiqh and aqidah. </li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+
+<!--                    <p class="sub-title ml-4">-->
+<!--                        <i class="fas fa-check text-primary mr-3"></i>  Reading the Qur’an.-->
+<!--                        <br>-->
+<!--                        <i class="fas fa-check text-primary mr-3"></i>  Reciting the Qur’an.-->
+<!--                        <br>-->
+<!--                        <i class="fas fa-check text-primary mr-3"></i>  Memorizing the Qur'an.-->
+<!--                        <br>-->
+<!--                        <i class="fas fa-check text-primary mr-3"></i>  Tajweed of the Qur'an.-->
+<!--                        <br>-->
+<!--                        <i class="fas fa-check text-primary mr-3"></i>  Ijazah as accredited certificate for completing a course.-->
+<!--                        <br>-->
+<!--                        <i class="fas fa-check text-primary mr-3"></i>  Best and trusted tutors from Al Azhar itself in Egypt.-->
+<!--                    </p>-->
+<!--                </div>-->
+
+<!--                <div class="col-12 mt-2">-->
+<!--                    <div class="col-md-8 col-11 m-auto">-->
+<!--                        <blockquote class="sub-title text-bold ">-->
+<!--                            Availability of joining a friend to the same course with only one Fee conditioned to be gathered in the same place on one screen with a similar Level. What are you wanting for?? Call your friend and join now.-->
+<!--                        </blockquote>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--            </div>-->
 
         </div>
     </section>
 
-    <courses style=""></courses>
+    <section class="section video-window">
+        <div class="container">
+            <div class="section-header text-center">
+                <!--                <span>Who we are? </span>-->
+                <h3 class="text-bold">QURAAN EDU.. your way to know more about Allah and his great book, The Holy Quraan.</h3>
+<!--                <p class="sub-title">We are an online institute providing online classes "All in One"</p>-->
+            </div>
+
+            <div class="row m-auto">
+                <iframe width="788" height="443" src="https://www.youtube.com/embed/XVf2nue4HyA"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <courses></courses>
 
     <section class="section how-it-works">
         <div class="container">
@@ -109,12 +151,93 @@
                         <div class="feature-header">
                             <div class="feature-icon">
                                 <span class="circle"></span>
-                                <i class="fas fa-street-view"></i>
+                                <i class="fas fa-street-view text-warning"></i>
                             </div>
                             <div class="feature-cont">
                                 <div class="feature-text">
                                     Welcome to our website
                                 </div>
+                                <p class="text-secondary">
+                                    Feel Free to check Our website as it's designed in a smooth way to make it easy for you to use.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="feature-box text-center">
+                        <div class="feature-header">
+                            <div class="feature-icon">
+                                <span class="circle"></span>
+                                <i class="fas fa-bars-staggered text-success"></i>
+                            </div>
+                            <div class="feature-cont">
+                                <div class="feature-text">
+                                    Confirm your Course
+                                </div>
+                                <p class="text-secondary">
+                                    please check and choose your suitable course that you need and tab on Free Trial, you will be asked to Register.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="feature-box text-center">
+                        <div class="feature-header">
+                            <div class="feature-icon">
+                                <span class="circle"></span>
+                                <i class="fas fa-calendar-day text-info"></i>
+                            </div>
+                            <div class="feature-cont">
+                                <div class="feature-text">
+                                    Time and Days
+                                </div>
+                                <p class="text-secondary">
+                                    You will go to choose your days and the time that suits you and then wait for free trial date.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="feature-box text-center">
+                        <div class="feature-header">
+                            <div class="feature-icon">
+                                <span class="circle"></span>
+                                <i class="fas fa-hourglass text-warning"></i>
+                            </div>
+                            <div class="feature-cont">
+                                <div class="feature-text">
+                                    Join your Free Trial
+                                </div>
+
+                                <p class="text-secondary">
+                                    Once your Free Trial date comes, Join the class from your Meetings page, your Teacher will be waiting for you.
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="feature-box text-center">
+                        <div class="feature-header">
+                            <div class="feature-icon">
+                                <span class="circle"></span>
+                                <i class="fas fa-dollar-sign text-success"></i>
+                            </div>
+                            <div class="feature-cont">
+                                <div class="feature-text">
+                                    Pay your Fees
+                                </div>
+                                <p class="text-secondary">
+                                    After finishing your class you will be directed to pay your Fees to Unlock the rest of the course.
+                                </p>
                             </div>
                         </div>
 <!--                        <p class="mb-0">-->
@@ -128,12 +251,14 @@
                         <div class="feature-header">
                             <div class="feature-icon">
                                 <span class="circle"></span>
-                                <i class="fas fa-bars-staggered"></i>
+                                <i class="fas fa-project-diagram text-info"></i>
                             </div>
                             <div class="feature-cont">
                                 <div class="feature-text">
-                                    You can check and then choose your course
+                                    Your Course is Unlocked
                                 </div>
+                                <p class="text-secondary">
+                                    Congratulations, The process is Completed, you are now one of our Family, enjoy your journey with us.                                </p>
                             </div>
                         </div>
 <!--                        <p class="mb-0">-->
@@ -142,100 +267,6 @@
                     </div>
                 </div>
 
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="feature-box text-center">
-                        <div class="feature-header">
-                            <div class="feature-icon">
-                                <span class="circle"></span>
-                                <i class="fas fa-calendar-day"></i>
-                            </div>
-                            <div class="feature-cont">
-                                <div class="feature-text">
-                                    Please choose the days and time that suit you
-                                </div>
-                            </div>
-                        </div>
-<!--                        <p class="mb-0">-->
-<!--                            Welcome to our website-->
-<!--                        </p>-->
-                    </div>
-                </div>
-
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="feature-box text-center">
-                        <div class="feature-header">
-                            <div class="feature-icon">
-                                <span class="circle"></span>
-                                <i class="fas fa-hourglass"></i>
-                            </div>
-                            <div class="feature-cont">
-                                <div class="feature-text">
-                                    Then you need to wait until your class time comes
-                                </div>
-                            </div>
-                        </div>
-<!--                        <p class="mb-0">-->
-<!--                            Welcome to our website-->
-<!--                        </p>-->
-                    </div>
-                </div>
-
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="feature-box text-center">
-                        <div class="feature-header">
-                            <div class="feature-icon">
-                                <span class="circle"></span>
-                                <i class="fas fa-dollar-sign"></i>
-                            </div>
-                            <div class="feature-cont">
-                                <div class="feature-text">
-                                    After attending the free trial, It's time to pay the Fee
-                                </div>
-                            </div>
-                        </div>
-<!--                        <p class="mb-0">-->
-<!--                            Welcome to our website-->
-<!--                        </p>-->
-                    </div>
-                </div>
-
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="feature-box text-center">
-                        <div class="feature-header">
-                            <div class="feature-icon">
-                                <span class="circle"></span>
-                                <i class="fas fa-project-diagram"></i>
-                            </div>
-                            <div class="feature-cont">
-                                <div class="feature-text">
-                                    Then you can complete your schedule of your course
-                                </div>
-                            </div>
-                        </div>
-<!--                        <p class="mb-0">-->
-<!--                            Welcome to our website-->
-<!--                        </p>-->
-                    </div>
-                </div>
-
-<!--                <div class="col-12 col-md-6 col-lg-4">-->
-<!--                    <div class="feature-box text-center">-->
-<!--                        <div class="feature-header">-->
-<!--                            <div class="feature-icon">-->
-<!--                                <span class="circle"></span>-->
-<!--                                <i class="fas fa-check-square"></i>-->
-<!--                            </div>-->
-<!--                            <div class="feature-cont">-->
-<!--                                <div class="feature-text">-->
-<!--                                    Our family is growing up with you-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--&lt;!&ndash;                        <p class="mb-0">&ndash;&gt;-->
-<!--&lt;!&ndash;                            Welcome to our website&ndash;&gt;-->
-<!--&lt;!&ndash;                        </p>&ndash;&gt;-->
-<!--                    </div>-->
-<!--                </div>-->
 
 
             </div>
@@ -252,7 +283,20 @@
     export default {
         components:{
             courses
-        }
+        },
+        data(){
+            return{
+                descriptionItems:[
+                    "We are an online Institute that provides live sessions for All ages, for you (Male or Female) and your Kids.",
+                    "Especially our children, where we give them the most attention, because we consider them the bright Future that will carry the Message after us.",
+                    "And As we believe that the Quraan and the Islam studies are closely related to each other, So we proudly decided to approach that method \"All in One\", to combine the Quraan, Islam studies and Arabic in one class, to achieve our goal that we are striving for, which is to build a wise Muslim who could be a Model to follow for everyone else and also to show the True image of Islam in its correct form. and reCorrecting the misconceptions and wrong Thoughts that some have.",
+                    "And to be able to achieve our Lofty Goal, we decided to choose our team very carefully and accurately to be able to take responsibility.",
+                    "Our Team is a highly qualified native Egyptian Arabic speakers and graduated from Al-Azhar University in Egypt, the beacon of Islam all over the world.",
+                    "We have our OWN Especial Approaches in Teaching that we learned from our shaikhs in Al-Azhar that consist of active and passive Approaches. and because we care, we ill start with you where your Level is.",
+                ]
+            }
+        },
+
     }
 </script>
 <style scoped>
@@ -305,4 +349,20 @@
         background-color:rgba(0, 0, 0, 0.5);
     }
     .fa-bars-staggered:before,.fa-reorder:before,.fa-stream:before{content:"\f550"}
+
+    .feature-icon{
+        background-color: transparent !important;
+    }
+    .feature-icon .circle{
+        background-color: transparent !important;
+    }
+    .feature-box:hover{
+        background:
+            linear-gradient(to left top, #0d6efd 0%/*bottom-right color*/, #01cae4 50% /*middle color*/, #01cae4 100% /*top-left color*/),
+            linear-gradient(#e7f1ff, #e7f1ff)/*"faked" black background make sure to add last or it will appear before the transparent/colored layer*/;
+    }
+    .feature-box:hover p,
+        .feature-box:hover i {
+        color: white !important;
+    }
 </style>

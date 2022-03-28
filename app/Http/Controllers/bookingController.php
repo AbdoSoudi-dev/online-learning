@@ -30,7 +30,7 @@ class bookingController extends Controller
                 ,$request->user()->timezone);
 
             $lecture_end = $start_date = Carbon::createFromFormat('Y-m-d H:i:s',$myBooking['session_date']
-                ,$request->user()->timezone)->addHour();
+                ,$request->user()->timezone)->addMinutes($myBooking['duration']);
 
             $myBookingsGroup[$myBooking['booking_group_id']][] = [
                 "id" => $myBooking['id'],
@@ -46,6 +46,7 @@ class bookingController extends Controller
                                 !($date_now >= $lecture_start && $date_now <= $lecture_end) ? true : false),
                 "timing" => $myBooking['timing'],
                 "course" => $myBooking['course'],
+                "duration" => $myBooking['duration'],
                 "meeting" => $myBooking['meetings'][0] ?? [] ,
             ];
             if ($myBooking['session_date'] > $date_now){
@@ -165,6 +166,7 @@ class bookingController extends Controller
                 "session_date"=> $day['date_time'],
                 "booking_group_id"=>$booking_group_id,
                 "session_num"=> $key+1,
+                "duration" => $request->duration,
                 "user_id"=> $request->user()->id
             ]);
         }

@@ -2,9 +2,13 @@
     <section class="section path-section bg-gray-dark">
         <div class="section-header text-center">
             <div class="container">
-<!--                <span>Choose the</span>-->
+                <span v-if="!$store.state.currentUser.free_trail || $store.state.currentUser.free_trail == 0">
+                    Learn Online.. and Enjoy Learning.
+                </span>
                 <h2>Courses</h2>
-<!--                <p class="sub-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</p>-->
+                <p class="sub-title">
+                    Schedule your Free Trial Now.
+                </p>
             </div>
         </div>
         <div class="learning-path-col">

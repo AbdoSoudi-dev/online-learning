@@ -29,11 +29,17 @@
                     })
                 }
 
-            }
+            },
         },
         mounted() {
             window.axios.defaults.headers.common['Authorization'] = 'Bearer '+this.$store.state.token;
             this.checkLoginAuth();
         },
+        watch:{
+            $route(to, from) {
+                window.scrollTo(0, 0);
+                document.querySelector(".fas.fa-times")?.click();
+            }
+        }
     }
 </script>

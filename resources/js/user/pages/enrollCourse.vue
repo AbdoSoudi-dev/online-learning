@@ -55,21 +55,32 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="timing in timingsZone">
+                                <tr v-for="(timing,key) in timingsEdited">
 
                                     <td >
-                                        <div class="d-flex row justify-content-center">
-                                            <div class="col-4" v-for="daily in timing.days">
+                                        <div class="d-flex row justify-content-center m-auto">
+                                            <div class="col-md-4 col-12" v-for="daily in timing.days">
                                                 {{ daily }}
                                             </div>
                                         </div>
                                     </td>
 
-                                    <td class="text-center">
+                                    <td class="text-center timting_duration">
 <!--                                        {{ timing.time }}-->
                                         <input type="time" class="form-control time_timing">
+                                        <br>
+                                        <div class="row d-flex justify-content-center">
+                                            <div class="col-6 position-relative">
+                                                <input type="radio" :id="'hour'+key" :name="'duration'+key" value="60" v-model="timing.duration">
+                                                <label :for="'hour'+key" class="col-12">60 mins</label>
+                                            </div>
+                                            <div class="col-6 position-relative">
+                                                <input type="radio" :id="'half-hour'+key" :name="'duration'+key" value="30" v-model="timing.duration">
+                                                <label :for="'half-hour'+key" class="col-12">30 mins</label>
+                                            </div>
+                                        </div>
                                     </td>
-                                    <td class="text-center text-success">{{ timing.price + "$" }}</td>
+                                    <td class="text-bold text-center text-success">{{ (timing.duration == 30 ? (timing.price / 2) : timing.price )+ " $" }}</td>
                                     <td class="text-center text-success">
 <!--                                        <span v-if="checkTiming.includes(timing.id)">-->
 <!--                                            Already detected-->
@@ -78,7 +89,7 @@
                                             Waiting
                                         </span>
                                         <i v-else
-                                           @click="saveBooking(timing.id,$event)" class="fas fa-sign-in-alt text-success fa-2x cursor-pointer"></i>
+                                           @click="saveBooking(timing.id,timing.duration,$event)" class="fas fa-sign-in-alt text-success fa-2x cursor-pointer"></i>
                                     </td>
                                 </tr>
                             </tbody>
@@ -103,7 +114,8 @@
                 courseDetails:{},
                 timings:[],
                 checkTiming:[],
-                wait:false
+                wait:false,
+                timingsEdited:[]
             }
         },
         methods:{
@@ -121,6 +133,7 @@
                 axios.get("/api/timings").then((res)=>{
                     // console.log(res);
                     this.timings = res.data;
+                    this.timingsZone();
                 }).catch((error)=>{
                     console.log(error);
                 })
@@ -146,15 +159,15 @@
                 var strTime = hours + ':' + minutes + ' ' + ampm;
                 return strTime;
             },
-            saveBooking(timing_id,event){
+            saveBooking(timing_id,duration,event){
                 let inputTime = event.currentTarget.parentNode.parentNode.children[1].children[0];
                 let time = inputTime.value;
-
                 if (time) {
                     this.wait = true;
                     axios.post("/api/bookings", {
                         timing_id: timing_id,
                         time: time,
+                        duration: duration,
                         course_id: this.$route.params.id
                     }).then((res) => {
                         // console.log(res);
@@ -175,6 +188,16 @@
 
                 }
             },
+            timingsZone(){
+                let timing = [];
+                for (let i = 0; i < this.timings.length; i++) {
+                    const time = this.timings[i];
+                    time.time = this.formatAMPM(time.time);
+                    time.duration = 60;
+                    timing.push({...time});
+                }
+                this.timingsEdited =  timing;
+            }
 
         },
         beforeMount() {
@@ -183,15 +206,7 @@
             // this.check_token_time();
         },
         computed:{
-            timingsZone(){
-                let timing = [];
-                for (let i = 0; i < this.timings.length; i++) {
-                    const time = this.timings[i];
-                    time.time = this.formatAMPM(time.time);
-                    timing.push({...time});
-                }
-                return timing;
-            }
+
         },
         mounted() {
 
@@ -203,5 +218,65 @@
 <style scoped>
     .h-75vh{
         height: 75vh;
+    }
+    td{
+        vertical-align: middle;
+    }
+    tr{
+        border-bottom: 1px solid #009efb !important;
+    }
+/*    input radio */
+    [type="radio"]:checked,
+    [type="radio"]:not(:checked) {
+        position: absolute;
+        left: -9999px;
+    }
+    [type="radio"]:checked + label,
+    [type="radio"]:not(:checked) + label
+    {
+        position: relative;
+        padding-left: 28px;
+        cursor: pointer;
+        line-height: 20px;
+        display: inline-block;
+        color: #666;
+    }
+    [type="radio"]:checked + label:before,
+    [type="radio"]:not(:checked) + label:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 18px;
+        height: 18px;
+        border: 1px solid #ddd;
+        border-radius: 100%;
+        background: #fff;
+    }
+    [type="radio"]:checked + label:after,
+    [type="radio"]:not(:checked) + label:after {
+        content: '';
+        width: 12px;
+        height: 12px;
+        background: #F87DA9;
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        border-radius: 100%;
+        -webkit-transition: all 0.2s ease;
+        transition: all 0.2s ease;
+    }
+    [type="radio"]:not(:checked) + label:after {
+        opacity: 0;
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+    [type="radio"]:checked + label:after {
+        opacity: 1;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    .timting_duration{
+        min-width: 161px;
     }
 </style>

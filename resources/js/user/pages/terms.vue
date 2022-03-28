@@ -8,17 +8,17 @@
             <div class="row m-auto " style="font-size: 18px !important;">
                 <div class="col-12">
                     <p class="sub-title"> <i class="fas fa-long-arrow-alt-right  text-primary"></i>
-                        Welcome to the QURAAN EDU. The following Terms of Service are applied when you register to our courses or your kid's classes . Please review the following terms carefully.
+                        Welcome to the QURAAN EDU Institute. The following Terms of Service are applied when you register to our courses or your kid's classes . Please review the following terms carefully.
                     </p>
                     <p class="sub-title"> <i class="fas fa-long-arrow-alt-right  text-primary"></i>
                         By accessing or using our website and services or redirect any users to our website, you signify and agree to the following Terms of Service.  If you do not agree to these Terms of Service, you may not be able to participate in our classes and courses or access or use our website and services.
                     </p>
                     <p class="sub-title"> <i class="fas fa-long-arrow-alt-right  text-primary"></i>
-                        In what follows, COMPANY refers to QURAAN EDU and YOU refers to the client or the student who purchases services from QURAAN EDU.
+                        In what follows, COMPANY refers to QURAAN EDU Institute and YOU refers to the client or the student who purchases services from QURAAN EDU Institute.
                     </p>
                     <h3 class="text-primary">PRIVACY POLICY</h3>
                     <p class="sub-title"> <i class="fas fa-long-arrow-alt-right  text-primary"></i>
-                        The Company respects the privacy of website users.  Please refer to the Company’s Privacy Policy #here, which explains how we collect, use, and disclose information that included to your privacy.  When you access or use the website, you agree to this Privacy Policy.
+                        The Company respects the privacy of website users.  Please refer to the Company’s Privacy Policy <router-link to="/privacyPolicy">#here</router-link>, which explains how we collect, use, and disclose information that included to your privacy.  When you access or use the website, you agree to this Privacy Policy.
                     </p>
                     <h3 class="text-primary">USE RESTRICTIONS</h3>
                     <p class="sub-title"> <i class="fas fa-long-arrow-alt-right  text-primary"></i>
@@ -53,43 +53,45 @@
                     <h3 class="text-primary">PAYMENTS AND BILLING</h3>
                     <div class="col-12 d-flex justify-content-end">
                         <div class="col-10 ">
-                            1) Within and after a successful completion of the free trial class, you will have to decide whether or not to continue with the classes at QURAAN EDU website.<br>
+                            1) Within and after a successful completion of the free trial class, you will have to decide whether or not to continue with the classes at QURAAN EDU Institute website.<br>
                             2) Once you decide to continue, you need to pay the fee at the due date – every 28 days fees are paid in advance on the last week of every month for next month. Classes are paused if you do not pay the fee on the due date.<br>
-                            3) QURAAN EDU has the right to stop the classes, if the fees are not paid in the due date.<br>
+                            3) QURAAN EDU Institute has the right to stop the classes, if the fees are not paid in the due date.<br>
                             4) In case you need to hold the classes and complete it later you need to get back to us as we decide if that possible on the current schedule of teachers or not.<br>
                             5) Any leave is considered as paid form your side and there is no replacing for that and it is paid if you keep the same schedule and teacher as we can not utilize the time for any other students of you.<br>
                             6) If the student is absent in any class due to a problem at his/her end, it is not necessary that replaced classes will be entertained.<br>
                             7) If students miss any class without prior notice (except emergency), absent will be marked and no makeup class will be considered. Replaced classes can be arranged with the same teacher or another teacher upon availability of  the schedule on the required time.<br>
                             8) If you want to cancel a class any day, you are required to email us 24 hours earlier to avail of the replaced class.<br>
-                            9) QURAAN EDU has the right to cancel the classes if any student were sy absent for more than two weeks without prior notice with no getting back to the student/client and no refund will be entertained as per our Terms of Service and refund policy.<br>
-                            10) Never share your contact information like phone number, Email, address, credit card information to any teacher. QURAAN EDU will not be held responsible in case of misuse.<br>
-                            11) QURAAN EDU reserves the right to change teachers anytime if needed for quality teaching purposes.<br>
+                            9) QURAAN EDU Institute has the right to cancel the classes if any student were sy absent for more than two weeks without prior notice with no getting back to the student/client and no refund will be entertained as per our Terms of Service and refund policy.<br>
+                            10) Never share your contact information like phone number, Email, address, credit card information to any teacher. QURAAN EDU Institute will not be held responsible in case of misuse.<br>
+                            11) QURAAN EDU Institute reserves the right to change teachers anytime if needed for quality teaching purposes.<br>
                             12) In case the teacher resigns/terminated, students will be provided with new teachers with a better qualifications, and students will not stay in touch with any individuals.<br>
-                            13) QURAAN EDU might increase the fee of every student's course according to the terms of service with the ratio between 10-12% of the present fee every year at the end of the year of the Gregorian calendar.<br>
-                            14) You will not discuss any payments and your contact details are personal to you and the website only or with the whats app number that is on the website. and any contact details with the teachers as in case of any loss or damage QURAAN EDU will not be responsible.<br>
+                            13) QURAAN EDU Institute might increase the fee of every student's course according to the terms of service with the ratio between 10-12% of the present fee every year at the end of the year of the Gregorian calendar.<br>
+                            14) You will not discuss any payments and your contact details are personal to you and the website only or with the whats app number that is on the website. and any contact details with the teachers as in case of any loss or damage QURAAN EDU Institute will not be responsible.<br>
                             15) We have 2 Eids, fitr and adha. The Eid Holidays on both occasions are considered as paid leaves of the teachers and we have no other leaves in the years for the teachers except the Eid. So Eid Holidays are included in the monthly fees and there are replacement classes and no refunds for there holidays.<br>
-                            16) If a teacher canceled a lesson . You have the right to claim that threw our email (quraanedu.contact@gmail.com)  and receive full credit for the canceled lesson.<br>
-                            17) QURAAN EDU fee of students could be varied, according to the type of course details and content and the Fees could change annually starting from the Gregorian calendar according to our policies of that time and terms of service .<br>
-                            18) You agree to ensure that payment(s) are made in accordance with the Payment Schedule. You may make early payments through your our approved payment gateway including Paypal (we are working to add more payment getaways) on time according to the due date on the invoice, otherwise QURAAN EDU will automatically process payments in accordance with the due dates stated on the Payment Schedule.<br>
+                            16) If a teacher canceled a lesson . You have the right to claim that threw our email (info@quraanedu.com)  and receive full credit for the canceled lesson.<br>
+                            17) QURAAN EDU Institute fee of students could be varied, according to the type of course details and content and the Fees could change annually starting from the Gregorian calendar according to our policies of that time and terms of service .<br>
+                            18) You agree to ensure that payment(s) are made in accordance with the Payment Schedule. You may make early payments through your our approved payment gateway including Paypal (we are working to add more payment getaways) on time according to the due date on the invoice, otherwise QURAAN EDU Institute will automatically process payments in accordance with the due dates stated on the Payment Schedule.<br>
                             19) you are able to make Payments for more than one course, as you are eligible to join more than one course at the same time and every course with it individual Fees.<br>
                             20) If we cancel lessons,  we will apply a full refund of any amounts you have paid to us for the rest of the course fees to your Nominated Payment Source or (if that is not possible) to any other Card that you have provided us details of.<br>
                             21) The Terms of Service (TOS) and refund policy are applicable to all students.<br>
-                            22) QURAAN EDU may revise its Terms of Service & Conditions at any point in time and those would be added and updated on our website as well.<br>
+                            22) QURAAN EDU Institute may revise its Terms of Service & Conditions at any point in time and those would be added and updated on our website as well.<br>
                         </div>
                     </div>
 
                     <h3 class="text-primary">Automatic Payments and your Continuous Payment Authority:</h3>
                     <p class="sub-title"> <i class="fas fa-long-arrow-alt-right  text-primary"></i>
-                        There's no Automatic Payments till this moment on our website Quraan Edu, therefore you are authorized to pay the Fees manually every 28 days at the renewal date of your course, and then you can continue using our services of the chosen course one more time.<br>
+                        There's no Automatic Payments till this moment on our website QURAAN EDU Institute, therefore you are authorized to pay the Fees manually every 28 days at the renewal date of your course, and then you can continue using our services of the chosen course one more time.<br>
                         Once there's an Automatic Payment method, you will be notified for that.
                     </p>
 
-                    <h3 class="text-primary">Late Payments</h3>
+                    <h3 class="text-primary">Late Payments and Refund</h3>
                     <div class="col-12 d-flex justify-content-end">
                         <div class="col-10 ">
                         (a) If you fail to pay any amounts according to the Payment Schedule, you will no more be able to continue your course or classes  until you pay the required amount for the course that you choose.<br>
-                        (b) If Fees were or may be incurred as a result of QURAAN EDU’s error, please let us know, and we will waive or refund any such fees.<br>
+                        (b) If Fees were or may be incurred as a result of QURAAN EDU Institute’s error, please let us know, and we will waive or refund any such fees.<br>
                         (c) We will contact you as soon as we can to let you know you have missed a payment, and to discuss how the payment can be made. We’ll follow a collections process under which we’ll do our best to work with you to bring the agreement up to date.<br>
+                        (d) Money back Guarantee after investigating in the presented reasons and the customer service will get back to the customer.<br>
+
                         </div>
                     </div>
 
@@ -103,15 +105,15 @@
                     </div>
 
                     <p class="sub-title"> <i class="fas fa-long-arrow-alt-right  text-primary"></i>
-                        If you are unable to make payments due to financial hardship, please contact quraanedu.contact@gmail.com  or contact us through what's app at +201149770796 . QURAAN EDU maintains a fund for sponsoring students who are going through financial hardship and depending on your circumstances, funds can be allocated towards your fees.
+                        If you are unable to make payments due to financial hardship, please contact info@quraanedu.com  or contact us through what's app at +201149770796 . QURAAN EDU Institute maintains a fund for sponsoring students who are going through financial hardship and depending on your circumstances, funds can be allocated towards your fees.
                     </p>
 
                     <h3 class="text-primary">Links To Other Websites:</h3>
 
                     <div class="col-12 d-flex justify-content-end">
                         <div class="col-10 ">
-                            1) Our Service may contain links to third-party web sites or services that are not owned or controlled by QURAAN EDU.<br>
-                            2) QURAAN EDU has no control over and assumes no responsibility for, the content, privacy policies, or practices of any third-party websites or services. You further acknowledge and agree that Quran Oasis Institute shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with use of or reliance on any such content, goods or services available on or through any such websites or services.<br>
+                            1) Our Service may contain links to third-party web sites or services that are not owned or controlled by QURAAN EDU Institute.<br>
+                            2) QURAAN EDU Institute has no control over and assumes no responsibility for, the content, privacy policies, or practices of any third-party websites or services. You further acknowledge and agree that Quran Oasis Institute shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with use of or reliance on any such content, goods or services available on or through any such websites or services.<br>
                             3) We strongly advise you to read the terms and conditions and privacy policies of any third-party websites or services that you visit.<br>
                         </div>
                     </div>
