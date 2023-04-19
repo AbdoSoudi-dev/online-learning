@@ -52,19 +52,19 @@
           }
         },
         methods:{
-            changePassword(){
-                axios.put("/api/changePassword",{
-                       old_password: this.old_password,
-                        password: this.password,
-                        password_confirmation: this.password_confirmation,
-                     })
-                     .then( (res)=>{
+            async changePassword(){
+                await axios.put("/api/change_password",{
+                            old_password: this.old_password,
+                            password: this.password,
+                            password_confirmation: this.password_confirmation,
+                        })
+                        .then(res =>{
                          this.response = res.data;
                          this.old_password = "";
                          this.password = "";
                          this.password_confirmation = "";
                      })
-                     .catch( (error)=>{
+                     .catch(error =>{
                          this.response = error.response.data;
                      })
             }
@@ -76,9 +76,6 @@
                 },10000)
             }
         },
-        beforeMount() {
-
-        }
     }
 </script>
 

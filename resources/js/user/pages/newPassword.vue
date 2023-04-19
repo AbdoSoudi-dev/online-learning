@@ -61,28 +61,22 @@
                     password_confirmation:""
                 },
                 errors:{},
-                response:"",
                 waiting:false
             }
         },
         methods:{
-            resetForm(){
+            async resetForm(){
                 this.waiting = true;
-                this.response = "";
                 this.errors = {};
-                axios.post('/api/reset-password',this.formData)
+                await axios.post('/api/reset_password',this.formData)
                     .then((res) =>{
-                        // console.log(res);
                         this.$router.push("/login");
-                    this.response = res.data.status;
-                    this.waiting = false;
-
-                }).catch((err)=>{
-                    // console.log(err)
-                    this.waiting = false;
-
-                    this.errors = err.response.data;
-                })
+                        this.waiting = false;
+                    })
+                    .catch((err)=>{
+                        this.waiting = false;
+                        this.errors = err.response.data;
+                    })
             },
 
         },

@@ -48,7 +48,9 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <a :href="'/joinRoom/'+meeting.meeting_id" class="btn btn-info text-light">Start</a>
+                                                <a :href="`/join_room/${meeting.meeting_id}`" class="btn btn-info text-light">
+                                                    Start
+                                                </a>
                                             </td>
                                             <td>{{ meeting.start_url }}</td>
                                             <td>{{ meeting.join_url }}</td>
@@ -74,14 +76,14 @@
             }
         },
         methods:{
-            getMeetings(){
-                axios.get("/api/meetingsAll").then((res)=>{
-                    // console.log(res.data);
-                    this.meetings = res.data;
-                })
+            async getMeetings(){
+               await axios.get("/api/meetings_all")
+                     .then((res)=>{
+                         this.meetings = res.data;
+                      })
             }
         },
-        mounted() {
+        beforeMount() {
             this.getMeetings();
         }
     }

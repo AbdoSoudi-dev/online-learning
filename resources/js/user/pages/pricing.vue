@@ -2,9 +2,7 @@
     <section class="section path-section bg-gray-dark">
         <div class="section-header text-center">
             <div class="container">
-<!--                <span>Choose the</span>-->
                 <h2>Pricing</h2>
-<!--                <p class="sub-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</p>-->
             </div>
         </div>
 
@@ -27,7 +25,7 @@
                                    <li> 4 Hours / Month </li>
                                 </ul>
                                 <div class="btn-area">
-                                    <router-link to="/coursesList" v-if="$store.state.currentUser.role_id">
+                                    <router-link to="/courses_list" v-if="$store.state.currentUser.role_id">
                                         Enroll Course
                                     </router-link>
                                     <router-link to="/register" v-else>
@@ -53,7 +51,7 @@
                                    <li> Joining Friend Availability </li>
                                 </ul>
                                 <div class="btn-area">
-                                    <router-link to="/coursesList" v-if="$store.state.currentUser.role_id">
+                                    <router-link to="/courses_list" v-if="$store.state.currentUser.role_id">
                                         Enroll Course
                                     </router-link>
                                     <router-link to="/register" v-else>
@@ -79,7 +77,7 @@
                                   <li> 24 Hours Support </li>
                                 </ul>
                                 <div class="btn-area">
-                                    <router-link to="/coursesList" v-if="$store.state.currentUser.role_id">
+                                    <router-link to="/courses_list" v-if="$store.state.currentUser.role_id">
                                         Enroll Course
                                     </router-link>
                                     <router-link to="/register" v-else>
@@ -105,7 +103,7 @@
                                   <li> 24 Hours Support </li>
                                 </ul>
                                 <div class="btn-area">
-                                    <router-link to="/coursesList" v-if="$store.state.currentUser.role_id">
+                                    <router-link to="/courses_list" v-if="$store.state.currentUser.role_id">
                                         Enroll Course
                                     </router-link>
                                     <router-link to="/register" v-else>
@@ -131,7 +129,7 @@
                                   <li> 24 Hours Support </li>
                                 </ul>
                                 <div class="btn-area">
-                                    <router-link to="/coursesList" v-if="$store.state.currentUser.role_id">
+                                    <router-link to="/courses_list" v-if="$store.state.currentUser.role_id">
                                         Enroll Course
                                     </router-link>
                                     <router-link to="/register" v-else>
@@ -172,7 +170,7 @@
                                     <li> 2 Hours / Month </li>
                                 </ul>
                                 <div class="btn-area-half">
-                                    <router-link to="/coursesList" v-if="$store.state.currentUser.role_id">
+                                    <router-link to="/courses_list" v-if="$store.state.currentUser.role_id">
                                         Enroll Course
                                     </router-link>
                                     <router-link to="/register" v-else>
@@ -198,7 +196,7 @@
                                     <li> Joining Friend Availability </li>
                                 </ul>
                                 <div class="btn-area-half">
-                                    <router-link to="/coursesList" v-if="$store.state.currentUser.role_id">
+                                    <router-link to="/courses_list" v-if="$store.state.currentUser.role_id">
                                         Enroll Course
                                     </router-link>
                                     <router-link to="/register" v-else>
@@ -224,7 +222,7 @@
                                     <li> 24 Hours Support </li>
                                 </ul>
                                 <div class="btn-area-half">
-                                    <router-link to="/coursesList" v-if="$store.state.currentUser.role_id">
+                                    <router-link to="/courses_list" v-if="$store.state.currentUser.role_id">
                                         Enroll Course
                                     </router-link>
                                     <router-link to="/register" v-else>
@@ -250,7 +248,7 @@
                                     <li> 24 Hours Support </li>
                                 </ul>
                                 <div class="btn-area-half">
-                                    <router-link to="/coursesList" v-if="$store.state.currentUser.role_id">
+                                    <router-link to="/courses_list" v-if="$store.state.currentUser.role_id">
                                         Enroll Course
                                     </router-link>
                                     <router-link to="/register" v-else>
@@ -276,7 +274,7 @@
                                     <li> 24 Hours Support </li>
                                 </ul>
                                 <div class="btn-area-half">
-                                    <router-link to="/coursesList" v-if="$store.state.currentUser.role_id">
+                                    <router-link to="/courses_list" v-if="$store.state.currentUser.role_id">
                                         Enroll Course
                                     </router-link>
                                     <router-link to="/register" v-else>
@@ -305,7 +303,7 @@
     export default {
             data(){
                 return{
-                    coursesList:[]
+
                 }
             },
             methods:{
@@ -405,12 +403,6 @@
         background: #262626;
     }
 
-
-
-
-
-    /* ignore the code below */
-
     .link-area
     {
         position:fixed;
@@ -426,8 +418,6 @@
         color:#fff;
         font-size:25px;
     }
-
-/*    half an hour design */
 
     .deal-top-half {
         position: relative;

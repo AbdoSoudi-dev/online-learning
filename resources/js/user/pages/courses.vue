@@ -15,7 +15,7 @@
             <div class="container">
                 <div class="row">
 
-                    <div class="col-12 col-md-4 col-lg-3" v-for="course in coursesList">
+                    <div class="col-12 col-md-4 col-lg-3" v-for="course in $store.state.courses">
                         <div class="large-col text-center">
                             <router-link :to="'/course/'+course.id">
                                 <div class="image-col-merge img_course" >
@@ -40,27 +40,7 @@
 
 
 <script>
-    export default {
-            data(){
-                return{
-                    coursesList:[]
-                }
-            },
-            methods:{
-                getCourses(){
-                    axios.get("/api/courses")
-                        .then((res)=>{
-                            this.coursesList = res.data;
-                        })
-                        .catch((err)=>{
-                            // console.log(err);
-                        });
-                }
-            },
-            beforeMount() {
-                this.getCourses();
-            }
-        }
+    export default {}
 
 </script>
 <style scoped>

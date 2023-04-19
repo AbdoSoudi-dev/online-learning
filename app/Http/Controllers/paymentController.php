@@ -22,36 +22,34 @@ class paymentController extends Controller
             return $pay;
         });
 
-        return response($myPayments,201);
+        return $myPayments;
     }
     public function store(Request $request)
     {
         Payment::create($request->all());
-        return response("DONE",201);
+        return true;
     }
     public function checkPayments($id, Request $request)
     {
-        $id = $request->user()->roler_id == 1 ? $request->user()->id : $id;
-
         $bookingsUser = Booking::whereDoesntHave("payment")
-               ->whereUser_id($id)
+               ->whereUser_id($request->user()->roler_id == 1 ? $request->user()->id : $id)
                ->groupBy("booking_group_id")
                ->selectRaw("MIN(id) id, booking_group_id")
                ->get();
-
         $checkPayments = [];
-        foreach ($bookingsUser as $item) {
+        foreach ($bookingsUser as $book) {
+            $book->setAppends([]);
             $checkPayments['count'] = count($bookingsUser) ? 1 : false;
-            $checkPayments[$item['booking_group_id']] = $item;
+            $checkPayments[$book['booking_group_id']] = $book;
         }
 
-        return response($checkPayments,201);
+        return $checkPayments;
     }
     public function allPayments()
     {
         $payments = Payment::with(["user","booking"=>function($query){
             $query->with("course");
         }])->latest()->get();
-        return response($payments,200);
+        return $payments;
     }
 }

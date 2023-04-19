@@ -58,16 +58,13 @@
 <script>
     export default {
         methods:{
-            logout(){
-                axios.delete('/api/logout')
-                    .then((res) =>{
-                        // console.log(res)
+            async logout(){
+                await axios.delete('/api/logout')
+                    .then( res=>{
                         this.$store.commit("get_current_user",{});
                         this.$store.commit("get_current_user","");
                         location.href = "/";
-                    }).catch((err)=>{
-                    // console.log(err)
-                })
+                    })
             }
         }
     }

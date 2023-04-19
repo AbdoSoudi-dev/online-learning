@@ -105,11 +105,11 @@
             }
         },
         methods:{
-            getComingBookings(){
-                axios.get("/api/coming_bookings").then((res)=>{
-                    // console.log(res);
-                    this.comingBookings = res.data;
-                })
+            async getComingBookings(){
+                await axios.get("/api/coming_bookings")
+                    .then((res)=>{
+                        this.comingBookings = res.data;
+                    })
             },
             formatAMPM(date) {
                 date = new Date(date);
@@ -131,19 +131,18 @@
                 }
 
             },
-            createMeeting(){
+            async createMeeting(){
                 this.wait = true;
-                axios.post("/api/create_meeting",{
-                    bookings:this.checkedBookings.map(x => x.id),
-                    topic:document.getElementById("topic").value,
-                    duration:document.getElementById("duration").value,
-                    start_at:this.checkedBookings[0].session_date,
-                }).then((res)=>{
-                    // console.log(res);
-                    this.wait = false;
-                    this.$router.push("/admin/meetings");
-
-                })
+                await axios.post("/api/create_meeting",{
+                        bookings:this.checkedBookings.map(x => x.id),
+                        topic:document.getElementById("topic").value,
+                        duration:document.getElementById("duration").value,
+                        start_at:this.checkedBookings[0].session_date,
+                    })
+                    .then((res)=>{
+                        this.wait = false;
+                        this.$router.push("/admin/meetings");
+                    })
             }
         },
         beforeMount() {

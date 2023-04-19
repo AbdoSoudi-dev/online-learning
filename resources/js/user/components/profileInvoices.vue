@@ -44,18 +44,15 @@
             }
         },
         methods:{
-            myPayments(){
-                axios.get("/api/myPayments")
-                     .then((res)=>{
-                         // console.log(res);
-                         this.payments = res.data;
-                     })
+            async myPayments(){
+                 const responsePayments = await axios.get("/api/my_payments");
+                 this.payments = await responsePayments.data;
             },
             dateFormat(date){
                 date = new Date(date);
-                var month = date.getMonth();
-                var day = date.getUTCDate();
-                var year = date.getUTCFullYear();
+                let month = date.getMonth();
+                let day = date.getUTCDate();
+                let year = date.getUTCFullYear();
 
                 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"

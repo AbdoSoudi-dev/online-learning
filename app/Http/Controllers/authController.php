@@ -2,114 +2,101 @@
 
 namespace App\Http\Controllers;
 
-use http\Env\Response;
+use App\Http\Requests\StoreUserRequest;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-
 use Illuminate\Support\Str;
 use Dotenv\Exception\ValidationException;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Validation\Rules\Password as RulesPassword;
+
 class authController extends Controller
 {
-    public function register(Request $request){
-        $fields = $request->validate([
-            'name' => 'required|string',
-            'country' => 'required|string',
-            'mobile_number' => 'required|string',
-            'timeZone' => 'required|string',
-            'timeZoneOffset' => 'required|string',
-            'email' => 'required|string|unique:users,email',
-            'password' => 'required|string|confirmed'
-        ]);
+    public function register(StoreUserRequest $request)
+    {
         $user = User::create([
-            'name' => $fields['name'],
-            'email' => $fields['email'],
-            'timezone_offset' => $fields['timeZoneOffset'],
-            'timezone' => $fields['timeZone'],
-            'mobile_number' => $fields['mobile_number'],
-            'country' => $fields['country'],
-            'password' => bcrypt($fields['password']),
-            'role_id' => ($request->role_id ? $request->role_id : 1)
+            'name' => $request->name,
+            'email' => $request->email,
+            'timezone_offset' => $request->timeZoneOffset,
+            'timezone' => $request->timeZone,
+            'mobile_number' => $request->mobile_number,
+            'country' => $request->country,
+            'password' => Hash::make($request->password),
+            'role_id' => 1
         ]);
 
         event(new Registered($user));
 
-        $token = $user->createToken('myapptoken')->plainTextToken;
+        $token = $user->createToken($request->userAgent());
 
-        $response = [
+        return [
             'user' => $user,
-            'token' => $token
+            'token' => $token->plainTextToken
         ];
-        return response($response,201);
     }
 
     public function login(Request $request){
+
         $fields = $request->validate([
             'email' => 'required|string',
             'password' => 'required|string'
         ]);
 
+        $user = User::whereEmail($fields['email'])->first();
 
-        // check email
-        $user = User::where('email', $fields['email'])->where("removed",0)->first();
-
-        //check password
         if (!$user || !Hash::check($fields['password'], $user->password)){
             return response([
                 'message' => 'bad creds'
             ], 401);
         }
 
-        $token = $user->createToken('myapptoken')->plainTextToken;
+        $token = $user->createToken('myapptoken');
 
-        $response = [
-            'user' => $user,
-            'token' => $token
-        ];
-        return response($response,201);
+        return [
+                'user' => $user,
+                'token' => $token->plainTextToken
+            ];
     }
 
     public function logout(Request $request){
         $request->user()->currentAccessToken()->delete();
+
         return [
-            'message' => 'looged out'
-        ];
+                'message' => 'logged out'
+            ];
     }
 
     public function changePassword(Request $request)
     {
-        $fields = $request->validate([
+        $request->validate([
             'old_password' => 'required|string',
             'password' => 'required|string|confirmed'
         ]);
 
-        //check password
-        if (!Hash::check($fields['old_password'], $request->user()->password )){
-            return response($request->user()->password, 401);
+        if (!Hash::check($request->old_password, $request->user()->password )){
+            return response("Old password is invalid", 401);
         }
 
-        $request->user()->update([ "password"=> bcrypt($fields['password']) ]);
+        $request->user()->update([ "password" => Hash::make($request->password) ]);
 
-        return response("Password has been updated successfully");
+        return "Password has been updated successfully";
     }
 
     public function forgotPassword(Request $request)
     {
-        $user = User::whereEmailAndRemoved($request->email,0)->first();
-        if (!$user){
-            return response("error",500);
-        }
-        $request->validate([
+         $request->validate([
             'email' => 'required|email',
         ]);
 
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        $user = User::whereEmail($request->email)->first();
+        if (!$user){
+            return response("error",500);
+        }
+
+        $status = Password::sendResetLink( $request->only("email") );
 
         if ($status == Password::RESET_LINK_SENT) {
             return [
@@ -120,6 +107,36 @@ class authController extends Controller
         throw ValidationException::withMessages([
             'email' => [trans($status)],
         ]);
+    }
+
+    public function editProfile(Request $request)
+    {
+        if ($request->hasFile("profile_image")){
+            $request->validate([
+                'profile_image' => 'image|mimes:jpg,png,jpeg|max:5120',
+            ]);
+            $image = $request->file('profile_image');
+            $imageName = date("Y-m-dHis").$image->getClientOriginalName();
+            Image::make($image)->save(public_path('profile_images/'  .  $imageName));
+            @unlink("public/profile_images/". $request->user()->profile_image );
+
+            User::find($request->user()->id)->update(["profile_image" =>$imageName]);
+        }
+
+        if ($request->email !== $request->user()->email){
+            User::find($request->user()->id)->update(["email_verified_at" =>NULL]);
+        }
+
+
+        User::find($request->user()->id)->update([
+            "name" => $request->name,
+            "email" => $request->email,
+            "country" => $request->country,
+            "mobile_number" => $request->mobile_number,
+            "timezone" => $request->timezone,
+            "timezone_offset" => $request->timezone_offset,
+        ]);
+        return User::find($request->user()->id);
     }
 
     public function reset(Request $request)
@@ -134,7 +151,7 @@ class authController extends Controller
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user) use ($request) {
                 $user->forceFill([
-                    'password' => Hash::make($request->password),
+                    'password' => bcrypt($request->password),
                     'remember_token' => Str::random(60),
                 ])->save();
 
@@ -144,15 +161,10 @@ class authController extends Controller
             }
         );
 
-        if ($status == Password::PASSWORD_RESET) {
-            return response([
-                'message'=> 'Password reset successfully'
-            ]);
-        }
+        $message =  $status == Password::PASSWORD_RESET ? 'Password reset successfully' : __($status) ;
+        $res_code = $status == Password::PASSWORD_RESET ? 200 : 500;
 
-        return response([
-            'message'=> __($status)
-        ], 500);
+        return response([ 'message'=> $message ], $res_code);
 
     }
 

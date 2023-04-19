@@ -34,9 +34,9 @@
                                 </router-link>
                             </li>
                             <li class="has-submenu">
-                                <router-link to="/coursesList">Courses <i class="fas fa-chevron-down"></i></router-link>
+                                <router-link to="/courses_list">Courses <i class="fas fa-chevron-down"></i></router-link>
                                 <ul class="submenu">
-                                    <li v-for="course in coursesList">
+                                    <li v-for="course in $store.state.courses">
                                         <router-link :to="'/course/'+course.id">{{ course.title }}</router-link>
                                     </li>
                                 </ul>
@@ -47,36 +47,26 @@
                             <li v-if="$store.state.currentUser.role_id && $store.state.currentUser.role_id != 1">
                                 <a href="/admin">Admin</a>
                             </li>
-<!--                            <li class="login-link" v-if="!$store.state.token">-->
-<!--                                <router-link to="/login">Login / Signup</router-link>-->
-<!--                            </li>-->
-
 
                             <li class="nav-item d-block d-md-none" v-if="!$store.state.currentUser.role_id">
-                                <!--                            <a class="nav-link" href="login.vue.html">Login</a>-->
                                 <router-link class="nav-link" to="/login">Login</router-link>
                             </li>
                             <li class="nav-item d-block d-md-none" v-if="!$store.state.currentUser.role_id">
-                                <!--                            <a class="nav-link header-login.vue" href="register.html">Register</a>-->
                                 <router-link class="nav-link  header-login" to="/register">register</router-link>
                             </li>
                             <li class="nav-item d-block d-md-none" v-if="$store.state.currentUser.role_id">
                                 <router-link to="/profile">
                                     Profile Settings
-<!--                                    <div class="avatar avatar-sm ml-2">-->
-<!--                                        <img :src="'/profile_images/' + $store.state.currentUser.profile_image" v-if="$store.state.currentUser.profile_image" :alt="$store.state.currentUser.name" class="avatar-img rounded-circle">-->
-<!--                                        <img v-else class="avatar-img rounded-circle" src="/profile_images/avatar.png" alt="avatar">-->
-<!--                                    </div>-->
                                 </router-link>
                             </li>
                             <li class="nav-item d-block d-md-none" v-if="$store.state.currentUser.role_id">
-                                <a class="dropdown-item" style="cursor: pointer" @click="logout()">Logout</a>
+                                <a class="dropdown-item cursor-pointer" @click="logout()">Logout</a>
                             </li>
                             <li class="" v-if="$store.state.currentUser.role_id">
-                                <router-link to="/schedule-timings">Meetings</router-link>
+                                <router-link to="/schedule_timings">Meetings</router-link>
                             </li>
                             <li class="">
-                                <router-link to="/aboutUs">About Us</router-link>
+                                <router-link to="/aboutus">About Us</router-link>
                             </li>
 
 
@@ -84,11 +74,9 @@
                     </div>
                     <ul class="nav header-navbar-rht">
                         <li class="nav-item" v-if="!$store.state.currentUser.role_id">
-<!--                            <a class="nav-link" href="login.vue.html">Login</a>-->
                             <router-link class="nav-link" to="/login">Login</router-link>
                         </li>
                         <li class="nav-item" v-if="!$store.state.currentUser.role_id">
-<!--                            <a class="nav-link header-login.vue" href="register.html">Register</a>-->
                             <router-link class="nav-link  header-login" to="/register">register</router-link>
                         </li>
                         <li class="nav-item dropdown has-arrow logged-item" v-else>
@@ -112,7 +100,7 @@
                                 <a class="dropdown-item">
                                     <router-link to="/profile">Profile Settings</router-link>
                                 </a>
-                                <a class="dropdown-item" style="cursor: pointer" @click="logout()">Logout</a>
+                                <a class="dropdown-item cursor-pointer" @click="logout()">Logout</a>
                             </div>
                         </li>
                     </ul>
@@ -126,36 +114,49 @@
     export default {
         data(){
             return{
-                coursesList:[],
+
             }
         },
         methods:{
-            logout(){
-                window.axios.defaults.headers.common['Authorization'] = 'Bearer '+this.$store.state.token;
-                axios.delete('/api/logout')
-                    .then((res) =>{
-                        // console.log(res)
-                        this.$store.commit("get_current_user",{});
-                        this.$store.commit("get_current_user","");
-                        this.$router.push("/");
-                    }).catch((err)=>{
-                    // console.log(err)
-                })
-            },
-            getCourses(){
-                axios.get("/api/courses")
-                    .then((res)=>{
-                        this.coursesList = res.data;
-                    })
-                    .catch((err)=>{
-                        // console.log(err);
-                    });
-            },
-        },
-        mounted() {
+            async logout(){
+                const logoutAuth = await axios.delete('/api/logout');
 
-            this.getCourses();
+                    if (+logoutAuth.status == 200) {
+                        this.$store.commit("get_current_user", {});
+                        this.$store.commit("get_token", "");
+                        this.$router.push("/");
+                    }else{
+                        alert("Something went wrong");
+                    }
+
+            },
+            async checkLoginAuth(){
+                if (this.$store.state.token !== "") {
+                    const loginAuth = await axios.get('/api/user');
+                    if (+loginAuth.status == 200) {
+                        this.$store.commit("get_current_user", loginAuth.data);
+                    } else {
+                        this.$store.commit("get_current_user", {});
+                        this.$store.commit("get_token", "");
+                    }
+                }
+            },
+            async getCourses(){
+                const courses = await axios.get("/api/courses");
+                this.$store.commit("get_courses",courses.data);
+            }
         },
+        beforeMount() {
+            window.axios.defaults.headers.common['Authorization'] = 'Bearer '+this.$store.state.token;
+            this.getCourses();
+            this.checkLoginAuth();
+        },
+        watch:{
+            $route(to, from) {
+                window.scrollTo(0, 0);
+                document.querySelector(".fas.fa-times")?.click();
+            }
+        }
     }
 </script>
 

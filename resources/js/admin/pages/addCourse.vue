@@ -9,9 +9,6 @@
                         <label for="" class="text-danger" v-if="errors.title"> {{ errors.title[0] }}</label>
                     </div>
                     <div class="col-6 mb-3">
-<!--                        <label>Price</label>-->
-<!--                        <input type="number" class="form-control" name="price" required>-->
-<!--                        <label for="" class="text-danger" v-if="errors.price"> {{ errors.price[0] }}</label>-->
                     </div>
                     <div class="col-6 mb-3">
                         <label>Short Description</label>
@@ -40,15 +37,9 @@
                     </div>
                 </div>
 
-
                 <div class="row mt-5">
                     <button class="btn btn-primary col-md-3 col-3 m-auto " type="submit">Add Course</button>
                 </div>
-
-<!--                <div class="row">-->
-<!--                    <div class="col-12 " v-html="description">-->
-<!--                    </div>-->
-<!--                </div>-->
 
             </form>
         </div>
@@ -74,7 +65,7 @@
                 document.querySelector('#image')
                     .addEventListener("change",function (e) {
 
-                    var reader = new FileReader();
+                    let reader = new FileReader();
                     reader.onload = function (e) {
                         document.querySelector('#showImage').src = e.target.result;
                         document.getElementById("showImage").style.display = "block";
@@ -82,17 +73,13 @@
                     reader.readAsDataURL(e.target.files['0']);
                 });
             },
-            addCourseForm(e){
+            async addCourseForm(e){
                 let formData = new FormData(e.currentTarget);
                 formData.append("description",this.description);
 
-                axios.post('/api/courses',formData)
-                     .then((res)=>{
-                         // console.log(res);
+                await axios.post('/api/courses',formData)
+                     .then( res=>{
                          this.$router.push("courses");
-                     })
-                     .catch((err)=>{
-                         // console.log(err);
                      })
 
             },

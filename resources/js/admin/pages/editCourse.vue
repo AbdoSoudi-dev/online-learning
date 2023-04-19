@@ -9,9 +9,7 @@
                         <label for="" class="text-danger" v-if="errors.title"> {{ errors.title[0] }}</label>
                     </div>
                     <div class="col-6 mb-3">
-<!--                        <label>Price</label>-->
-<!--                        <input type="number" class="form-control" :value="course.price" name="price" required>-->
-<!--                        <label for="" class="text-danger" v-if="errors.price"> {{ errors.price[0] }}</label>-->
+
                     </div>
                     <div class="col-6 mb-3">
                         <label>Short Description</label>
@@ -44,11 +42,6 @@
                 <div class="row mt-5">
                     <button class="btn btn-primary col-md-3 col-3 m-auto " type="submit">Edit Course</button>
                 </div>
-
-<!--                <div class="row">-->
-<!--                    <div class="col-12 " v-html="description">-->
-<!--                    </div>-->
-<!--                </div>-->
 
             </form>
         </div>
@@ -84,35 +77,27 @@
                     reader.readAsDataURL(e.target.files['0']);
                 });
             },
-            addCourseForm(e){
+            async addCourseForm(e){
                 let formData = new FormData(e.currentTarget);
                 formData.append("description",this.description);
                 formData.append("id",this.$route.params.id);
 
-                axios.post('/api/courseUpdate',formData)
-                     .then((res)=>{
-                         // console.log(res);
-                         this.$router.push("../courses");
-                     })
-                     .catch((err)=>{
-                         // console.log(err);
-                     })
+                await axios.post('/api/course_update',formData)
+                      .then(res=>{
+                          this.$router.push("../courses");
+                      })
 
             },
-            getCourseDetails(){
-                axios.get("/api/courses/"+this.$route.params.id)
-                    .then((res)=>{
-                        // console.log(res);
-                        this.course = res.data;
-                        this.description = res.data.description;
-                        this.loaded = true
-                    })
-                    .catch((err)=>{
-                        // console.log(err);
-                    })
+            async getCourseDetails(){
+                await axios.get(`/api/courses/${this.$route.params.id}`)
+                      .then((res)=>{
+                          this.course = res.data;
+                          this.description = res.data.description;
+                          this.loaded = true
+                       })
             },
         },
-        mounted() {
+        beforeMount() {
             this.getCourseDetails();
             this.showImage();
         },

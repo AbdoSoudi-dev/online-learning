@@ -25,7 +25,6 @@
                                     <thead>
                                     <tr class="text-primary">
                                         <td class="text-center" >Days</td>
-<!--                                        <td class="text-center"> Time </td>-->
                                         <td class="text-center"> Price </td>
                                         <td class="text-center"> Actions </td>
                                     </tr>
@@ -39,8 +38,6 @@
                                                     </div>
                                                 </div>
                                             </td>
-
-<!--                                            <td>{{ timing.time }}</td>-->
                                             <td class="text-success">{{ timing.price + "$" }}</td>
                                             <td>
                                                 <div class="d-flex justify-content-center">
@@ -98,12 +95,6 @@
                                     </div>
                                 </div>
                             </div>
-<!--                            <div class="col-12">-->
-<!--                                <div class="form-group m-auto">-->
-<!--                                    <label class="col-12"> Time </label>-->
-<!--                                    <input type="time" class="form-control text-center" v-model="time">-->
-<!--                                </div>-->
-<!--                            </div>-->
                             <div class="col-12">
                                 <div class="form-group m-auto">
                                     <label class="col-12"> Price </label>
@@ -139,12 +130,6 @@
                                     </div>
                                 </div>
                             </div>
-<!--                            <div class="col-12">-->
-<!--                                <div class="form-group m-auto">-->
-<!--                                    <label class="col-12"> Time </label>-->
-<!--                                    <input type="time" class="form-control text-center" v-model="time">-->
-<!--                                </div>-->
-<!--                            </div>-->
                             <div class="col-12">
                                 <div class="form-group m-auto">
                                     <label class="col-12"> Price </label>
@@ -197,7 +182,6 @@
                     days:this.days,
                     price:this.price
                 }).then((res)=>{
-                    // console.log(res);
 
                     document.getElementById('close').click();
 
@@ -206,8 +190,6 @@
                     this.time = "";
 
                     this.all_timings();
-                }).catch((error)=>{
-                    console.log(error);
                 })
             },
             formatAMPM(date) {
@@ -221,19 +203,16 @@
                 var strTime = hours + ':' + minutes + ' ' + ampm;
                 return strTime;
             },
-            deleteTiming(id){
+            async deleteTiming(id){
                 if (confirm("Are you sure?")){
-                    axios.delete("/api/timings/"+id).then(res=>{
-                        console.log(res);
-                    })
+                    await axios.delete("/api/timings/"+id);
                 }
             },
             editTime(){
-                axios.put("/api/timings/"+this.editTimingId,{
+                axios.put(`/api/timings/${this.editTimingId}`,{
                     days:this.days,
                     price:this.price
                 }).then((res)=>{
-                    // console.log(res);
 
                     document.getElementById('close').click();
 

@@ -36,19 +36,12 @@
 
                                         <div class="col-12 text-center">
                                             <div class="mt-2 mx-auto">
-                                                <!--                                            <div class="col-6 ">-->
-                                                <!--                                                <h3 class="text-success text-bold m-2" v-if="courseDetails.price">-->
-                                                <!--                                                    {{ courseDetails.price + ' $' }}-->
-                                                <!--                                                </h3>-->
-                                                <!--                                            </div>-->
-                                                <!--                                            <div class="col-6">-->
                                                 <button class="btn btn-success col-6 m-auto" @click="enrollCourse" v-if="$store.state.currentUser.free_trail == 1">
                                                     Enroll Now
                                                 </button>
                                                 <button class="btn btn-success col-6 m-auto" @click="enrollCourse" v-else>
                                                     Free Trial
                                                 </button>
-                                                <!--                                            </div>-->
                                             </div>
 
                                         </div>
@@ -81,19 +74,13 @@
             }
         },
         methods:{
-            getCourseDetails(){
-                axios.get("/api/courses/"+this.$route.params.id)
-                     .then((res)=>{
-                         // console.log(res);
-                         this.courseDetails = res.data;
-                     })
-                    .catch((err)=>{
-                        // console.log(err);
-                    })
+            async getCourseDetails(){
+                const course = await axios.get("/api/courses/"+this.$route.params.id);
+                this.courseDetails =  await course.data;
             },
             enrollCourse(){
               if (this.$store.state.token){
-                  this.$router.push("/enrollCourse/"+this.courseId);
+                  this.$router.push("/enroll_course/"+this.courseId);
               }else{
                   this.$router.push("/register");
               }

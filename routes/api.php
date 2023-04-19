@@ -22,10 +22,7 @@ use App\Http\Controllers\VerifyEmailController;
 */
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    if ($request->user()->removed == 1){
-        return response("",500);
-    }
-    return $request->user();
+    return $request->user()->removed == 1 ? response("",500) : $request->user();
 });
 Route::post('/register',[authController::class,'register']);
 Route::post('/login',[authController::class,'login']);
@@ -41,59 +38,51 @@ Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke
     ->name('verification.verify');
 
 // reset password
-Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
-Route::post('reset-password', [AuthController::class, 'reset']);
+Route::post('forgot_password', [authController::class, 'forgotPassword']);
+Route::post('reset_password', [authController::class, 'reset']);
 
 
 
 // protected routes
 Route::group(['middleware'=>['auth:sanctum']], function () {
 
-    // Resend link to verify email
     Route::post('/email/verify/resend', function (Request $request) {
         $request->user()->sendEmailVerificationNotification();
         return response('Verification link sent!',200);
     })->middleware(['auth', 'throttle:6,1']);
 
 
-    Route::delete('/logout',[AuthController::class,'logout']);
-
-    Route::put('/changePassword',[AuthController::class,'changePassword']);
+    Route::put('/change_password',[authController::class,'changePassword']);
+    Route::post('/edit_profile',[authController::class,'editProfile']);
+    Route::delete('/logout',[authController::class,'logout']);
 
     Route::get('/users',[userController::class,'index']);
-    Route::post('/addUser',[userController::class,'store']);
-    Route::post('/editUser',[userController::class,'update']);
+    Route::post('/add_user',[userController::class,'store']);
+    Route::post('/edit_user',[userController::class,'update']);
     Route::get('/user/{id}',[userController::class,'getUser']);
-    Route::post('/editProfile',[userController::class,'editProfile']);
-    Route::post('/removeUser',[userController::class,'removeUser']);
+    Route::post('/remove_user',[userController::class,'removeUser']);
 
     Route::post("/courses",[courseController::class,"store"]);
-    Route::post("/courseUpdate",[courseController::class,"update"]);
-    Route::put("/courseDestroy/{id}",[courseController::class,"destroy"]);
+    Route::post("/course_update",[courseController::class,"update"]);
+    Route::put("/course_destroy/{id}",[courseController::class,"destroy"]);
 
     Route::apiResource("timings", TimingController::class);
     Route::post("check_times", [TimingController::class,"checkTimes"]);
 
     Route::post("bookings",[ bookingController::class,"store" ]);
-
-    Route::get("coming_bookings",[ bookingController::class,"coming_bookings" ]);
+    Route::get("coming_bookings",[ bookingController::class,"comingBookings" ]);
+    Route::get("bookings/{id}",[ bookingController::class,"myBooking" ]);
+    Route::get("bookings_pay_check/{id}",[ bookingController::class,"bookingsPayCheck" ]);
+    Route::get("bookings_list/{id}",[ bookingController::class,"bookingsList" ]);
+    Route::post("bookings_presenting", [ bookingController::class, "bookingsPresenting" ]);
+    Route::delete("delete_booking/{booking_group_id}", [ bookingController::class, "deleteBooking" ]);
 
     Route::post("create_meeting",[ MeetingController::class,"createMeeting" ]);
-    Route::get("meetingsAll",[ MeetingController::class,"getMeetings" ]);
+    Route::get("meetings_all",[ MeetingController::class,"getMeetings" ]);
 
-    Route::get("bookings/{id}",[ bookingController::class,"myBooking" ]);
-    Route::get("bookingsPayCheck/{id}",[ bookingController::class,"bookingsPayCheck" ]);
-    Route::get("bookings_list/{id}",[ bookingController::class,"bookingsList" ]);
-
-    Route::post("bookingsPresenting", [ bookingController::class, "bookingsPresenting" ]);
-
-    Route::delete("deleteBooking/{booking_group_id}", [ bookingController::class, "deleteBooking" ]);
-
-    Route::post("setPayment", [ paymentController::class, "store" ]);
-
-    Route::get("myPayments", [ paymentController::class, "myPayments" ]);
-    Route::get("paymentsAdmin", [ paymentController::class, "allPayments" ]);
-    Route::get("checkPayments/{id}", [ paymentController::class, "checkPayments" ]);
+    Route::post("set_payment", [ paymentController::class, "store" ]);
+    Route::get("my_payments", [ paymentController::class, "myPayments" ]);
+    Route::get("payments_admin", [ paymentController::class, "allPayments" ]);
+    Route::get("check_payments/{id}", [ paymentController::class, "checkPayments" ]);
 
 });
-

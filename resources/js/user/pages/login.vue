@@ -27,7 +27,7 @@
                                 </div>
                                 <div class="text-end">
                                     <a class="forgot-link">
-                                        <router-link to="/resetPassword">
+                                        <router-link to="/reset_password">
                                             Forgot Password ?
                                         </router-link>
                                     </a>
@@ -58,22 +58,18 @@
             }
         },
         methods:{
-            loginForm(){
-                axios.post('/api/login',this.formData)
+            async loginForm(){
+                await axios.post('/api/login',this.formData)
                     .then((res) =>{
-                        // console.log(res)
                         this.$store.commit("get_token",res.data.token);
                         this.$store.commit("get_current_user",res.data.user);
-                        if (res.data.user.role_id == 1){
-                            this.$router.push("/");
-                        }else{
-                            this.$router.push("/");
-                        }
+                        this.$router.push("/");
 
-                }).catch((err)=>{
-                    // console.log(err)
-                    this.errors = err.response.data;
-                })
+                        window.axios.defaults.headers.common['Authorization'] = 'Bearer '+ res.data.token;
+                    })
+                    .catch((err)=>{
+                        this.errors = err.response.data;
+                    })
             }
         }
     }

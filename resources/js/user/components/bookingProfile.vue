@@ -9,7 +9,8 @@
                     <h4 class="card-title">Bookings List </h4>
                     <div class="form-group" v-if="$store.state.currentUser.role_id == 2 || $store.state.currentUser.role_id == 3">
                         <h4>Choose User</h4>
-                        <select class="form-control m-auto" @change="getBookingsList" v-model="user_id">
+                        <select class="form-control m-auto"
+                                @change="getUsersAndBookingsListAndCheckPayments(false)" v-model="user_id">
                             <option v-for="user in users" :value="user.id">{{ user.name }}</option>
                         </select>
                     </div>
@@ -49,7 +50,7 @@
                                             </div>
 
                                         </td>
-                                        <td>( {{ list.count }} /{{ list.session_num-1 }})</td>
+                                        <td>( {{ (list.timing.days.length * 4) }} /{{ list.session_num-1 }})</td>
                                         <td v-if="payments.count">
                                             <div class="btn btn-danger" v-if="payments[list.booking_group_id]">
                                                 <router-link :to="'/payment/'+payments[list.booking_group_id].id">
@@ -62,10 +63,14 @@
                                         <td>{{ (list.diff_time ?? "expired") }}</td>
                                         <td >
                                             <div class="pro-progress ">
-                                                <div class="tooltip-toggle" tabindex="0" :style="'width:' + Math.round((list.session_num-1)*100/list.count) + '% !important' ">
+                                                <div class="tooltip-toggle" tabindex="0"
+                                                     :style="'width:' + Math.round((list.session_num-1)*100/(list.timing.days.length * 4)) + '% !important' ">
 
                                                 </div>
-                                                <div class="tooltip" :style="'left:' + (+Math.round((list.session_num-1)*100/list.count) -7) + '% !important' ">{{ Math.round((list.session_num-1)*100/list.count) + "%" }}</div>
+                                                <div class="tooltip"
+                                                     :style="'left:' + (+Math.round((list.session_num-1)*100/(list.timing.days.length * 4)) -7) + '% !important' ">
+                                                    {{ Math.round((list.session_num-1)*100/(list.timing.days.length * 4)) + "%" }}
+                                                </div>
                                             </div>
                                         </td>
 
@@ -92,64 +97,44 @@
                 bookingsList:[],
                 user_id:this.$store.state.currentUser.id,
                 users:[],
-                payments:[]
+                payments:[],
+                isAdmin: ( this.$store.state.currentUser.role_id == 2
+                           || this.$store.state.currentUser.role_id == 3 )
             }
         },
         methods:{
-            getUsers(){
-                axios.get('/api/users')
-                    .then((res)=>{
-                        // console.log(res)
-                        this.users = res.data;
-                    })
-                    .catch((err)=>{
-
-                    })
-            },
-            getBookingsList(){
-                axios.get("/api/bookings_list/"+this.user_id)
-                    .then((res)=>{
-                        // console.log(res);
-                        this.bookingsList = res.data;
-                        this.checkPayments();
-                    })
-                    .catch((error)=>{
-                        // console.log(error);
-                    })
+            async getUsersAndBookingsListAndCheckPayments(isAdmin){
+                await Promise.all([
+                    axios.get(`/api/check_payments/${this.user_id}`),
+                    axios.get(`/api/bookings_list/${this.user_id}`),
+                    isAdmin ? axios.get('/api/users') : [],
+                ]).then((response)=>{
+                    this.payments = response[0].data;
+                    this.bookingsList = response[1].data;
+                    this.users = response[2].data ?? this.users;
+                });
             },
             formatAMPM(date) {
                 date = new Date(date);
-                var hours = date.getHours();
-                var minutes = date.getMinutes();
-                var ampm = hours >= 12 ? 'pm' : 'am';
+                let hours = date.getHours();
+                let minutes = date.getMinutes();
+                let ampm = hours >= 12 ? 'pm' : 'am';
                 hours = hours % 12;
                 hours = hours ? hours : 12; // the hour '0' should be '12'
                 minutes = minutes < 10 ? '0'+minutes : minutes;
-                var strTime = hours + ':' + minutes + ' ' + ampm;
+                let strTime = hours + ':' + minutes + ' ' + ampm;
                 return strTime;
             },
-            checkPayments(){
-                axios.get("/api/checkPayments/"+this.user_id)
-                    .then( (res)=>{
-                        console.log(res);
-                        this.payments = res.data;
-                    })
-                    .catch( (error)=>{
-                        console.log(error)
-                    })
-            },
-            deleteBooking(booking_group_id){
-                axios.delete("/api/deleteBooking/"+booking_group_id)
-                    .then(res=>{
-                        console.log(res.data);
-                        this.getBookingsList();
-                    })
+            async deleteBooking(booking_group_id){
+                await Promise.all([
+                    axios.delete(`/api/delete_booking/${booking_group_id}`),
+                    this.getUsersAndBookingsListAndCheckPayments(false),
+                ])
             }
 
         },
         beforeMount() {
-            this.getUsers();
-            this.getBookingsList();
+            this.getUsersAndBookingsListAndCheckPayments(this.isAdmin);
         }
     }
 </script>

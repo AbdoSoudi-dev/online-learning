@@ -13,7 +13,7 @@
             <div class="row">
 
                 <div class="text-right"  >
-                    <router-link to="addUser">
+                    <router-link to="add_user">
                         <i style="cursor: pointer" class="fas fa-plus text-light bg-success ml-2 fa-3x p-2"></i>
                     </router-link>
                 </div>
@@ -40,7 +40,7 @@
                                             <td>{{ user.updated_at.split("T")[0] }}</td>
                                             <td>{{ user.role.title }}</td>
                                             <td style="cursor: pointer;">
-                                                <router-link :to="'editUser/'+user.id">
+                                                <router-link :to="'edit_user/'+user.id">
                                                     <i class="fas fa-edit text-primary"></i>
                                                 </router-link>
                                             </td>
@@ -76,26 +76,18 @@
             }
         },
         methods:{
-            getUsers(){
-                axios.get('/api/users')
-                    .then((res)=>{
-                        // console.log(res)
-                        this.users = res.data;
-                    })
-                    .catch((err)=>{
-
-                    })
+            async getUsers(){
+                await axios.get('/api/users')
+                         .then((res)=>{
+                             this.users = res.data;
+                         })
             },
-            deleteUser(userId){
-                axios.post("/api/removeUser",{
-                    id : userId
-                }).then((res)=>{
-                        console.log(res)
-                    this.users = this.users.filter( x => x.id != userId );
+           async deleteUser(userId){
+               await axios.post("/api/remove_user",{
+                         id : userId
+                     }).then((res)=>{
+                        this.users = this.users.filter( x => x.id != userId );
                         alert("User deleted successfully");
-                    })
-                    .catch((err)=>{
-
                     })
             }
         },
@@ -104,11 +96,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>
-
-<!--~k-mGQ-B^_g&#45;&#45;t&7-->
-<!--id18118004_abdosaudi-->
-<!--id18118004_online_learning-->

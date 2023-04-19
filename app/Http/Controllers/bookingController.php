@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BookingResource;
 use App\Models\Booking;
 use App\Models\Timing;
 use App\Models\User;
@@ -9,216 +10,106 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
 use Carbon\CarbonPeriod;
-use Illuminate\Support\Facades\DB;
 
 class bookingController extends Controller
 {
     public function myBooking($id,Request $request)
     {
-        $id = $request->user()->role_id == 1 ? $request->user()->id : $id;
-        $myBookings = Booking::with(["timing","course","meetings"])
-                            ->where("user_id",$id)
+        $my_bookings = Booking::with(["timing","course","meetings"])
+                            ->where("user_id",($request->user()->role_id == 1 ? $request->user()->id : $id))
                             ->get();
 
-        $myBookingsGroup = [];
-        $date_now = Carbon::createFromFormat('Y-m-d H:i:s',Carbon::now(),$request->user()->timezone);
+        $bookings_by_key = [];
 
-        $check_coming = false;
-        foreach ($myBookings as $myBooking) {
-
-            $lecture_start = $start_date = Carbon::createFromFormat('Y-m-d H:i:s',$myBooking['session_date']
-                ,$request->user()->timezone);
-
-            $lecture_end = $start_date = Carbon::createFromFormat('Y-m-d H:i:s',$myBooking['session_date']
-                ,$request->user()->timezone)->addMinutes($myBooking['duration']);
-
-            $myBookingsGroup[$myBooking['booking_group_id']][] = [
-                "id" => $myBooking['id'],
-                "present" => $myBooking['present'],
-                "course_id" => $myBooking['course_id'],
-                "booking_group_id" => $myBooking['booking_group_id'],
-                "session_date" => date("Y-m-d",strtotime($myBooking['session_date'])),
-                "session_time" => $myBooking['session_date'],
-                "day" => date("l",strtotime($myBooking['session_date'])),
-                "status" => ($myBooking['session_date'] < $date_now ? "expired" : "incoming"),
-                "current" => ($date_now >= $lecture_start && $date_now <= $lecture_end ? true : false),
-                "coming" =>($myBooking['session_date'] > $date_now && !$check_coming &&
-                                !($date_now >= $lecture_start && $date_now <= $lecture_end) ? true : false),
-                "timing" => $myBooking['timing'],
-                "course" => $myBooking['course'],
-                "duration" => $myBooking['duration'],
-                "meeting" => $myBooking['meetings'][0] ?? [] ,
-            ];
-            if ($myBooking['session_date'] > $date_now){
-                $check_coming = true;
-            }
+        $booking_resources = BookingResource::collection($my_bookings);
+        foreach ($booking_resources as $booking_resource) {
+            $bookings_by_key[$booking_resource['booking_group_id']][]= $booking_resource;
         }
-
-        return response($myBookingsGroup,201);
+        return $bookings_by_key;
     }
 
     public function bookingsList($id,Request $request)
     {
-        $id = $request->user()->roler_id == 1 ? $request->user()->id : $id;
-
         $myBookings = Booking::with(["timing","course"])
             ->whereIn("id",
-                Booking::whereUser_id($id)->where("session_date", ">=", Carbon::now())->groupBy("booking_group_id")->selectRaw("MIN(id) id")->pluck("id"))
+                Booking::whereUser_id($request->user()->roler_id == 1 ? $request->user()->id : $id)
+                    ->where("session_date", ">=", now())
+                    ->groupBy("booking_group_id")->selectRaw("MIN(id) id")->pluck("id"))
             ->get();
-        $myBookings = $myBookings->map(function ($book)use ($request){
-            $book['diff_time'] = Carbon::createFromFormat("Y-m-d H:i:s",$book['session_date'],
-                $request->user()->id)->diffForHumans();
 
-            $book['count'] = Booking::whereBooking_group_id($book['booking_group_id'])->count();
-            return $book;
-        });
-
-        return response($myBookings,201);
+        return $myBookings;
     }
-
-//    public function getBooking($myBookings,$timezone)
-//    {
-//        $allBookings = [];
-//
-//        foreach ($myBookings as $myBooking) {
-//            $start_date = Carbon::createFromFormat('Y-m-d H:i:s',$myBooking->start_date
-//                ,$timezone);
-//
-//            $end_date = Carbon::createFromFormat('Y-m-d H:i:s',$myBooking->start_date
-//                ,$timezone)->addDays(35);
-//
-//            $period = CarbonPeriod::create($start_date, $end_date);
-//
-//            $days = [];
-//            $timingDays= $myBooking->timing->days;
-//            $myBooking->time = Carbon::createFromFormat('Y-m-d H:i:s',
-//                $myBooking->timing->time
-//                ,$timezone);
-//
-//            foreach ($period as $item) {
-//                $day = $item->format("l");
-//                $coming = $item->format("Y-m-d ") . $myBooking->time->format("H:i");
-//                if (in_array($day,$timingDays) && count($days) != 12){
-//                    $days[] = [
-//                        "date" => $item->format("Y-m-d"),
-//                        "day" => $day,
-//                        "date_time" =>$coming,
-//                        "status" => ($coming < date("Y-m-d H:i") ? "expired" : "incoming"),
-//                        "current" => ($coming == date("Y-m-d H:i") ? true : false),
-//                        "coming" => ($coming > date("Y-m-d H:i") && !in_array(true,array_column($days,"coming")) ? true : false),
-//                    ];
-//                }
-//            }
-//            $myBooking->courseTimes = $days;
-//            if (!$myBooking->expired_date){
-//                $expiredBooking = Booking::find($myBooking->id);
-//                $expiredBooking->expired_date = $days[count($days)-1]['date'] . " " . Carbon::parse($myBooking->time)->addHours(2)->format("H:i");
-//                $expiredBooking->save();
-//            }
-//            $allBookings[] = $myBooking;
-//        }
-//
-//        return $allBookings;
-//    }
 
     public function store(Request $request)
     {
 
-        $lectures_times = Timing::find($request->timing_id);
-            $start_date = Carbon::createFromFormat('Y-m-d H:i:s',Carbon::now()
-                ,"Africa/Cairo")->addDays(2);
+        $start_date = Carbon::createFromFormat('Y-m-d H:i:s',now()
+            ,"Africa/Cairo")->addDays(2);
 
-            $end_date = Carbon::createFromFormat('Y-m-d H:i:s',Carbon::now()
-                ,"Africa/Cairo")->addDays(40);
+        $end_date = Carbon::createFromFormat('Y-m-d H:i:s',now()
+            ,"Africa/Cairo")->addDays(40);
 
+        $period = CarbonPeriod::create($start_date, $end_date);
 
+        $time = Carbon::createFromFormat('Y-m-d H:i:s',date("Y-m-d H:i:s"
+                ,strtotime($request->time)),"Africa/Cairo");
 
-            $period = CarbonPeriod::create($start_date, $end_date);
+        $booking_group_id = $this->generateBookingGroupId();
 
-            $days = [];
-            $timingDays= $lectures_times->days;
-            $time = Carbon::createFromFormat('Y-m-d H:i:s',date("Y-m-d H:i:s",strtotime($request->time))
-                ,"Africa/Cairo");
+        $timing_days = collect(Timing::find($request->timing_id)->days);
 
+        $key = 0;
 
-
-            foreach ($period as $item) {
-                $day = $item->format("l");
-                $coming = $item->format("Y-m-d ") . $time->format("H:i");
-                if (in_array($day,$timingDays) && count($days) != count($lectures_times->days) * 4){
-                    $days[] = [
-                        "date" => $item->format("Y-m-d"),
-                        "day" => $day,
-                        "date_time" =>$coming,
-                        "status" => ($coming < date("Y-m-d H:i") ? "expired" : "incoming"),
-                        "current" => ($coming == date("Y-m-d H:i") ? true : false),
-                        "coming" => ($coming > date("Y-m-d H:i") && !in_array(true,array_column($days,"coming")) ? true : false),
-                    ];
-                }
+        foreach ($period as $item) {
+            if ($timing_days->contains($item->format("l"))
+                && ($key != $timing_days->count() * 4) )
+            {
+                $key++;
+                Booking::create([
+                    "timing_id"=> $request->timing_id,
+                    "course_id"=> $request->course_id,
+                    "session_date"=> $item->format("Y-m-d ") . $time->format("H:i"),
+                    "booking_group_id"=>$booking_group_id,
+                    "session_num"=> $key,
+                    "duration" => $request->duration,
+                    "user_id"=> $request->user()->id
+                ]);
             }
-
-        $booking_group_id = $this->generate_booking_group_id();
-
-        foreach ($days as $key => $day) {
-            Booking::create([
-                "timing_id"=> $request->timing_id,
-                "course_id"=> $request->course_id,
-                "session_date"=> $day['date_time'],
-                "booking_group_id"=>$booking_group_id,
-                "session_num"=> $key+1,
-                "duration" => $request->duration,
-                "user_id"=> $request->user()->id
-            ]);
         }
 
-
-        return response("DONE",201);
+        return "DONE";
     }
 
-    public function generate_booking_group_id() {
-        $number = mt_rand(1000000000, 9999999999); // better than rand()
+    public function generateBookingGroupId() {
+        $number = mt_rand(1000000000, 9999999999);
+        $number = abs($number);
 
-        // call the same function if the barcode exists already
-        if ($this->booking_group_id_exists($number)) {
-            return $this->generate_booking_group_id();
-        }
-
-        // otherwise, it's valid and can be used
-        return $number;
+        return $this->bookingGroupIdExists($number) ? $this->generateBookingGroupId() : $number;
     }
 
-    function booking_group_id_exists($number) {
-        // query the database and return a boolean
-        // for instance, it might look like this in Laravel
+    public function bookingGroupIdExists($number) {
         return Booking::whereBooking_group_id($number)->exists();
     }
 
-    function coming_bookings(){
-        $bookings_coming_id = Booking::groupBy("booking_group_id")
-                                ->where("session_date",">",Carbon::now())
-                                ->selectRaw("MIN(id) id")
-                                ->pluck("id");
+    public function comingBookings(){
         $myBookings = Booking::with(["timing","course","user","meetings"])
-            ->whereIn("bookings.id",$bookings_coming_id)
-            ->get();
+                        ->whereIn("bookings.id",Booking::groupBy("booking_group_id")
+                                ->where("session_date",">",now())
+                                ->selectRaw("MIN(id) id")
+                                ->pluck("id"))
+                        ->get();
 
-        $myBookings = $myBookings->map(function ($book){
-            $book['meeting_date'] =  date("Y-m-d H:i",strtotime($book['session_date']));
-            $book['meeting_date'] = str_replace(" ","T",$book['meeting_date']);
-            return $book;
-        });
-
-        return response($myBookings,201);
+        return $myBookings;
     }
 
-    function bookingsPresenting(Request $request)
+    public function bookingsPresenting(Request $request)
     {
         if (!$request->user()->free_trail){
            $request->user()->update([ "free_trail" => "1" ]);
         }
         Booking::find($request->booking_id)->update([ "present" => "1" ]);
 
-        return response(User::find($request->user()->id),201);
+        return User::find($request->user()->id);
     }
 
     public function bookingsPayCheck($id,Request $request)
@@ -227,17 +118,13 @@ class bookingController extends Controller
                          ->whereIdAndUser_id($id,$request->user()->id)
                          ->whereDoesntHave("payment")
                          ->first();
-        if ($bookingCheck){
-            return response($bookingCheck,201);
-        }
 
-        return response("",500);
-
+        return response($bookingCheck ?? "",$bookingCheck ? 200 : 500);
     }
 
     public function deleteBooking($booking_group_id)
     {
         Booking::whereBooking_group_id($booking_group_id)->delete();
-        return response("DONE",201);
+        return "DONE";
     }
 }

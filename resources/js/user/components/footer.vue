@@ -22,9 +22,6 @@
                                         <li>
                                             <a href="https://twitter.com/quraan_edu" target="_blank"><i class="fab fa-twitter"></i> </a>
                                         </li>
-<!--                                        <li>-->
-<!--                                            <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>-->
-<!--                                        </li>-->
                                         <li>
                                             <a href="https://wa.me/message/JBQ3GVHCNEQZH1" target="_blank"><i class="fab fa-whatsapp"></i></a>
                                         </li>
@@ -42,7 +39,7 @@
                         <div class="footer-widget footer-menu">
                             <h2 class="footer-title">Courses</h2>
                             <ul>
-                                <li v-for="course in coursesList">
+                                <li v-for="course in $store.state.courses">
                                     <router-link :to="'/course/'+course.id">
                                         {{ course.title }}
                                     </router-link>
@@ -62,7 +59,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <router-link to="/aboutUs">
+                                    <router-link to="/aboutus">
                                         About Us
                                     </router-link>
                                 </li>
@@ -72,7 +69,7 @@
                                     </router-link>
                                 </li>
                                 <li>
-                                    <router-link to="/privacyPolicy">
+                                    <router-link to="/privacy_policy">
                                         Privacy Policy
                                     </router-link>
                                 </li>
@@ -135,7 +132,6 @@
         data(){
             return{
                 year:"",
-                coursesList:[]
             }
         },
         methods:{
@@ -143,22 +139,12 @@
                 let date = new Date();
                 this.year  = date.getUTCFullYear();
             },
-            getCourses(){
-                axios.get("/api/courses")
-                    .then((res)=>{
-                        this.coursesList = res.data;
-                    })
-                    .catch((err)=>{
-                        // console.log(err);
-                    });
-            },
             openChat(){
                 document.getElementById("webchat_header").click();
             }
         },
         beforeMount() {
             this.getCurrentYear();
-            this.getCourses();
         }
     }
 </script>

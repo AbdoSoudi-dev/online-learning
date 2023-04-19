@@ -20,9 +20,9 @@
                     <div class="col-12">
                         <div class="form-group">
                             <div class="dropdown d-flex ">
-                                                <span class="btn btn-outline-primary dropdown-toggle d-flex w-20 pt-2 border" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <div :class="'mt-1 ml-2 vti__flag '+ ( (currentCountry.iso2 ?? allCountries[0].iso2).toLowerCase() )"></div>
-                                                </span>
+                                <span class="btn btn-outline-primary dropdown-toggle d-flex w-20 pt-2 border" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div :class="'mt-1 ml-2 vti__flag '+ ( (currentCountry.iso2 ?? allCountries[0].iso2).toLowerCase() )"></div>
+                                </span>
 
                                 <input type="tel" placeholder="write your number" v-model="mobile_number" class="form-control w-80" required>
 
@@ -81,7 +81,7 @@
         data(){
             return{
                 formData:{
-                    id:"",
+                    id: this.$route.params.id,
                     name:"",
                     email:"",
                     mobile_number:null,
@@ -99,18 +99,18 @@
             }
         },
         methods:{
-            addUserForm(){
+           async addUserForm(){
                 this.formData.mobile_number = this.mobile_number.toString().replace("+","");
                 this.formData.country = this.currentCountry.name.split(" ")[0];
                 if(this.formData.mobile_number.substring(0,2) == this.currentCountry.dialCode) {
-                    axios.post('/api/editUser',this.formData).then((res) =>{
-                        // console.log(res)
-                        alert("Profile has been updated successfully");
-                        this.$router.push("../users")
-                    }).catch((err)=>{
-                        // console.log(err)
-                        this.errors = err.response.data.errors;
-                    })
+                   await axios.post('/api/edit_user',this.formData)
+                         .then((res) =>{
+                             alert("Profile has been updated successfully");
+                             this.$router.push("../users")
+                         })
+                         .catch((err)=>{
+                             this.errors = err.response.data.errors;
+                         })
                 }else{
                     alert("Mobile format is incorrect.. It should be your country dial code then your number");
                 }
@@ -124,20 +124,17 @@
                     }
                 }
             },
-            getUser(){
-                axios.get('/api/user/'+this.$route.params.id).then((res) =>{
-                    // console.log(res)
-                    this.formData.name = res.data.name;
-                    this.formData.email = res.data.email;
-                    this.mobile_number = res.data.mobile_number;
-                    this.formData.country = res.data.country;
-                    this.formData.role_id = res.data.role_id;
-                    this.formData.timezone = res.data.timezone;
-                    this.formData.timezone_offset = res.data.timezone_offset;
-
-                }).catch((err)=>{
-                    // console.log(err)
-                })
+            async getUser(){
+                await axios.get(`/api/user/${this.$route.params.id}`)
+                      .then((res) =>{
+                          this.formData.name = res.data.name;
+                          this.formData.email = res.data.email;
+                          this.mobile_number = res.data.mobile_number;
+                          this.formData.country = res.data.country;
+                          this.formData.role_id = res.data.role_id;
+                          this.formData.timezone = res.data.timezone;
+                          this.formData.timezone_offset = res.data.timezone_offset;
+                      })
             }
         },
         watch:{
@@ -147,7 +144,6 @@
                     this.currentCountry = {};
                 }
 
-                // if(!this.currentCountry.iso2){
                 for (let country of this.allCountries){
                     if (
                         country.dialCode == code.substring(0,1) ||
@@ -156,15 +152,11 @@
                         country.dialCode == code.substring(0,4)
                     ){
                         this.currentCountry = country;
-                        // this.mobile_number = country.dialCode
                     }
                 }
-                // }
-
             },
         },
         beforeMount(){
-            this.formData.id = this.$route.params.id;
             this.getUser();
         }
     }

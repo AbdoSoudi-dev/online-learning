@@ -36,6 +36,6 @@ class MeetingController extends Controller
             $query->with("user");
         }])->latest()->get();
 
-        return response($meetings,200);
+        return $meetings;
     }
 }

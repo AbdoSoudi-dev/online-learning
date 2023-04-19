@@ -81,7 +81,6 @@
                                             <span v-else :class="'text-light p-2 '+
                                                 (courseTime.current || courseTime.coming ? 'bg-info r' : (courseTime.status === 'expired' ? 'bg-danger' : 'bg-secondary') ) "
                                                   style="border-radius: 5px">
-<!--                                                <a :href="'/joinRoom/'+courseTime.meeting.meeting_id">-->
                                                     {{ courseTime.current ? "Join Now"
                                                     : ( courseTime.coming ? "coming" : courseTime.status  ) }}
                                                 <!--                                                </a>-->
@@ -111,27 +110,15 @@
             }
         },
         methods:{
-            getUsers(){
+            async getUsers(){
                 if (this.$store.state.currentUser.role_id != 1) {
-                    axios.get('/api/users')
-                        .then((res) => {
-                            // console.log(res)
-                            this.users = res.data;
-                        })
-                        .catch((err) => {
-
-                        })
+                    const responseUsers = await axios.get('/api/users');
+                    this.users = await responseUsers.data;
                 }
             },
-            getBookingTimes(){
-                axios.get("/api/bookings/"+this.user_id)
-                    .then((res)=>{
-                        // console.log(res);
-                        this.myBookingTimes = res.data;
-                    })
-                    .catch((error)=>{
-                        // console.log(error);
-                    })
+            async getBookingTimes(){
+                const responseBookingTimes = await axios.get("/api/bookings/"+this.user_id);
+                this.myBookingTimes = await responseBookingTimes.data;
             },
             formatAMPM(date) {
                 date = new Date(date);
@@ -144,34 +131,20 @@
                 var strTime = hours + ':' + minutes + ' ' + ampm;
                 return strTime;
             },
-            setPresented(booking_id,present,meeting_id){
+            async setPresented(booking_id,present,meeting_id){
                 if (present == 0 || this.$store.state.currentUser.free_trail == 0){
-                    axios.post("/api/bookingsPresenting",{
-                        booking_id: booking_id
-                    })
-                    .then((res)=>{
-                        // console.log(res);
-                        this.$store.commit("get_current_user",res.data);
-                        window.open("/joinRoom/"+meeting_id)
-                    })
-                    .catch((error)=>{
-                        // console.log(error);
-                    })
+                    await axios.post("/api/bookings_presenting",{
+                              booking_id: booking_id
+                          })
+                          .then((res)=>{
+                              this.$store.commit("get_current_user",res.data);
+                              window.open("/joinRoom/"+meeting_id)
+                          })
                 }
-                else{
-                    // window.open("adsad")
-                }
-
             },
-            checkPayments(){
-                axios.get("/api/checkPayments/"+this.user_id)
-                    .then( (res)=>{
-                        // console.log(res);
-                        this.payments = res.data;
-                    })
-                    .catch( (error)=>{
-                        // console.log(error)
-                    })
+            async checkPayments(){
+                const responsePayments = await axios.get("/api/check_payments/"+this.user_id);
+                this.payments = await responsePayments.data;
             }
         },
         beforeMount() {

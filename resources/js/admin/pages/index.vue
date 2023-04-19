@@ -19,22 +19,20 @@
             sidebar
         },
         methods:{
-            checkLoginAuth(){
-                axios.get('/api/user')
-                    .then((res) =>{
-                        // console.log(res)
-                        this.$store.commit("get_current_user",res.data);
-                    }).catch((err)=>{
-                    // console.log(err)
-                    this.$store.commit("get_current_user",{});
-                    this.$store.commit("get_token","");
-                })
+            async checkLoginAuth(){
+                await axios.get('/api/user')
+                      .then((res) =>{
+                          this.$store.commit("get_current_user",res.data);
+                      })
+                      .catch((err)=>{
+                          this.$store.commit("get_current_user",{});
+                          this.$store.commit("get_token","");
+                      })
             }
         },
         beforeMount() {
             window.axios.defaults.headers.common['Authorization'] = 'Bearer '+this.$store.state.token;
             this.checkLoginAuth();
-
         }
 
     }

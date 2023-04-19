@@ -2,7 +2,6 @@
     <section class="section path-section" v-if="courseDetails.removed == 0">
         <div class="section-header">
             <div class="container">
-<!--                <span class="text-bold">lorem aaaa</span>-->
                 <h2 class="text-center" v-if="$store.state.currentUser.free_trail == 1"></h2>
                 <h2 class="text-center" v-else>Start Free Trial!</h2>
             </div>
@@ -66,7 +65,6 @@
                                     </td>
 
                                     <td class="text-center timting_duration">
-<!--                                        {{ timing.time }}-->
                                         <input type="time" class="form-control time_timing">
                                         <br>
                                         <div class="row d-flex justify-content-center">
@@ -82,14 +80,11 @@
                                     </td>
                                     <td class="text-bold text-center text-success">{{ (timing.duration == 30 ? (timing.price / 2) : timing.price )+ " $" }}</td>
                                     <td class="text-center text-success">
-<!--                                        <span v-if="checkTiming.includes(timing.id)">-->
-<!--                                            Already detected-->
-<!--                                        </span>-->
                                         <span v-if="wait">
                                             Waiting
                                         </span>
                                         <i v-else
-                                           @click="saveBooking(timing.id,timing.duration,$event)" class="fas fa-sign-in-alt text-success fa-2x cursor-pointer"></i>
+                                           @click="prepareToSaveBooking(timing.id,timing.duration,$event)" class="fas fa-sign-in-alt text-success fa-2x cursor-pointer"></i>
                                     </td>
                                 </tr>
                             </tbody>
@@ -113,71 +108,44 @@
             return{
                 courseDetails:{},
                 timings:[],
-                checkTiming:[],
                 wait:false,
                 timingsEdited:[]
             }
         },
         methods:{
-            getCourseDetails(){
-                axios.get("/api/courses/"+this.$route.params.id)
-                    .then((res)=>{
-                        // console.log(res);
-                        this.courseDetails = res.data;
-                    })
-                    .catch((err)=>{
-                        // console.log(err);
-                    })
+            async getCourseDetails() {
+                const responseCourseDetails = await axios.get("/api/courses/" + this.$route.params.id);
+                this.courseDetails = responseCourseDetails.data;
             },
-            all_timings(){
-                axios.get("/api/timings").then((res)=>{
-                    // console.log(res);
-                    this.timings = res.data;
-                    this.timingsZone();
-                }).catch((error)=>{
-                    console.log(error);
-                })
-            },
-            check_token_time(){
-                axios.post("/api/check_times",{
-                    course_id : this.$route.params.id
-                }).then((res)=>{
-                    // console.log(res);
-                    this.checkTiming = res.data;
-                }).catch((error)=>{
-                    console.log(error);
-                })
+            async allTimings(){
+                await axios.get("/api/timings")
+                    .then(res =>{
+                        this.timings = res.data;
+                        this.timingsZone();
+                    })
             },
             formatAMPM(date) {
                 date = new Date(date);
-                var hours = date.getHours();
-                var minutes = date.getMinutes();
-                var ampm = hours >= 12 ? 'pm' : 'am';
+                let hours = date.getHours();
+                let minutes = date.getMinutes();
+                let ampm = hours >= 12 ? 'pm' : 'am';
                 hours = hours % 12;
                 hours = hours ? hours : 12; // the hour '0' should be '12'
                 minutes = minutes < 10 ? '0'+minutes : minutes;
-                var strTime = hours + ':' + minutes + ' ' + ampm;
+                let strTime = hours + ':' + minutes + ' ' + ampm;
                 return strTime;
             },
-            saveBooking(timing_id,duration,event){
+            prepareToSaveBooking(timing_id,duration,event){
+                this.wait = true;
                 let inputTime = event.currentTarget.parentNode.parentNode.children[1].children[0];
-                let time = inputTime.value;
-                if (time) {
-                    this.wait = true;
-                    axios.post("/api/bookings", {
+
+                if (inputTime.value) {
+                    this.saveBooking({
                         timing_id: timing_id,
-                        time: time,
+                        time: inputTime.value,
                         duration: duration,
                         course_id: this.$route.params.id
-                    }).then((res) => {
-                        // console.log(res);
-                        this.$router.push("/schedule-timings");
-                    })
-                        .catch((err) => {
-                            // console.log(err);
-                            alert("Something went wrong");
-                            this.wait = false;
-                        })
+                    });
                 }else{
                     inputTime.style = "transform: scale(1.5);transition: all 1s ease-in-out;";
                     alert("detect you suitable time, please!");
@@ -187,6 +155,16 @@
                     },500);
 
                 }
+            },
+            async saveBooking(data){
+                await axios.post("/api/bookings", data)
+                    .then((res) => {
+                        this.$router.push("/schedule_timings");
+                    })
+                    .catch((err) => {
+                        alert("Something went wrong");
+                        this.wait = false;
+                    })
             },
             timingsZone(){
                 let timing = [];
@@ -202,15 +180,8 @@
         },
         beforeMount() {
             this.getCourseDetails();
-            this.all_timings();
-            // this.check_token_time();
+            this.allTimings();
         },
-        computed:{
-
-        },
-        mounted() {
-
-        }
     }
 
 </script>

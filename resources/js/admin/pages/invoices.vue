@@ -61,10 +61,11 @@
             }
         },
         methods:{
-            getPayments(){
-                axios.get("/api/paymentsAdmin").then((res)=>{
-                    this.invoices = res.data;
-                })
+            async getPayments(){
+                await axios.get("/api/payments_admin")
+                      .then((res)=>{
+                        this.invoices = res.data;
+                      })
             },
             dateFormat(date){
                 date = new Date(date);

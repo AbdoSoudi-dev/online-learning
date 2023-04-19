@@ -74,24 +74,16 @@
             }
         },
         methods:{
-            myCourses(){
-                axios.get("/api/courses")
-                     .then((res)=>{
-                         this.courses = res.data;
-                     })
-                    .catch((err)=>{
-                        // console.log(err);
-                    });
+            async myCourses(){
+                const reponseCourses = await axios.get("/api/courses");
+                this.courses = await reponseCourses.data;
             },
-            inactiveCourse(id){
+            async inactiveCourse(id){
                 if (confirm("Are you sure?")){
-                    axios.put("/api/courseDestroy/"+id)
-                        .then((res)=>{
-                            this.myCourses();
-                        })
-                        .catch((err)=>{
-                            // console.log(err);
-                        });
+                    await axios.put(`/api/course_destroy/${id}`)
+                    .then(res=>{
+                        this.myCourses();
+                    })
                 }
             }
         },

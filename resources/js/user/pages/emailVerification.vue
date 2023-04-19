@@ -51,18 +51,15 @@
             }
         },
         methods:{
-            sendVerification(){
-                this.wait = true
-                axios.post("/api/email/verify/resend")
-                     .then((res)=>{
-                         // console.log(res);
-                         this.wait = false
-                         this.sentVerification = true;
-                     })
-                     .catch((error)=>{
-                         this.error = true
-                         // console.log(error);
-                     })
+            async sendVerification(){
+                this.wait = true;
+                this.sentVerification = true;
+                await axios.post("/api/email/verify/resend").then(res =>{
+                    this.wait = false;
+                }).catch(err =>{
+                    this.wait = false;
+                    this.error = true;
+                });
             }
         },
         beforeMount() {

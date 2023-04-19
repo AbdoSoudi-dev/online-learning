@@ -19,21 +19,6 @@
         name: "zoomRoom",
         components:{
             zoomFrame,
-        },
-        data(){
-            return{
-
-
-            }
-        },
-        methods:{
-
-        },
-        beforeMount() {
-
-        },
-        created() {
-
         }
     }
 </script>

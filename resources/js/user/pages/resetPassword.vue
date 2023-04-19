@@ -51,22 +51,20 @@
             }
         },
         methods:{
-            resetForm(){
+           async resetForm(){
                 this.waiting = true;
                 this.response = "";
                 this.errors = false;
-                axios.post('/api/forgot-password',this.formData)
-                    .then((res) =>{
-                        console.log(res);
-                    this.response = res.data.status;
-                    this.waiting = false;
 
-                }).catch((err)=>{
-                    // console.log(err)
-                    this.waiting = false;
-
-                    this.errors = true;
-                })
+                await axios.post('/api/forgot_password',this.formData)
+                        .then((res) =>{
+                            this.response = res.data.status;
+                            this.waiting = false;
+                        })
+                        .catch((err)=>{
+                            this.waiting = false;
+                            this.errors = true;
+                        })
             }
         }
     }

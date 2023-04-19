@@ -121,21 +121,17 @@
                 script.src =
                     "https://www.paypal.com/sdk/js?client-id=AUDUxtbSB7Lt1wgPHnyVd2xLTziX0A0MSsZYkclJdpCWC6RYOaUmSomUbXlIudr7FsdXn5Le9-_koRHc";
                 script.id = "paypal_script";
-                // AWVtRxX_6Ekx_x9dME6zWgJ6BDKa_tAFZtsJgQ1FmNwWvHBGo-FvutOYiTib1Xm_OncTr4i-OcbegdFz
-            // &disable-funding=credit,card
-
                 script.addEventListener("load", this.setPayload);
                 document.body.appendChild(script);
             },
-            getBookingData(){
-                axios.get("/api/bookingsPayCheck/"+this.$route.params.booking_id)
-                     .then((res)=>{
-                         // console.log(res);
-                         this.bookingData = res.data;
-                         this.loadPaypalScript();
-                     }).catch((err)=>{
-                        this.$router.push("/invoices");
-                     })
+            async getBookingData(){
+                await axios.get("/api/bookings_pay_check/"+this.$route.params.booking_id)
+                     .then(res =>{
+                             this.bookingData = res.data;
+                         })
+                    .catch(err =>{
+                            this.$router.push("/invoices");
+                        })
             },
             setPayload(){
                 let booking_id = this.$route.params.booking_id;
@@ -145,7 +141,6 @@
 
                 paypal.Buttons({
                     createOrder: function(data, actions) {
-                        // Set up the transaction
                         return actions.order.create({
                             purchase_units: [{
                                 amount: {
@@ -158,7 +153,6 @@
 
                     onApprove: function(data, actions) {
                         return actions.order.capture().then(function (details) {
-                            console.log(data)
 
                             let paypalData = {};
                             paypalData.email_address = details.payer.email_address;
@@ -171,41 +165,28 @@
                             paypalData.booking_id = booking_id;
                             paypalData.user_id = user_id;
 
-                            // console.log(paypalData);
-                            //send data to save
-                            axios.post("/api/setPayment",paypalData)
+
+                            axios.post("/api/set_payment",paypalData)
                                 .then((res)=>{
-                                    // console.log(res)
                                     router.push("/invoices");
                                 })
-                                .catch((err)=>{
-                                    // console.log(err);
-                                })
-
                             alert('Transaction completed, Thanks ' + details.payer.name.given_name);
+
                         });
                     },
                     onError: function (err) {
                         alert("Something went wrong, Please try again")
-                        console.log(err);
                     }
 
                 }).render('#your-container-element');
             },
             formatDate() {
                 let date = new Date();
-                var hours = date.getHours();
-                var minutes = date.getMinutes();
-                var ampm = hours >= 12 ? 'pm' : 'am';
-                hours = hours % 12;
-                hours = hours ? hours : 12; // the hour '0' should be '12'
-                minutes = minutes < 10 ? '0'+minutes : minutes;
+                this.dateHours =  this.formatAMPM(date);
 
-                this.dateHours =  hours + ':' + minutes + ' ' + ampm;
-
-                var month = date.getMonth();
-                var day = date.getUTCDate();
-                var year = date.getUTCFullYear();
+                let month = date.getMonth();
+                let day = date.getUTCDate();
+                let year = date.getUTCFullYear();
 
                 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
@@ -216,30 +197,25 @@
             },
             formatAMPM(date) {
                 date = new Date(date);
-                var hours = date.getHours();
-                var minutes = date.getMinutes();
-                var ampm = hours >= 12 ? 'pm' : 'am';
+                let hours = date.getHours();
+                let minutes = date.getMinutes();
+                let ampm = hours >= 12 ? 'PM' : 'AM';
                 hours = hours % 12;
                 hours = hours ? hours : 12; // the hour '0' should be '12'
                 minutes = minutes < 10 ? '0'+minutes : minutes;
-                var strTime = hours + ':' + minutes + ' ' + ampm;
+                let strTime = hours + ':' + minutes + ' ' + ampm;
                 return strTime;
             },
         },
         beforeMount() {
-            this.getBookingData();
             this.formatDate();
+            this.getBookingData();
+            this.loadPaypalScript();
         },
         unmounted() {
-            if(document.getElementById("paypal_script")){
-                document.getElementById("paypal_script").remove();
-            }
-
+            document.getElementById("paypal_script")?.remove();
         }
 
     }
 </script>
 
-<style scoped>
-
-</style>

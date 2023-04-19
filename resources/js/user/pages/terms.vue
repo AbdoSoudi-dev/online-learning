@@ -5,7 +5,7 @@
                 <h2 class="text-primary">Terms Of Service</h2>
             </div>
 
-            <div class="row m-auto " style="font-size: 18px !important;">
+            <div class="row m-auto text-18">
                 <div class="col-12">
                     <p class="sub-title"> <i class="fas fa-long-arrow-alt-right  text-primary"></i>
                         Welcome to the QURAAN EDU Institute. The following Terms of Service are applied when you register to our courses or your kid's classes . Please review the following terms carefully.
@@ -18,7 +18,7 @@
                     </p>
                     <h3 class="text-primary">PRIVACY POLICY</h3>
                     <p class="sub-title"> <i class="fas fa-long-arrow-alt-right  text-primary"></i>
-                        The Company respects the privacy of website users.  Please refer to the Company’s Privacy Policy <router-link to="/privacyPolicy">#here</router-link>, which explains how we collect, use, and disclose information that included to your privacy.  When you access or use the website, you agree to this Privacy Policy.
+                        The Company respects the privacy of website users.  Please refer to the Company’s Privacy Policy <router-link to="/privacy_policy">#here</router-link>, which explains how we collect, use, and disclose information that included to your privacy.  When you access or use the website, you agree to this Privacy Policy.
                     </p>
                     <h3 class="text-primary">USE RESTRICTIONS</h3>
                     <p class="sub-title"> <i class="fas fa-long-arrow-alt-right  text-primary"></i>
@@ -43,6 +43,7 @@
                             </div>
                         </div>
                     </p>
+
 
                     <h3 class="text-primary">ONLINE CONTENT DISCLAIMER</h3>
                     <p class="sub-title"> <i class="fas fa-long-arrow-alt-right  text-primary"></i>
@@ -169,5 +170,8 @@
 <style scoped>
     .p-100{
         padding-left: 100px;
+    }
+    .text-18{
+        font-size: 18px !important;
     }
 </style>

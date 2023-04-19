@@ -43,31 +43,31 @@ import terms from "../user/pages/terms";
 
 
 const routes = [
-    { path : "/joinRoom/:id", component: zoomRoom },
+    { path : "/join_room/:id", component: zoomRoom },
     { path: "/", name:"home", component: index,
         children:[
             { path : "/home", component: home,alias:"/" },
-            { path : "/aboutUs", component: aboutUs },
-            { path : "/privacyPolicy", component: privacyPolicy },
+            { path : "/aboutus", component: aboutUs },
+            { path : "/privacy_policy", component: privacyPolicy },
             { path : "/terms", component: terms },
-            { path : "/coursesList", component: courses },
+            { path : "/courses_list", component: courses },
             { path : "/pricing", component: pricing },
             { path : "/course/:id", component: courseDetails },
-            { path : "/enrollCourse/:id", component: enrollCourse,meta: { requiresAuth: true } },
+            { path : "/enroll_course/:id", component: enrollCourse,meta: { requiresAuth: true } },
             { path : "/payment/:booking_id", component: payment },
             { path: "/login", name:"user.login" , component: login,meta: { requiresNoAuth: true },  },
             { path: "/register", name:"user.register" , component: register,meta: { requiresNoAuth: true },  },
-            { path: "/resetPassword" , component: resetPassword,meta: { requiresNoAuth: true },  },
-            { path: "/newPassword" , component: newPassword,meta: { requiresNoAuth: true },  },
+            { path: "/reset_password" , component: resetPassword,meta: { requiresNoAuth: true },  },
+            { path: "/new_password" , component: newPassword,meta: { requiresNoAuth: true },  },
             { path : "/profile", component: profile, meta: { requiresAuth: true },
                 children:[
                     { path: "/bookings",component:bookingProfile },
-                    { path: "/schedule-timings",component:profileScheduleTimings },
+                    { path: "/schedule_timings",component:profileScheduleTimings },
                     { path: "/invoices",component:profileInvoices },
                     { path: "/reviews",component:profileReviews },
-                    { path: "/changePassword",component:profileChangePassword },
-                    { path: "/emailVerification",component:emailVerification },
-                    { path: "/emailVerified",component:profileEmailVerified },
+                    { path: "/change_password",component:profileChangePassword },
+                    { path: "/email_verification",component:emailVerification },
+                    { path: "/email_verified",component:profileEmailVerified },
                     { path: "",component:profileEdit },
                 ]
             },
@@ -81,11 +81,10 @@ const routes = [
             { path: "bookings",component: adminBookings  },
             { path: "invoices",component: adminInvoices  },
             { path: "users", component: adminUsers, meta: { requiresSuperadmin: true },  },
-            { path: "addUser", component: addUser, meta: { requiresSuperadmin: true },  },
-            { path: "editUser/:id", component: editUser, meta: { requiresSuperadmin: true },  },
-            // { path: "profile", component: adminProfile  },
-            { path: "addCourse", component: addCourse  },
-            { path: "editCourse/:id", component: editCourse  },
+            { path: "add_user", component: addUser, meta: { requiresSuperadmin: true },  },
+            { path: "edit_user/:id", component: editUser, meta: { requiresSuperadmin: true },  },
+            { path: "add_course", component: addCourse  },
+            { path: "edit_course/:id", component: editCourse  },
             { path: "timings", component: timings  },
             { path: "new_meeting", component: createMeetings  },
             { path: "meetings", component: meetings  },
@@ -96,9 +95,8 @@ const routes = [
 ];
 
 const router = createRouter({
-    // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
     history: createWebHistory(),
-    routes, // short for `routes: routes`
+    routes,
 })
 
 router.beforeEach((to, from, next) => {

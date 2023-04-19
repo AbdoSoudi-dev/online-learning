@@ -36,14 +36,6 @@
                                 <input type="email" class="form-control" v-model="formData.email" required>
                             </div>
                         </div>
-<!--                        <div class="form-group">-->
-<!--                            <label class="form-control-label">Mobile Number</label>-->
-<!--                            <vue-tel-input styleClasses="form-control"-->
-<!--                                           invalidMsg="invalid Number"-->
-<!--                                           :value="formData.mobile_number"-->
-<!--                                           @input="countryChanged"-->
-<!--                                           enabledCountryCode="true"></vue-tel-input>-->
-<!--                        </div>-->
 
                         <div class="row">
                             <div class="col-12">
@@ -53,11 +45,11 @@
                                                     <div :class="'mt-1 ml-2 vti__flag '+ ( (currentCountry.iso2 ?? allCountries[0].iso2).toLowerCase() )"></div>
                                                 </span>
 
-                                        <input type="tel" placeholder="write your number" v-model="mobile_number" class="form-control w-80" required>
+                                        <input type="tel" placeholder="write your number" v-model="mobileNumber" class="form-control w-80" required>
 
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1"
                                             style="max-height:200px; overflow: scroll">
-                                            <li v-for="country in allCountries" @click="currentCountry = country; this.mobile_number = country.dialCode">
+                                            <li v-for="country in allCountries" @click="currentCountry = country; mobileNumber = country.dialCode">
                                                 <a class="dropdown-item d-flex" href="#">
                                                     <div :class="'vti__flag '+ ( country.iso2.toLowerCase() )"></div>
                                                     {{ country.name }} {{ "+"+country.dialCode }}
@@ -82,37 +74,6 @@
                                 </select>
                             </div>
                         </div>
-
-<!--                        <div class="col-12 col-md-6">-->
-<!--                            <div class="form-group">-->
-<!--                                <label>Name</label>-->
-<!--                                <input type="text" class="form-control" :value="formData.name">-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="col-12 col-md-6">-->
-<!--                            <div class="form-group">-->
-<!--                                <label>City</label>-->
-<!--                                <input type="text" class="form-control" value="Old Forge">-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="col-12 col-md-6">-->
-<!--                            <div class="form-group">-->
-<!--                                <label>State</label>-->
-<!--                                <input type="text" class="form-control" value="Newyork">-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="col-12 col-md-6">-->
-<!--                            <div class="form-group">-->
-<!--                                <label>Zip Code</label>-->
-<!--                                <input type="text" class="form-control" value="13420">-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="col-12 col-md-6">-->
-<!--                            <div class="form-group">-->
-<!--                                <label>Country</label>-->
-<!--                                <input type="text" class="form-control" value="United States">-->
-<!--                            </div>-->
-<!--                        </div>-->
                     </div>
                     <div class="submit-section">
                         <button type="submit" class="btn btn-primary submit-btn">Save Changes</button>
@@ -140,15 +101,13 @@
                     "timezone" : this.$store.state.currentUser.timezone,
                     "timezone_offset" : this.$store.state.currentUser.timezone_offset,
                 },
-                mobile_number:"",
+                mobileNumber:this.$store.state.currentUser.mobile_number,
                 currentCountry:{},
                 allCountries:allCountries,
             }
         },
         methods:{
             countryChanged(phone, phoneObject, input){
-                console.log(phoneObject);
-                console.log(phone);
                 if (phoneObject?.formatted) {
                     this.formData.mobile_number = phoneObject.formatted
                 }
@@ -158,12 +117,11 @@
                 }
 
             },
-            editProfileData(event){
-
-                if(this.mobile_number.toString().replace("+","").substring(0,2) == this.currentCountry.dialCode) {
+            async editProfileData(event){
+                if(this.mobileNumber.toString().replace("+","").substring(0,2) == this.currentCountry.dialCode) {
 
                     this.formData.country = this.currentCountry.name.split(" ")[0];
-                    this.formData.mobile_number = this.mobile_number.toString().replace("+", "");
+                    this.formData.mobile_number = this.mobileNumber.toString().replace("+", "");
 
                     let myForm = new FormData(event.currentTarget);
                     myForm.append("country", this.formData.country);
@@ -173,23 +131,20 @@
                     myForm.append("timezone", this.formData.timezone);
                     myForm.append("timezone_offset", this.formData.timezone_offset);
 
-                    axios.post("/api/editProfile", myForm)
+                    await axios.post("/api/edit_profile", myForm)
                         .then((res) => {
-                            // console.log(res);
                             alert("Profile has been updated successfully");
                             this.$store.commit("get_current_user",res.data);
                             this.$router.push("/");
                         })
-                        .catch((error) => {
-                            // console.log(error);
-                        });
+
                 }else{
                     alert("Mobile format is incorrect.. It should be your country dial code then your number");
                 }
 
             },
             showImage(e){
-                    var reader = new FileReader();
+                    let reader = new FileReader();
                     reader.onload = function (e) {
                         document.querySelector('#showImage').src = e.target.result;
                         document.getElementById("showImage").style.display = "block";
@@ -198,21 +153,11 @@
             },
         },
         watch:{
-           formData: {
-             handler:function (newValue) {
-                 // console.log(document.getElementById("timezone").selectedOptions[0].attributes[0].value);
-                 // this.FormData.timezone_offset =  document.getElementById("timezone").selectedOptions[0].getAttribute('timezone_offset')
-                 console.log(newValue);
-             },
-              deep:true
-          } ,
-            mobile_number(){
-                let code = this.mobile_number.toString().replace("+","");
-                if (!this.mobile_number){
+            mobileNumber(){
+                let code = this.mobileNumber.toString().replace("+","");
+                if (!this.mobileNumber){
                     this.currentCountry = {};
                 }
-
-                // if(!this.currentCountry.iso2){
                 for (let country of this.allCountries){
                     if (
                         country.dialCode == code.substring(0,1) ||
@@ -221,16 +166,10 @@
                         country.dialCode == code.substring(0,4)
                     ){
                         this.currentCountry = country;
-                        // this.mobile_number = country.dialCode
                     }
                 }
-                // }
-
             },
 
         },
-        beforeMount() {
-            this.mobile_number = this.$store.state.currentUser.mobile_number;
-        }
     }
 </script>

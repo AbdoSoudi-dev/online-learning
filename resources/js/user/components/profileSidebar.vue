@@ -15,11 +15,10 @@
                     </div>
                     <div class="user-info-cont mt-2">
                         <h4 class="usr-name text-capitalize">{{ $store.state.currentUser.name }}</h4>
-<!--                        <p class="mentor-type">English Literature (M.A)</p>-->
                     </div>
                 </div>
                 <div class="progress-bar-custom text-danger" v-if="!$store.state.currentUser.email_verified_at">
-                    <router-link to="/emailVerification">
+                    <router-link to="/email_verification">
                         <h5 class="text-danger">Verify Your Account <br> <small>*for security reasons</small> </h5>
                     </router-link>
                 </div>
@@ -31,7 +30,7 @@
                             </router-link>
                         </li>
                         <li>
-                            <router-link to="/schedule-timings">
+                            <router-link to="/schedule_timings">
                                 <i class="fas fa-hourglass-start"></i>Schedule Timings <span><i class="fas fa-chevron-right"></i></span>
                             </router-link>
                         </li>
@@ -40,18 +39,13 @@
                                 <i class="fas fa-file-invoice"></i>My Payments <span><i class="fas fa-chevron-right"></i></span>
                             </router-link>
                         </li>
-<!--                        <li>-->
-<!--                            <router-link to="/reviews">-->
-<!--                                <i class="fas fa-eye"></i>My Reviews <span><i class="fas fa-chevron-right"></i></span>-->
-<!--                            </router-link>-->
-<!--                        </li>-->
                         <li>
                             <router-link to="/profile">
                                 <i class="fas fa-user-cog"></i>Edit Profile <span><i class="fas fa-chevron-right"></i></span>
                             </router-link>
                         </li>
                         <li>
-                            <router-link to="/changePassword">
+                            <router-link to="/change_password">
                                 <i class="fas fa-user-edit"></i>Change Password <span><i class="fas fa-chevron-right"></i></span>
                             </router-link>
                         </li>
@@ -70,16 +64,13 @@
 <script>
     export default {
         methods:{
-            logout(){
-                axios.delete('/api/logout')
-                    .then((res) =>{
-                        // console.log(res)
+            async logout(){
+                await axios.delete('/api/logout')
+                    .then(res =>{
                         this.$store.commit("get_current_user",{});
                         this.$store.commit("get_current_user","");
                         this.$router.push("/");
-                    }).catch((err)=>{
-                    // console.log(err)
-                })
+                    })
             },
         }
     }

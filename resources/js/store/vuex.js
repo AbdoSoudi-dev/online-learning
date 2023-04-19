@@ -1,12 +1,12 @@
 import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
-// import * as Cookies from "js-cookie";
 
 const store = new Vuex.Store({
     state () {
         return {
             currentUser:{},
-            token:""
+            token:"",
+            courses: []
         }
     },
     mutations:{
@@ -16,6 +16,9 @@ const store = new Vuex.Store({
         get_token(state,payload){
             state.token = payload;
         },
+        get_courses(state,payload){
+            state.courses = payload;
+        }
     },
     plugins: [createPersistedState()],
 
