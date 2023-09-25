@@ -93,7 +93,7 @@
                                 </div>
                                 <p>
                                     <i class="fas fa-phone-alt"></i>
-                                    WhatsApp: +201149770796
+                                    WhatsApp: +5222244454
                                 </p>
                                 <p class="mb-0">
                                     <i class="fas fa-envelope"></i>

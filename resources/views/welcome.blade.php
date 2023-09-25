@@ -51,8 +51,7 @@
     </head>
     <body class="antialiased">
        <div id="app">
-           <h1 class="opacity-0">Quraan edu</h1>
-           <p class="opacity-0">Online courses provide live classes for adults and kids teach Quraan and Islam "all in one" , one place and one class.</p>
+
        </div>
 
        <script src="{{ asset("js/app.js") }}"></script>

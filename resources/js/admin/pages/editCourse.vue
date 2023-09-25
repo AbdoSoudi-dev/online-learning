@@ -68,7 +68,7 @@
             showImage(){
                 document.querySelector('#image')
                     .addEventListener("change",function (e) {
-
+                        console.log(e.currentTarget)
                     var reader = new FileReader();
                     reader.onload = function (e) {
                         document.querySelector('#showImage').src = e.target.result;
@@ -97,7 +97,7 @@
                        })
             },
         },
-        beforeMount() {
+        mounted() {
             this.getCourseDetails();
             this.showImage();
         },

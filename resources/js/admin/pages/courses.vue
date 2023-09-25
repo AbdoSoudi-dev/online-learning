@@ -14,7 +14,7 @@
                         </ul>
                     </div>
                     <div class="col-12">
-                        <router-link to="addCourse">
+                        <router-link to="add_course">
                             <i style="cursor: pointer" class="fas fa-plus text-light bg-success ml-2 fa-3x p-2"></i>
                         </router-link>
                     </div>
@@ -41,7 +41,7 @@
                                             <div class="row">
                                                 <div class="col">
                                                     <a class="text-success">
-                                                        <router-link :to="'editCourse/'+course.id">
+                                                        <router-link :to="'edit_course/'+course.id">
                                                             <i class="far fa-edit"></i> Edit
                                                         </router-link>
                                                     </a>
